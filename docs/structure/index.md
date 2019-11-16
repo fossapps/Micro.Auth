@@ -6,7 +6,7 @@ $ tree -I 'docs|*bin*|*obj*'
 ├── Dockerfile
 ├── hooks
 │   └── commit-msg
-├── Micro.Starter.Api
+├── Micro.Auth.Api
 │   ├── appsettings.json
 │   ├── Configs
 │   │   ├── DatabaseConfig.cs
@@ -17,7 +17,7 @@ $ tree -I 'docs|*bin*|*obj*'
 │   ├── HealthCheck
 │   │   ├── HealthCheckController.cs
 │   │   └── HealthData.cs
-│   ├── Micro.Starter.Api.csproj
+│   ├── Micro.Auth.Api.csproj
 │   ├── Migrations
 │   ├── Models
 │   │   ├── ApplicationContext.cs
@@ -34,19 +34,19 @@ $ tree -I 'docs|*bin*|*obj*'
 │   │   └── UuidService.cs
 │   └── Workers
 │       └── Worker.cs
-├── Micro.Starter.sln
-├── Micro.Starter.UnitTest
+├── Micro.Auth.sln
+├── Micro.Auth.UnitTest
 │   ├── ExternalTests
 │   │   └── postman_tests.sh
-│   ├── Micro.Starter.UnitTest.csproj
+│   ├── Micro.Auth.UnitTest.csproj
 │   └── UnitTest1.cs
 └── release.config.js
 ```
 
-## Micro.Starter.Api
+## Micro.Auth.Api
 This is the project which is actually booted, once it boots, it configures and starts listening for incoming requests.
 `Controllers` are where requests will land in, they're not supposed to contain any business logic,
 but rather extract data from requests and pass in to other services.
 
-## Micro.Starter.UnitTest
-This project contains unit tests and postman tests for Micro.Starter.Api
+## Micro.Auth.UnitTest
+This project contains unit tests and postman tests for Micro.Auth.Api

@@ -40,25 +40,25 @@ module.exports = {
         },
         {
             path: "@semantic-release/exec",
-            cmd: `docker pull fossapps/micro.starter:\`git rev-parse --short=4 ${process.env.TRAVIS_COMMIT}\``
+            cmd: `docker pull fossapps/micro.auth:\`git rev-parse --short=4 ${process.env.TRAVIS_COMMIT}\``
         },
         {
             path: "@semantic-release/exec",
-            cmd: `docker tag fossapps/micro.starter:\`git rev-parse --short=4 ${process.env.TRAVIS_COMMIT}\` fossapps/micro.starter:\${nextRelease.version}`
+            cmd: `docker tag fossapps/micro.auth:\`git rev-parse --short=4 ${process.env.TRAVIS_COMMIT}\` fossapps/micro.auth:\${nextRelease.version}`
         },
         {
             path: "@semantic-release/exec",
-            cmd: `docker tag fossapps/micro.starter:\`git rev-parse --short=4 ${process.env.TRAVIS_COMMIT}\` fossapps/micro.starter:latest`
+            cmd: `docker tag fossapps/micro.auth:\`git rev-parse --short=4 ${process.env.TRAVIS_COMMIT}\` fossapps/micro.auth:latest`
         }
     ],
     publish: [
         {
             path: "@semantic-release/exec",
-            cmd: "docker push fossapps/micro.starter:${nextRelease.version}"
+            cmd: "docker push fossapps/micro.auth:${nextRelease.version}"
         },
         {
             path: "@semantic-release/exec",
-            cmd: "docker push fossapps/micro.starter:latest"
+            cmd: "docker push fossapps/micro.auth:latest"
         },
         "@semantic-release/github"
     ]
