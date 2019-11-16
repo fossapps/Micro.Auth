@@ -1,5 +1,5 @@
 # CircleCI integration
-Micro.Starter is using travis-ci for it's powerful build pipelines to ensure each change works as intended.
+Micro.Auth is using travis-ci for it's powerful build pipelines to ensure each change works as intended.
 
 The following visualization will help understanding build flow better moving forward:
 
@@ -30,7 +30,7 @@ This step simply tags the docker image, pushes the tag to docker hub, and create
 For all these automation, it uses semantic-release, please look into release automation section of documentation
 
 ```bash
-docker run fossapps/micro.starter:tag
+docker run fossapps/micro.auth:tag
 ```
 Where tag can be either `latest` or any github tag (or the short commit hash)
 

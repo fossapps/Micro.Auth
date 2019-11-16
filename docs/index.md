@@ -1,4 +1,4 @@
-## Micro.Starter
+## Micro.Auth
 A Starter Kit built with production in mind.
 It contains things you're most likely to use in a project such as auth, monitoring, etc
 
