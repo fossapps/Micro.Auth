@@ -14,6 +14,10 @@ services:
       - POSTGRES_PASSWORD=secret
       - POSTGRES_USER=starter
       - POSTGRES_DB=starter_db
+  key_store:
+    image: fossapps/micro.keystore:1.5.0
+    volumes:
+      - ./.docker-configs/keystore/appsettings.json:/app/appsettings.json
   influxdb:
     image: influxdb
     environment:
