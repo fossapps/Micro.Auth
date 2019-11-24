@@ -15,7 +15,12 @@ services:
       - POSTGRES_USER=starter
       - POSTGRES_DB=starter_db
   key_store:
-    image: fossapps/micro.keystore:1.5.0
+    image: fossapps/micro.keystore:1.6.0
+    ports:
+      - 15000:15000
+    environment:
+      - ASPNETCORE_URLS=http://+:15000
+      - DatabaseConfig__AutoMigrate=true
     volumes:
       - ./.docker-configs/keystore/appsettings.json:/app/appsettings.json
   influxdb:
