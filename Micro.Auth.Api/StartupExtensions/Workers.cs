@@ -5,9 +5,9 @@ namespace Micro.Auth.Api.StartupExtensions
 {
     public static class Workers
     {
-        public static void RegisterWorker(this IServiceCollection services)
+        public static void RegisterWorkers(this IServiceCollection services)
         {
-            services.AddHostedService<Worker>();
+            services.AddHostedService<KeyGenerationWorker>();
         }
     }
 }

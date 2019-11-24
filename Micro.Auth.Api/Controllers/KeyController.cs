@@ -17,7 +17,7 @@ namespace Micro.Auth.Api.Controllers
         [HttpGet]
         public IActionResult GetKey()
         {
-            return Ok(new {_keyContainer.GetKey().PublicKey});
+            return Ok(new {_keyContainer.GetKey().PublicKey, _keyContainer.GetKey().KeyId});
         }
     }
 }
