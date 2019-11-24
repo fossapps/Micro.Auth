@@ -6,6 +6,8 @@ services:
       - 5000:5000
     environment:
       - ASPNETCORE_ENVIRONMENT=ci
+      - ASPNETCORE_URLS=http://+:5000
+      - DatabaseConfig__AutoMigrate=true
   postgres:
     image: postgres:11-alpine
     ports:
