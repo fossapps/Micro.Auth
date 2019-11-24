@@ -14,7 +14,16 @@
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.0.0-preview8" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.1" />
       <None Include="./appsettings.ci.json" CopyToPublishDirectory="Always" />
+      <PackageReference Include="PemUtils" Version="3.0.0.81" />
       <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Repository" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Micro.Sdks\Micro.Sdks.csproj" />
     </ItemGroup>
 
     <Target Name="Install githooks" BeforeTargets="Build">

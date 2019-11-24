@@ -6,6 +6,8 @@ services:
       - 5000:5000
     environment:
       - ASPNETCORE_ENVIRONMENT=ci
+      - ASPNETCORE_URLS=http://+:5000
+      - DatabaseConfig__AutoMigrate=true
   postgres:
     image: postgres:11-alpine
     ports:
@@ -14,6 +16,15 @@ services:
       - POSTGRES_PASSWORD=secret
       - POSTGRES_USER=starter
       - POSTGRES_DB=starter_db
+  key_store:
+    image: fossapps/micro.keystore:1.6.0
+    ports:
+      - 15000:15000
+    environment:
+      - ASPNETCORE_URLS=http://+:15000
+      - DatabaseConfig__AutoMigrate=true
+    volumes:
+      - ./.docker-configs/keystore/appsettings.json:/app/appsettings.json
   influxdb:
     image: influxdb
     environment:

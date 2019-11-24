@@ -19,7 +19,9 @@ namespace Micro.Auth.Api.StartupExtensions
             services
                 .AddHealthChecks()
                 .AddCheck<ConnectionToDbCheck>(nameof(ConnectionToDbCheck))
-                .AddCheck<MemoryCheck>(nameof(MemoryCheck));
+                .AddCheck<MemoryCheck>(nameof(MemoryCheck))
+                .AddCheck<KeyCreatedCheck>(nameof(KeyCreatedCheck))
+                .AddCheck<KeyServiceConnectionCheck>(nameof(KeyServiceConnectionCheck));
         }
         public static void ConfigureHealthCheckEndpoint(this IEndpointRouteBuilder endpoints)
         {

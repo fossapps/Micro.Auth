@@ -1,5 +1,13 @@
 version: '3'
 services:
+  key_store:
+    image: fossapps/micro.keystore:1.6.0
+    ports:
+      - 15000:15000
+    environment:
+      - ASPNETCORE_URLS=http://+:15000
+    volumes:
+      - ./.docker-configs/keystore/appsettings.json:/app/appsettings.json
   postgres:
     image: postgres:11-alpine
     ports:

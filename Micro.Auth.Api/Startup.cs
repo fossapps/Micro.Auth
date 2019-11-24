@@ -24,11 +24,11 @@ namespace Micro.Auth.Api
         {
             services.AddConfiguration(Configuration);
             services.AddMetrics();
-            services.ConfigureRequiredDependencies();
+            services.ConfigureRequiredDependencies(Configuration);
             services.ConfigureHealthChecks();
             services.AddControllers();
             services.ConfigureSwagger();
-            services.RegisterWorker();
+            services.RegisterWorkers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
