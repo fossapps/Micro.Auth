@@ -1,0 +1,167 @@
+{
+  "datasource": null,
+  "aliasColors": {},
+  "bars": false,
+  "cacheTimeout": null,
+  "dashLength": 10,
+  "dashes": false,
+  "fill": 2,
+  "fillGradient": 0,
+  "gridPos": {
+    "h": 9,
+    "w": 12,
+    "x": 0,
+    "y": 0
+  },
+  "id": 2,
+  "legend": {
+    "avg": false,
+    "current": false,
+    "max": false,
+    "min": false,
+    "show": true,
+    "total": false,
+    "values": false
+  },
+  "lines": true,
+  "linewidth": 1,
+  "links": [],
+  "nullPointMode": "null",
+  "options": {
+    "dataLinks": []
+  },
+  "percentage": false,
+  "pluginVersion": "6.4.4",
+  "pointradius": 1,
+  "points": true,
+  "renderer": "flot",
+  "seriesOverrides": [],
+  "spaceLength": 10,
+  "stack": true,
+  "steppedLine": false,
+  "targets": [
+    {
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "null"
+          ],
+          "type": "fill"
+        }
+      ],
+      "measurement": "application__keygenerationworker.timetosave",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "A",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "type": "field",
+            "params": [
+              "last"
+            ]
+          },
+          {
+            "type": "mean",
+            "params": []
+          }
+        ]
+      ],
+      "tags": [],
+      "alias": "Time to Save"
+    }
+  ],
+  "thresholds": [
+    {
+      "value": 15,
+      "op": "gt",
+      "fill": true,
+      "line": true,
+      "colorMode": "critical"
+    }
+  ],
+  "timeFrom": null,
+  "timeRegions": [],
+  "timeShift": null,
+  "title": "Key Generation Worker",
+  "tooltip": {
+    "shared": true,
+    "sort": 0,
+    "value_type": "individual"
+  },
+  "type": "graph",
+  "xaxis": {
+    "buckets": null,
+    "mode": "time",
+    "name": null,
+    "show": true,
+    "values": []
+  },
+  "yaxes": [
+    {
+      "format": "ms",
+      "label": "Time To Save",
+      "logBase": 1,
+      "max": "50",
+      "min": "0",
+      "show": true,
+      "decimals": null
+    },
+    {
+      "format": "short",
+      "label": "",
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": true
+    }
+  ],
+  "yaxis": {
+    "align": false,
+    "alignLevel": null
+  },
+  "interval": "",
+  "description": "",
+  "alert": {
+    "conditions": [
+      {
+        "type": "query",
+        "query": {
+          "params": [
+            "A",
+            "5m",
+            "now"
+          ]
+        },
+        "reducer": {
+          "type": "avg",
+          "params": []
+        },
+        "evaluator": {
+          "type": "gt",
+          "params": [
+            15
+          ]
+        },
+        "operator": {
+          "type": "and"
+        }
+      }
+    ],
+    "noDataState": "alerting",
+    "executionErrorState": "alerting",
+    "frequency": "1m",
+    "handler": 1,
+    "notifications": [],
+    "for": "5m",
+    "alertRuleTags": {},
+    "name": "Key Generation Worker alert"
+  }
+}

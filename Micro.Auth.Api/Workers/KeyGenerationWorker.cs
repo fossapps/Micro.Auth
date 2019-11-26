@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using App.Metrics;
@@ -33,7 +34,7 @@ namespace Micro.Auth.Api.Workers
             {
                 _logger.LogInformation($"Worker running at {DateTime.Now}");
                 var key = SigningKey.Create();
-                var response = await _metrics.KeyGenerationWorker().RecordTimeToSavePublicKey(() => SaveKey(key.PublicKey, stoppingToken ));
+                var response = await _metrics.KeyGenerationWorker().RecordTimeToSavePublicKey(async () => await SaveKey(key.PublicKey, stoppingToken ));
                 switch (response)
                 {
                     case KeyCreatedResponse createdResponse:
@@ -50,16 +51,18 @@ namespace Micro.Auth.Api.Workers
                         break;
                 }
 
-                await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
             }
         }
 
         private async Task<object> SaveKey(string publicKey, CancellationToken stoppingToken)
         {
+            var stopwatch = Stopwatch.StartNew();
             var response = await _keyStoreClient.Keys.AddAsync(new CreateKeyRequest
             {
                 Body = publicKey
             }, stoppingToken);
+            _logger.LogInformation(stopwatch.ElapsedMilliseconds.ToString());
             return response;
         }
     }

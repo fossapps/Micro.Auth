@@ -25,8 +25,7 @@ namespace Micro.Auth.Api.Measurements
             {
                 Name = "KeyGenerationWorker.TimeToSave",
                 DurationUnit = TimeUnit.Milliseconds,
-                MeasurementUnit = Unit.Calls,
-                RateUnit = TimeUnit.Milliseconds,
+                RateUnit = TimeUnit.Milliseconds
             });
         }
 
