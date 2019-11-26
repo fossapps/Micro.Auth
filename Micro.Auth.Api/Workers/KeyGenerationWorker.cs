@@ -13,13 +13,13 @@ namespace Micro.Auth.Api.Workers
     {
         private readonly ILogger<KeyGenerationWorker> _logger;
         private readonly IKeyContainer _keyContainer;
-        private readonly IHttpClient _keyStore;
+        private readonly IKeyStoreClient _keyStoreClient;
 
-        public KeyGenerationWorker(ILogger<KeyGenerationWorker> logger, IKeyContainer keyContainer, IHttpClient keyStore)
+        public KeyGenerationWorker(ILogger<KeyGenerationWorker> logger, IKeyContainer keyContainer, IKeyStoreClient keyStoreClient)
         {
             _logger = logger;
             _keyContainer = keyContainer;
-            _keyStore = keyStore;
+            _keyStoreClient = keyStoreClient;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -28,7 +28,7 @@ namespace Micro.Auth.Api.Workers
             {
                 _logger.LogInformation($"Worker running at {DateTime.Now}");
                 var key = SigningKey.Create();
-                var response = await _keyStore.Keys.AddAsync(new CreateKeyRequest
+                var response = await _keyStoreClient.Keys.AddAsync(new CreateKeyRequest
                 {
                     Body = key.PublicKey
                 }, stoppingToken);

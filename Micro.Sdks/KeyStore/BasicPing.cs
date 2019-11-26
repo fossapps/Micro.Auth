@@ -21,7 +21,7 @@ namespace FossApps.KeyStore
     /// <summary>
     /// BasicPing operations.
     /// </summary>
-    public partial class BasicPing : IServiceOperations<HttpClient>, IBasicPing
+    public partial class BasicPing : IServiceOperations<KeyStoreClient>, IBasicPing
     {
         /// <summary>
         /// Initializes a new instance of the BasicPing class.
@@ -32,7 +32,7 @@ namespace FossApps.KeyStore
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public BasicPing(HttpClient client)
+        public BasicPing(KeyStoreClient client)
         {
             if (client == null)
             {
@@ -42,9 +42,9 @@ namespace FossApps.KeyStore
         }
 
         /// <summary>
-        /// Gets a reference to the HttpClient
+        /// Gets a reference to the KeyStoreClient
         /// </summary>
-        public HttpClient Client { get; private set; }
+        public KeyStoreClient Client { get; private set; }
 
         /// <param name='customHeaders'>
         /// Headers that will be added to request.

@@ -19,9 +19,9 @@ namespace Micro.Auth.Api.StartupExtensions
             services.AddSingleton(SetupKeyStoreHttpClient(configuration.GetSection("Services").Get<Services>().KeyStore));
         }
 
-        private static IHttpClient SetupKeyStoreHttpClient(KeyStoreConfig config)
+        private static IKeyStoreClient SetupKeyStoreHttpClient(KeyStoreConfig config)
         {
-            return new HttpClient
+            return new KeyStoreClient
             {
                 BaseUri = new Uri(config.Url),
             };

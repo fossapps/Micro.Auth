@@ -9,12 +9,12 @@ namespace Micro.Auth.Api.HealthCheck
 {
     public class KeyServiceConnectionCheck : IHealthCheck
     {
-        private readonly IHttpClient _client;
+        private readonly IKeyStoreClient _keyStoreClient;
         private readonly ILogger<KeyServiceConnectionCheck> _logger;
 
-        public KeyServiceConnectionCheck(IHttpClient client, ILogger<KeyServiceConnectionCheck> logger)
+        public KeyServiceConnectionCheck(IKeyStoreClient client, ILogger<KeyServiceConnectionCheck> logger)
         {
-            _client = client;
+            _keyStoreClient = client;
             _logger = logger;
         }
 
@@ -22,7 +22,7 @@ namespace Micro.Auth.Api.HealthCheck
         {
             try
             {
-                var result = await _client.BasicPing.PingWithHttpMessagesAsync(null, cancellationToken);
+                var result = await _keyStoreClient.BasicPing.PingWithHttpMessagesAsync(null, cancellationToken);
                 if (result != null)
                 {
                     return HealthCheckResult.Healthy("can ping");
