@@ -11,7 +11,7 @@ namespace FossApps.KeyStore
 
     /// <summary>
     /// </summary>
-    public partial interface IHttpClient : System.IDisposable
+    public partial interface IKeyStoreClient : System.IDisposable
     {
         /// <summary>
         /// The base URI of the service.

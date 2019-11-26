@@ -21,7 +21,7 @@ namespace FossApps.KeyStore
     /// <summary>
     /// Keys operations.
     /// </summary>
-    public partial class Keys : IServiceOperations<HttpClient>, IKeys
+    public partial class Keys : IServiceOperations<KeyStoreClient>, IKeys
     {
         /// <summary>
         /// Initializes a new instance of the Keys class.
@@ -32,7 +32,7 @@ namespace FossApps.KeyStore
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public Keys(HttpClient client)
+        public Keys(KeyStoreClient client)
         {
             if (client == null)
             {
@@ -42,9 +42,9 @@ namespace FossApps.KeyStore
         }
 
         /// <summary>
-        /// Gets a reference to the HttpClient
+        /// Gets a reference to the KeyStoreClient
         /// </summary>
-        public HttpClient Client { get; private set; }
+        public KeyStoreClient Client { get; private set; }
 
         /// <param name='body'>
         /// </param>

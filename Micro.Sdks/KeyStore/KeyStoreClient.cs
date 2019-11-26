@@ -15,7 +15,7 @@ namespace FossApps.KeyStore
     using System.Net;
     using System.Net.Http;
 
-    public partial class HttpClient : ServiceClient<HttpClient>, IHttpClient
+    public partial class KeyStoreClient : ServiceClient<KeyStoreClient>, IKeyStoreClient
     {
         /// <summary>
         /// The base URI of the service.
@@ -43,31 +43,31 @@ namespace FossApps.KeyStore
         public virtual IKeys Keys { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the HttpClient class.
+        /// Initializes a new instance of the KeyStoreClient class.
         /// </summary>
         /// <param name='httpClient'>
         /// HttpClient to be used
         /// </param>
         /// <param name='disposeHttpClient'>
-        /// True: will dispose the provided httpClient on calling HttpClient.Dispose(). False: will not dispose provided httpClient</param>
-        public HttpClient(System.Net.Http.HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
+        /// True: will dispose the provided httpClient on calling KeyStoreClient.Dispose(). False: will not dispose provided httpClient</param>
+        public KeyStoreClient(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the HttpClient class.
+        /// Initializes a new instance of the KeyStoreClient class.
         /// </summary>
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        public HttpClient(params DelegatingHandler[] handlers) : base(handlers)
+        public KeyStoreClient(params DelegatingHandler[] handlers) : base(handlers)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the HttpClient class.
+        /// Initializes a new instance of the KeyStoreClient class.
         /// </summary>
         /// <param name='rootHandler'>
         /// Optional. The http client handler used to handle http transport.
@@ -75,13 +75,13 @@ namespace FossApps.KeyStore
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        public HttpClient(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
+        public KeyStoreClient(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the HttpClient class.
+        /// Initializes a new instance of the KeyStoreClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -92,7 +92,7 @@ namespace FossApps.KeyStore
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public HttpClient(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
+        public KeyStoreClient(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (baseUri == null)
             {
@@ -102,7 +102,7 @@ namespace FossApps.KeyStore
         }
 
         /// <summary>
-        /// Initializes a new instance of the HttpClient class.
+        /// Initializes a new instance of the KeyStoreClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -116,7 +116,7 @@ namespace FossApps.KeyStore
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public HttpClient(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        public KeyStoreClient(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (baseUri == null)
             {
