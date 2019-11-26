@@ -51,19 +51,16 @@ namespace Micro.Auth.Api.Workers
                         break;
                 }
 
-                await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
             }
         }
 
         private async Task<object> SaveKey(string publicKey, CancellationToken stoppingToken)
         {
-            var stopwatch = Stopwatch.StartNew();
-            var response = await _keyStoreClient.Keys.AddAsync(new CreateKeyRequest
+            return await _keyStoreClient.Keys.AddAsync(new CreateKeyRequest
             {
                 Body = publicKey
             }, stoppingToken);
-            _logger.LogInformation(stopwatch.ElapsedMilliseconds.ToString());
-            return response;
         }
     }
 }
