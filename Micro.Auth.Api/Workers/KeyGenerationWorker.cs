@@ -1,25 +1,30 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using App.Metrics;
 using FossApps.KeyStore;
 using FossApps.KeyStore.Models;
 using Micro.Auth.Api.Keys;
+using Micro.Auth.Api.Measurements;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace Micro.Auth.Api.Workers
 {
+    // ReSharper disable once ClassNeverInstantiated.Global This is Worker and will be initialized by framework.
     public class KeyGenerationWorker : BackgroundService
     {
         private readonly ILogger<KeyGenerationWorker> _logger;
         private readonly IKeyContainer _keyContainer;
         private readonly IKeyStoreClient _keyStoreClient;
+        private readonly IMetrics _metrics;
 
-        public KeyGenerationWorker(ILogger<KeyGenerationWorker> logger, IKeyContainer keyContainer, IKeyStoreClient keyStoreClient)
+        public KeyGenerationWorker(ILogger<KeyGenerationWorker> logger, IKeyContainer keyContainer, IKeyStoreClient keyStoreClient, IMetrics metrics)
         {
             _logger = logger;
             _keyContainer = keyContainer;
             _keyStoreClient = keyStoreClient;
+            _metrics = metrics;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -28,10 +33,7 @@ namespace Micro.Auth.Api.Workers
             {
                 _logger.LogInformation($"Worker running at {DateTime.Now}");
                 var key = SigningKey.Create();
-                var response = await _keyStoreClient.Keys.AddAsync(new CreateKeyRequest
-                {
-                    Body = key.PublicKey
-                }, stoppingToken);
+                var response = await _metrics.KeyGenerationWorker().RecordTimeToSavePublicKey(() => SaveKey(key.PublicKey, stoppingToken ));
                 switch (response)
                 {
                     case KeyCreatedResponse createdResponse:
@@ -39,15 +41,26 @@ namespace Micro.Auth.Api.Workers
                         _keyContainer.SetKey(key);
                         break;
                     case ProblemDetails _:
+                        _metrics.KeyGenerationWorker().MarkErrorSavingToKeyService();
                         _logger.LogError("problem while saving public key");
                         break;
                     default:
+                        _metrics.KeyGenerationWorker().MarkErrorUnhandledType();
                         _logger.LogError("unhandled type");
                         break;
                 }
 
                 await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
             }
+        }
+
+        private async Task<object> SaveKey(string publicKey, CancellationToken stoppingToken)
+        {
+            var response = await _keyStoreClient.Keys.AddAsync(new CreateKeyRequest
+            {
+                Body = publicKey
+            }, stoppingToken);
+            return response;
         }
     }
 }
