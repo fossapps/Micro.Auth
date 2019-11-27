@@ -9,7 +9,8 @@ namespace Micro.Auth.Api.Models
     public class ApplicationContext : IdentityDbContext
     {
         private readonly DatabaseConfig _db;
-        public new DbSet<User> Users;
+        public new DbSet<User> Users { set; get; }
+        public DbSet<RefreshToken> RefreshTokens { set; get; }
 
         public ApplicationContext(DbContextOptions options, IOptions<DatabaseConfig> dbOption) : base(options)
         {
