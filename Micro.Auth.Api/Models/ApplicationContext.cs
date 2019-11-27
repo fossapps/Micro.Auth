@@ -1,13 +1,15 @@
 using Micro.Auth.Api.Configs;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Npgsql;
 
 namespace Micro.Auth.Api.Models
 {
-    public class ApplicationContext : DbContext
+    public class ApplicationContext : IdentityDbContext
     {
         private readonly DatabaseConfig _db;
+        public new DbSet<User> Users;
 
         public ApplicationContext(DbContextOptions options, IOptions<DatabaseConfig> dbOption) : base(options)
         {
