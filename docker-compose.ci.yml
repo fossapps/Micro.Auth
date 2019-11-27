@@ -4,6 +4,8 @@ services:
     image: fossapps/micro.auth
     ports:
       - 5000:5000
+    depends_on:
+      - postgres
     environment:
       - ASPNETCORE_ENVIRONMENT=ci
       - ASPNETCORE_URLS=http://+:5000
@@ -23,6 +25,8 @@ services:
     environment:
       - ASPNETCORE_URLS=http://+:15000
       - DatabaseConfig__AutoMigrate=true
+    depends_on:
+      - postgres
     volumes:
       - ./.docker-configs/keystore/appsettings.json:/app/appsettings.json
   influxdb:
