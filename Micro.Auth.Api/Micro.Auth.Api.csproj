@@ -22,10 +22,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Repository" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\Micro.Sdks\Micro.Sdks.csproj" />
     </ItemGroup>
 
