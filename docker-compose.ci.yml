@@ -6,6 +6,7 @@ services:
       - 5000:5000
     depends_on:
       - postgres
+      - key_store
     environment:
       - ASPNETCORE_ENVIRONMENT=ci
       - ASPNETCORE_URLS=http://+:5000
