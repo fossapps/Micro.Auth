@@ -3,6 +3,7 @@ using FossApps.KeyStore;
 using Micro.Auth.Api.Configs;
 using Micro.Auth.Api.Keys;
 using Micro.Auth.Api.Models;
+using Micro.Auth.Api.Users;
 using Micro.Auth.Api.Uuid;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -21,6 +22,7 @@ namespace Micro.Auth.Api.StartupExtensions
             services.AddSingleton<IUuidService, UuidService>();
             services.AddSingleton<IKeyContainer, KeyContainer>();
             services.AddScoped<IRoleStore<IdentityRole>, RoleStore<IdentityRole>>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddSingleton<IKeyResolver, KeyResolver>();
             services.AddSingleton(SetupKeyStoreHttpClient(configuration.GetSection("Services").Get<Services>().KeyStore));
         }
