@@ -41,6 +41,7 @@ namespace Micro.Auth.Api
                 app.UseDeveloperExceptionPage();
             }
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.AddSwaggerWithUi();
             app.UseEndpoints(endpoints =>
