@@ -10,6 +10,7 @@ namespace Micro.Auth.Api.RefreshTokens
         Task<RefreshToken> FindById(string id);
         Task<RefreshToken> FindByUser(string userId);
         Task<RefreshToken> Create(RefreshToken token);
+        Task Delete(string id);
     }
 
     public class RefreshTokenRepository : IRefreshTokenRepository
@@ -36,6 +37,12 @@ namespace Micro.Auth.Api.RefreshTokens
             var result = await _db.RefreshTokens.AddAsync(token);
             await _db.SaveChangesAsync();
             return result.Entity;
+        }
+
+        public Task Delete(string id)
+        {
+            _db.RefreshTokens.Remove(new RefreshToken {Id = id});
+            return _db.SaveChangesAsync();
         }
     }
 }
