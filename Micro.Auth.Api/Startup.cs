@@ -26,6 +26,7 @@ namespace Micro.Auth.Api
             services.AddMetrics();
             services.ConfigureRequiredDependencies(Configuration);
             services.ConfigureHealthChecks();
+            services.ConfigureIdentityServices();
             services.AddControllers();
             services.ConfigureSwagger();
             services.RegisterWorkers();
@@ -40,6 +41,7 @@ namespace Micro.Auth.Api
                 app.UseDeveloperExceptionPage();
             }
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.AddSwaggerWithUi();
             app.UseEndpoints(endpoints =>
