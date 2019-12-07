@@ -23,6 +23,7 @@ namespace Micro.Auth.Api.StartupExtensions
             services.AddSingleton<IKeyContainer, KeyContainer>();
             services.AddScoped<IRoleStore<IdentityRole>, RoleStore<IdentityRole>>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserService, UserService>();
             services.AddSingleton<IKeyResolver, KeyResolver>();
             services.AddSingleton(SetupKeyStoreHttpClient(configuration.GetSection("Services").Get<Services>().KeyStore));
         }
