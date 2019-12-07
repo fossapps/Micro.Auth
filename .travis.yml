@@ -19,7 +19,7 @@ jobs:
         - docker build . -t fossapps/micro.auth --build-arg VERSION=$TAG
         - docker-compose -f ./docker-compose.ci.yml up -d
         - cd ./Micro.Auth.UnitTest/ExternalTests
-        - sh ./Micro.Auth.UnitTest/ExternalTests/postman_tests.sh
+        - sh postman_tests.sh
         - docker tag fossapps/micro.auth fossapps/micro.auth:$TAG
         - docker push fossapps/micro.auth:$TAG
     - stage: deploy
