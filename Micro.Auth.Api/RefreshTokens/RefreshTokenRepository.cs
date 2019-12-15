@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Micro.Auth.Api.Models;
+using Micro.Auth.Api.Uuid;
 using Microsoft.EntityFrameworkCore;
 
 namespace Micro.Auth.Api.RefreshTokens
@@ -16,10 +17,12 @@ namespace Micro.Auth.Api.RefreshTokens
     public class RefreshTokenRepository : IRefreshTokenRepository
     {
         private readonly ApplicationContext _db;
+        private readonly IUuidService _uuid;
 
-        public RefreshTokenRepository(ApplicationContext db)
+        public RefreshTokenRepository(ApplicationContext db, IUuidService uuid)
         {
             _db = db;
+            _uuid = uuid;
         }
 
         public Task<RefreshToken> FindById(string id)
@@ -34,6 +37,7 @@ namespace Micro.Auth.Api.RefreshTokens
 
         public async Task<RefreshToken> Create(RefreshToken token)
         {
+            token.Id = _uuid.GenerateUuId();
             var result = await _db.RefreshTokens.AddAsync(token);
             await _db.SaveChangesAsync();
             return result.Entity;
