@@ -4,6 +4,7 @@ using Micro.Auth.Api.Models;
 using Micro.Auth.Api.RefreshTokens;
 using Micro.Auth.Api.Tokens;
 using Micro.Auth.Api.Users.ViewModels;
+using Micro.Auth.Api.Uuid;
 using Microsoft.AspNetCore.Identity;
 
 namespace Micro.Auth.Api.Users
@@ -20,13 +21,15 @@ namespace Micro.Auth.Api.Users
         private readonly IRefreshTokenRepository _refreshTokenRepository;
         private readonly SignInManager<User> _signInManager;
         private readonly ITokenFactory _tokenFactory;
+        private readonly IUuidService _uuidService;
 
-        public UserService(UserManager<User> userManager, IRefreshTokenRepository refreshTokenRepository, SignInManager<User> signInManager, ITokenFactory tokenFactory)
+        public UserService(UserManager<User> userManager, IRefreshTokenRepository refreshTokenRepository, SignInManager<User> signInManager, ITokenFactory tokenFactory, IUuidService uuidService)
         {
             _userManager = userManager;
             _refreshTokenRepository = refreshTokenRepository;
             _signInManager = signInManager;
             _tokenFactory = tokenFactory;
+            _uuidService = uuidService;
         }
 
         public Task<IdentityResult> Create(CreateUserRequest request)
@@ -65,7 +68,7 @@ namespace Micro.Auth.Api.Users
             }
             var principal = await _signInManager.CreateUserPrincipalAsync(login.User);
             var jwt = _tokenFactory.GenerateJwtToken(principal);
-            var refreshToken = await _refreshTokenRepository.Create(login.ToRefreshToken(_tokenFactory.GenerateToken(32)));
+            var refreshToken = await _refreshTokenRepository.Create(login.ToRefreshToken(_uuidService.GenerateUuId()));
             var res = new LoginSuccessResponse
             {
                 RefreshToken = refreshToken.Value,
