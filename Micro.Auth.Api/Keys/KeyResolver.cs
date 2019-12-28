@@ -24,7 +24,7 @@ namespace Micro.Auth.Api.Keys
             return response switch
             {
                 KeyCreatedResponse keyCreatedResponse => keyCreatedResponse.Body,
-                _ => throw new KeyNotFoundException()
+                _ => throw new KeyNotFoundException($"key: '{keyId}' not found")
             };
         }
     }

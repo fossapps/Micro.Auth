@@ -9,7 +9,6 @@ namespace Micro.Auth.Api.Tokens
 {
     public interface ITokenFactory
     {
-        string GenerateToken(int size);
         string GenerateJwtToken(ClaimsPrincipal principal);
     }
 
@@ -21,16 +20,6 @@ namespace Micro.Auth.Api.Tokens
         public TokenFactory(IKeyContainer keyContainer)
         {
             _keyContainer = keyContainer;
-        }
-
-        public string GenerateToken(int size)
-        {
-            var randomNumber = new byte[size];
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(randomNumber);
-                return Convert.ToBase64String(randomNumber);
-            }
         }
 
         public string GenerateJwtToken(ClaimsPrincipal principal)

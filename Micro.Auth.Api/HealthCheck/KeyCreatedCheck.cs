@@ -24,7 +24,7 @@ namespace Micro.Auth.Api.HealthCheck
 
             if (key.CreatedAt + TimeSpan.FromMinutes(10) + TimeSpan.FromSeconds(30) < DateTime.Now)
             {
-                return HealthCheckResult.Unhealthy("key wasn't generated in last 5 minutes 30 seconds");
+                return HealthCheckResult.Unhealthy("key wasn't generated in last 10 minutes 30 seconds");
             }
 
             var elapsedSinceCreated = DateTime.Now - key.CreatedAt;
