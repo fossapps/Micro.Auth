@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace Tests
+namespace Micro.Auth.UnitTest
 {
     public class Tests
     {

@@ -1,12 +1,12 @@
 using System;
 using System.Text;
 using System.Threading.Tasks;
-using Micro.Auth.Api.Controllers.Extensions;
+using Micro.Auth.Api.UserData.Extensions;
 using Micro.Auth.Api.Users;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace Micro.Auth.Api.Controllers
+namespace Micro.Auth.Api.Authentication
 {
     [Route("api/[controller]")]
     [ApiController]

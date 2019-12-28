@@ -1,4 +1,4 @@
-namespace Micro.Auth.Api.Controllers.ViewModels
+namespace Micro.Auth.Api.Users.ViewModels
 {
     public class FindByEmailResponse
     {

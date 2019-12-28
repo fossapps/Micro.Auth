@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using Micro.Auth.Api.Controllers.ViewModels;
 using Micro.Auth.Api.Models;
 using Micro.Auth.Api.RefreshTokens;
 using Micro.Auth.Api.Tokens;
+using Micro.Auth.Api.Users.ViewModels;
 using Microsoft.AspNetCore.Identity;
 
 namespace Micro.Auth.Api.Users

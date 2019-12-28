@@ -1,5 +1,3 @@
-using System;
-
 namespace Micro.Auth.Api.Keys
 {
     public interface IKeyContainer

@@ -1,11 +1,10 @@
 using System.Threading.Tasks;
-using Micro.Auth.Api.Controllers.ViewModels;
-using Micro.Auth.Api.Users;
+using Micro.Auth.Api.Users.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Micro.Auth.Api.Controllers
+namespace Micro.Auth.Api.Users
 {
     [Route("api/[controller]")]
     [ApiController]
