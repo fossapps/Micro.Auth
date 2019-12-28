@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Micro.Auth.Api.Controllers
+namespace Micro.Auth.Api.Keys
 {
     [Route("api/[controller]")]
     [ApiController]

@@ -25,6 +25,10 @@
       <ProjectReference Include="..\Micro.Sdks\Micro.Sdks.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="UserData" />
+    </ItemGroup>
+
     <Target Name="Install githooks" BeforeTargets="Build">
         <Exec Command="cp ../hooks/* ../.git/hooks/" />
     </Target>
