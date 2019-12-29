@@ -28,7 +28,7 @@ namespace Micro.Auth.UnitTest.Keys
         }
 
         [Test]
-        public async Task TestKeyResolverThrowsWhenKeyIsNotFound()
+        public void TestKeyResolverThrowsWhenKeyIsNotFound()
         {
             var mockKeyStoreClient = new Mock<IKeyStoreClient>();
             mockKeyStoreClient.Setup(x => x.Keys.GetWithHttpMessagesAsync("keyId", null, It.IsAny<CancellationToken>()))

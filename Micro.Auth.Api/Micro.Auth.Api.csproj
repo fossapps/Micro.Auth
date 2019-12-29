@@ -23,6 +23,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Micro.Sdks\Micro.Sdks.csproj" />
+      <ProjectReference Include="..\Micro.Mails\Micro.Mails.csproj" />
     </ItemGroup>
 
     <ItemGroup>

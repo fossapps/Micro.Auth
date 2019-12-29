@@ -1,8 +1,12 @@
+using System;
 using System.Threading.Tasks;
+using App.Metrics;
+using Micro.Auth.Api.Measurements;
 using Micro.Auth.Api.Users.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Micro.Auth.Api.Users
 {
@@ -12,11 +16,15 @@ namespace Micro.Auth.Api.Users
     {
         private readonly IUserRepository _userRepository;
         private readonly IUserService _userService;
+        private readonly ILogger<UsersController> _logger;
+        private readonly IMetrics _metrics;
 
-        public UsersController(IUserRepository userRepository, IUserService userService)
+        public UsersController(IUserRepository userRepository, IUserService userService, ILogger<UsersController> logger, IMetrics metrics)
         {
             _userRepository = userRepository;
             _userService = userService;
+            _logger = logger;
+            _metrics = metrics;
         }
 
         [HttpGet("findByEmail/{email}")]
@@ -49,13 +57,33 @@ namespace Micro.Auth.Api.Users
         [ProducesResponseType(typeof(IdentityResult), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create(CreateUserRequest request)
         {
-            var result = await _userService.Create(request);
-            if (!result.Succeeded)
+            try
             {
-                return BadRequest(result);
-            }
+                var result = await _metrics.UsersControllerMetrics().RecordTimeCreateUser(async () => await _userService.Create(request));
+                if (!result.Succeeded)
+                {
+                    _metrics.UsersControllerMetrics().MarkBadRequest();
+                    return BadRequest(result);
+                }
 
-            return Ok(result);
+                _metrics.UsersControllerMetrics().MarkAccountCreated();
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                _metrics.UsersControllerMetrics().MarkException(e.GetType().FullName);
+                var user = await _userRepository.FindByEmail(request.Email);
+                if (user != null)
+                {
+                    await _userService.Remove(user);
+                }
+                _logger.LogCritical(e, "error while trying to create user");
+                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
+                {
+                    Status = StatusCodes.Status500InternalServerError,
+                    Title = "error handling request",
+                });
+            }
         }
     }
 }
