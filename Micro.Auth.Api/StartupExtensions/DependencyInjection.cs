@@ -7,6 +7,8 @@ using Micro.Auth.Api.RefreshTokens;
 using Micro.Auth.Api.Tokens;
 using Micro.Auth.Api.Users;
 using Micro.Auth.Api.Uuid;
+using Micro.Mails;
+using Micro.Mails.Content;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +31,18 @@ namespace Micro.Auth.Api.StartupExtensions
             services.AddSingleton<IKeyResolver, KeyResolver>();
             services.AddSingleton<ITokenFactory, TokenFactory>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+            services.AddSingleton(SetupMailService(configuration.GetSection("EmailConfig").Get<Mail>()));
+            services.AddSingleton(SetupMailBuilder(configuration.GetSection("EmailConfig").Get<Mail>()));
             services.AddSingleton(SetupKeyStoreHttpClient(configuration.GetSection("Services").Get<Services>().KeyStore));
+        }
+
+        private static MailBuilder SetupMailBuilder(Mail mailConfig)
+        {
+            return new MailBuilder(mailConfig.DefaultSender);
+        }
+        private static IMailService SetupMailService(Mail mailConfig)
+        {
+            return new SmtpMailService(mailConfig.Smtp);
         }
 
         private static IKeyStoreClient SetupKeyStoreHttpClient(KeyStoreConfig config)

@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="./Content/Templates/*" CopyToPublishDirectory="Always" />
+    </ItemGroup>
+</Project>
