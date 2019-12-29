@@ -8,15 +8,15 @@ namespace Micro.Auth.Api.Measurements
 {
     public static class KeyGenerationWorkerExtension
     {
-        public static KeyGenWorker KeyGenerationWorker(this IMetrics metrics)
+        public static KeyGenWorkerMetrics KeyGenerationWorker(this IMetrics metrics)
         {
-            return new KeyGenWorker(metrics);
+            return new KeyGenWorkerMetrics(metrics);
         }
     }
 
-    public class KeyGenWorker : BaseMeasurement
+    public class KeyGenWorkerMetrics : BaseMeasurement
     {
-        public KeyGenWorker(IMetrics metrics) : base(metrics)
+        public KeyGenWorkerMetrics(IMetrics metrics) : base(metrics)
         {
         }
         public async Task<T> RecordTimeToSavePublicKey<T>(Func<Task<T>> fn)

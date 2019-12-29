@@ -42,7 +42,6 @@ namespace Micro.Auth.Api.Users
 
         public async Task<IdentityResult> Create(CreateUserRequest request)
         {
-            throw new Exception("test");
             var result = await _userManager.CreateAsync(new User
             {
                 Email = request.Email,
@@ -53,9 +52,17 @@ namespace Micro.Auth.Api.Users
                 return result;
             }
 
-            var mail = await _mailBuilder.ActivationEmail().Build(new ActivationMailData {Name = request.Username}, new MailAddress(request.Email, request.Username));
-            await _mailService.SendAsync(mail);
-            return result;
+            try
+            {
+                var mail = await _mailBuilder.ActivationEmail().Build(new ActivationMailData {Name = request.Username},
+                    new MailAddress(request.Email, request.Username));
+                await _mailService.SendAsync(mail);
+                return result;
+            }
+            catch (Exception e)
+            {
+                throw new SendingEmailFailedException("sending email failed", e);
+            }
         }
 
         public Task<IdentityResult> Remove(User email)
