@@ -19,6 +19,26 @@ namespace Micro.Auth.Api.Measurements
         {
         }
 
+        public void MarkFindUserByEmail()
+        {
+            MeterMark(new MeterOptions
+            {
+                Name = "UsersController.FindUserByEmail",
+                MeasurementUnit = Unit.Requests,
+                RateUnit = TimeUnit.Seconds
+            });
+        }
+
+        public void MarkFindUserByUsername()
+        {
+            MeterMark(new MeterOptions
+            {
+                Name = "UsersController.FindUserByUsername",
+                MeasurementUnit = Unit.Requests,
+                RateUnit = TimeUnit.Seconds
+            });
+        }
+
         public void MarkBadRequest()
         {
             MeterMark(new MeterOptions
