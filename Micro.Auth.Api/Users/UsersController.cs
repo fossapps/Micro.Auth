@@ -27,23 +27,12 @@ namespace Micro.Auth.Api.Users
             _metrics = metrics;
         }
 
-        [HttpGet("findByEmail/{email}")]
-        [ProducesResponseType(typeof(FindByEmailResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> FindByEmail(string email)
-        {
-            var user = await _userRepository.FindByEmail(email);
-            return Ok(new FindByEmailResponse
-            {
-                Available = user == null,
-                Email = email,
-            });
-        }
-
         [HttpGet("findByUsername/{username}")]
         [ProducesResponseType(typeof(FindByUsernameResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> FindByUsername(string username)
+        public async Task<ActionResult<FindByUsernameResponse>> FindByUsername(string username)
         {
             var user = await _userRepository.FindByUsername(username);
+            _metrics.UsersControllerMetrics().MarkFindUserByUsername();
             return Ok(new FindByUsernameResponse
             {
                 Available = user == null,
@@ -51,6 +40,19 @@ namespace Micro.Auth.Api.Users
             });
         }
 
+
+        [HttpGet("findByEmail/{email}")]
+        [ProducesResponseType(typeof(FindByEmailResponse), StatusCodes.Status200OK)]
+        public async Task<ActionResult<FindByUsernameResponse>> FindByEmail(string email)
+        {
+            var user = await _userRepository.FindByEmail(email);
+            _metrics.UsersControllerMetrics().MarkFindUserByEmail();
+            return Ok(new FindByEmailResponse
+            {
+                Available = user == null,
+                Email = email,
+            });
+        }
 
         [HttpPost]
         [ProducesResponseType(typeof(IdentityResult), StatusCodes.Status200OK)]
