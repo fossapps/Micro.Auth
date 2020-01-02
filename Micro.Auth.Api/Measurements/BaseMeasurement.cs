@@ -16,7 +16,7 @@ namespace Micro.Auth.Api.Measurements
 
         protected T MeasureTime<T>(Func<T> fn, TimerOptions timerOptions)
         {
-            using (_metrics.Measure.Timer.Time(timerOptions))
+            using (_metrics?.Measure.Timer.Time(timerOptions))
             {
                 return fn();
             }
@@ -24,7 +24,7 @@ namespace Micro.Auth.Api.Measurements
 
         protected async Task<T> MeasureTimeAsync<T>(Func<Task<T>> fn, TimerOptions timerOptions)
         {
-            using (_metrics.Measure.Timer.Time(timerOptions))
+            using (_metrics?.Measure.Timer.Time(timerOptions))
             {
                 return await fn();
             }
@@ -32,7 +32,7 @@ namespace Micro.Auth.Api.Measurements
 
         protected void MeterMark(MeterOptions meterOptions)
         {
-            _metrics.Measure.Meter.Mark(meterOptions);
+            _metrics?.Measure.Meter.Mark(meterOptions);
         }
     }
 }
