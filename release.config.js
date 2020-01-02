@@ -1,4 +1,4 @@
-const serviceName = 'auth'
+const serviceName = 'fossapps/micro.auth';
 
 class SemanticReleaseError extends Error {
     constructor(message, code, details) {
@@ -42,25 +42,25 @@ module.exports = {
         },
         {
             path: "@semantic-release/exec",
-            cmd: `docker pull devcurate/devcurate.${serviceName}:\`git rev-parse --short=4 ${process.env.GITHUB_SHA}\``
+            cmd: `docker pull ${serviceName}:\`git rev-parse --short=4 ${process.env.TRAVIS_COMMIT}\``
         },
         {
             path: "@semantic-release/exec",
-            cmd: `docker tag devcurate/devcurate.${serviceName}:\`git rev-parse --short=4 ${process.env.GITHUB_SHA}\` devcurate/devcurate.${serviceName}:\${nextRelease.version}`
+            cmd: `docker tag ${serviceName}:\`git rev-parse --short=4 ${process.env.TRAVIS_COMMIT}\` ${serviceName}:\${nextRelease.version}`
         },
         {
             path: "@semantic-release/exec",
-            cmd: `docker tag devcurate/devcurate.${serviceName}:\`git rev-parse --short=4 ${process.env.GITHUB_SHA}\` devcurate/devcurate.${serviceName}:latest`
+            cmd: `docker tag ${serviceName}:\`git rev-parse --short=4 ${process.env.TRAVIS_COMMIT}\` ${serviceName}:latest`
         }
     ],
     publish: [
         {
             path: "@semantic-release/exec",
-            cmd: `docker push devcurate/devcurate.${serviceName}:\${nextRelease.version}`
+            cmd: `docker push ${serviceName}:\${nextRelease.version}`
         },
         {
             path: "@semantic-release/exec",
-            cmd: `docker push devcurate/devcurate.${serviceName}:latest`
+            cmd: `docker push ${serviceName}:latest`
         },
         "@semantic-release/github"
     ]
