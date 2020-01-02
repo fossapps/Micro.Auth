@@ -75,7 +75,9 @@ jobs:
             TAG=$TAG docker-compose -f ./docker-compose.ci.yml up -d
 
       - name: Run Postman Tests
-        run: sh ./${SERVICE_NAME_CAPITALIZED}.UnitTest/ExternalTests/postman_tests.sh
+        run: |
+          cd ./${SERVICE_NAME_CAPITALIZED}.UnitTest/ExternalTests
+          sh ./postman_tests.sh
   
   publish:
     needs: [ build-docker-image, run-postman-tests ]
