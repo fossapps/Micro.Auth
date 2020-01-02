@@ -1,3 +1,4 @@
+const serviceName = 'fossapps/micro.auth';
 class SemanticReleaseError extends Error {
     constructor(message, code, details) {
         super(message);
@@ -40,25 +41,25 @@ module.exports = {
         },
         {
             path: "@semantic-release/exec",
-            cmd: `docker pull fossapps/micro.auth:\`git rev-parse --short=4 ${process.env.TRAVIS_COMMIT}\``
+            cmd: `docker pull ${serviceName}:\`git rev-parse --short=4 ${process.env.TRAVIS_COMMIT}\``
         },
         {
             path: "@semantic-release/exec",
-            cmd: `docker tag fossapps/micro.auth:\`git rev-parse --short=4 ${process.env.TRAVIS_COMMIT}\` fossapps/micro.auth:\${nextRelease.version}`
+            cmd: `docker tag ${serviceName}:\`git rev-parse --short=4 ${process.env.TRAVIS_COMMIT}\` ${serviceName}:\${nextRelease.version}`
         },
         {
             path: "@semantic-release/exec",
-            cmd: `docker tag fossapps/micro.auth:\`git rev-parse --short=4 ${process.env.TRAVIS_COMMIT}\` fossapps/micro.auth:latest`
+            cmd: `docker tag ${serviceName}:\`git rev-parse --short=4 ${process.env.TRAVIS_COMMIT}\` ${serviceName}:latest`
         }
     ],
     publish: [
         {
             path: "@semantic-release/exec",
-            cmd: "docker push fossapps/micro.auth:${nextRelease.version}"
+            cmd: `docker push ${serviceName}:\${nextRelease.version}`
         },
         {
             path: "@semantic-release/exec",
-            cmd: "docker push fossapps/micro.auth:latest"
+            cmd: `docker push ${serviceName}:latest`
         },
         "@semantic-release/github"
     ]
