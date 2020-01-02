@@ -1,4 +1,5 @@
 const serviceName = 'fossapps/micro.auth';
+
 class SemanticReleaseError extends Error {
     constructor(message, code, details) {
         super(message);
