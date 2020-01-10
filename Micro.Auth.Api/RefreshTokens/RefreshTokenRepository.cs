@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Micro.Auth.Api.Models;
@@ -12,6 +13,7 @@ namespace Micro.Auth.Api.RefreshTokens
         Task<RefreshToken> FindByUser(string userId);
         Task<RefreshToken> Create(RefreshToken token);
         Task Delete(string id);
+        Task<RefreshToken> TouchLastUsed(string id);
     }
 
     public class RefreshTokenRepository : IRefreshTokenRepository
@@ -47,6 +49,19 @@ namespace Micro.Auth.Api.RefreshTokens
         {
             _db.RefreshTokens.Remove(new RefreshToken {Id = id});
             return _db.SaveChangesAsync();
+        }
+
+        public async Task<RefreshToken> TouchLastUsed(string id)
+        {
+            var token = await FindById(id);
+            if (token == null)
+            {
+                throw new RefreshTokenNotFoundException();
+            }
+            token.LastUsed = DateTime.Now;
+            var entry = _db.RefreshTokens.Update(token);
+            await _db.SaveChangesAsync();
+            return entry.Entity;
         }
     }
 }

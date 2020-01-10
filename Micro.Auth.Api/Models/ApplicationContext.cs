@@ -1,4 +1,5 @@
 using Micro.Auth.Api.Configs;
+using Micro.Auth.Api.RefreshTokens;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;

@@ -1,7 +1,7 @@
 using System;
 using System.Net;
 
-namespace Micro.Auth.Api.Models
+namespace Micro.Auth.Api.RefreshTokens
 {
     public class RefreshToken
     {
