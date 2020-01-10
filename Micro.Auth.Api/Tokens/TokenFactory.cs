@@ -1,8 +1,11 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using Micro.Auth.Api.Keys;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Micro.Auth.Api.Tokens
@@ -16,19 +19,22 @@ namespace Micro.Auth.Api.Tokens
     {
 
         private readonly IKeyContainer _keyContainer;
+        private readonly IdentityOptions _identityOptions;
 
-        public TokenFactory(IKeyContainer keyContainer)
+        public TokenFactory(IKeyContainer keyContainer, IOptions<IdentityOptions> identityOptions)
         {
             _keyContainer = keyContainer;
+            _identityOptions = identityOptions.Value;
         }
 
         public string GenerateJwtToken(ClaimsPrincipal principal)
         {
+            var securityStampClaimType = _identityOptions.ClaimsIdentity.SecurityStampClaimType;
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Issuer = "micro.auth",
                 Audience = "micro.auth",
-                Subject = new ClaimsIdentity(principal.Claims),
+                Subject = new ClaimsIdentity(principal.Claims.Where(x => x.Type != securityStampClaimType)),
                 Expires = DateTime.UtcNow.AddMinutes(15),
                 SigningCredentials = new SigningCredentials(new RsaSecurityKey(_keyContainer.GetKey().PrivateKey) {KeyId = _keyContainer.GetKey().KeyId}, SecurityAlgorithms.RsaSha512)
             };
