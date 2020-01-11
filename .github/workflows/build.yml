@@ -93,6 +93,7 @@ jobs:
           DOCKERHUB_LOGIN: ${{secrets.DOCKERHUB_LOGIN}}
           DOCKERHUB_PASSWORD: ${{secrets.DOCKERHUB_PASSWORD}}
         with:
+          semantic_version: 16.0.1
           extra_plugins: |
             @semantic-release/git
             @semantic-release/exec
