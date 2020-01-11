@@ -105,6 +105,5 @@ namespace Micro.Auth.Api.Users
             };
             return (signInResult, res);
         }
-
     }
 }
