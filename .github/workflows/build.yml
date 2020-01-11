@@ -94,6 +94,6 @@ jobs:
           DOCKERHUB_PASSWORD: ${{secrets.DOCKERHUB_PASSWORD}}
         with:
           extra_plugins: |
-            @semantic-release/git
-            @semantic-release/exec
+            @semantic-release/git@7.0.18
+            @semantic-release/exec@3.3.8
             @semantic-release/changelog@3.0.0
