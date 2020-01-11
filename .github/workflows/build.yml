@@ -95,5 +95,5 @@ jobs:
         with:
           extra_plugins: |
             @semantic-release/git@7.0.18
-            @semantic-release/exec
+            @semantic-release/exec@3.3.8
             @semantic-release/changelog@3.0.0
