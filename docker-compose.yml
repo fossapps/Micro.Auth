@@ -27,7 +27,6 @@ services:
       - 8083:8083 # admin interface
 
   chronograf:
-    container_name: chronograf
     image: chronograf
     environment:
       - influxdb-url=influxdb:8086
@@ -35,7 +34,6 @@ services:
       - 18888:8888
 
   grafana:
-    container_name: grafana
     image: grafana/grafana
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=secret
