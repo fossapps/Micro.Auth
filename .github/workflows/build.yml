@@ -78,6 +78,7 @@ jobs:
         run: |
           cd ./${SERVICE_NAME_CAPITALIZED}.UnitTest/ExternalTests
           sh ./postman_tests.sh
+          docker-compose logs
   
   publish:
     needs: [ build-docker-image, run-postman-tests ]
