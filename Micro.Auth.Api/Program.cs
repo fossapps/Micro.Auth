@@ -51,6 +51,7 @@ namespace Micro.Auth.Api
                             });
                         });
                     webBuilder.UseMetrics();
+                    webBuilder.ConfigureSerilog();
                     webBuilder.UseStartup<Startup>();
                 });
     }

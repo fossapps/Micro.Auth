@@ -74,11 +74,6 @@ namespace Micro.Auth.Api.Users
             catch (Exception e)
             {
                 _metrics.UsersControllerMetrics().MarkException(e.GetType().FullName);
-                var user = await _userRepository.FindByEmail(request.Email);
-                if (user != null)
-                {
-                    await _userService.Remove(user);
-                }
                 _logger.LogCritical(e, "error while trying to create user");
                 return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
                 {
