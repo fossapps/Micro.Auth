@@ -1,3 +1,4 @@
+using System;
 using Micro.Auth.Api.Configs;
 using Micro.Auth.Api.StartupExtensions;
 using Microsoft.AspNetCore.Builder;
@@ -7,6 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Serilog;
+using Serilog.Extensions.Logging;
+using Serilog.Sinks.Elasticsearch;
 
 namespace Micro.Auth.Api
 {
@@ -35,6 +39,7 @@ namespace Micro.Auth.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, IOptions<SlackLoggingConfig> slackConfig)
         {
+            loggerFactory.AddSerilog();
             loggerFactory.ConfigureLoggerWithSlack(slackConfig.Value, env);
             if (env.IsDevelopment())
             {
