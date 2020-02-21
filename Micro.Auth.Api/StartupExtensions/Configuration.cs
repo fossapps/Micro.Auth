@@ -11,7 +11,6 @@ namespace Micro.Auth.Api.StartupExtensions
             services.Configure<DatabaseConfig>(configuration.GetSection("DatabaseConfig"));
             services.Configure<Mail>(configuration.GetSection("EmailConfig"));
             services.Configure<ElasticConfiguration>(configuration.GetSection("ElasticConfiguration"));
-            services.Configure<SlackLoggingConfig>(configuration.GetSection("Logging").GetSection("Slack"));
         }
     }
 }
