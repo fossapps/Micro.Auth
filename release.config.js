@@ -42,15 +42,15 @@ module.exports = {
         },
         {
             path: "@semantic-release/exec",
-            cmd: `docker pull ${serviceName}:\`git rev-parse --short=4 ${process.env.TRAVIS_COMMIT}\``
+            cmd: `docker pull ${serviceName}:\`git rev-parse --short=4 ${process.env.GITHUB_SHA}\``
         },
         {
             path: "@semantic-release/exec",
-            cmd: `docker tag ${serviceName}:\`git rev-parse --short=4 ${process.env.TRAVIS_COMMIT}\` ${serviceName}:\${nextRelease.version}`
+            cmd: `docker tag ${serviceName}:\`git rev-parse --short=4 ${process.env.GITHUB_SHA}\` ${serviceName}:\${nextRelease.version}`
         },
         {
             path: "@semantic-release/exec",
-            cmd: `docker tag ${serviceName}:\`git rev-parse --short=4 ${process.env.TRAVIS_COMMIT}\` ${serviceName}:latest`
+            cmd: `docker tag ${serviceName}:\`git rev-parse --short=4 ${process.env.GITHUB_SHA}\` ${serviceName}:latest`
         }
     ],
     publish: [
