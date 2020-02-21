@@ -1,7 +1,7 @@
 version: '3'
 services:
   api:
-    image: fossapps/micro.auth
+    image: fossapps/micro.auth:${TAG}
     ports:
       - 5000:5000
     depends_on:
