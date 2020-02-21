@@ -1,4 +1,3 @@
-using System;
 using Micro.Auth.Api.Configs;
 using Micro.Auth.Api.StartupExtensions;
 using Microsoft.AspNetCore.Builder;
@@ -9,8 +8,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Serilog;
-using Serilog.Extensions.Logging;
-using Serilog.Sinks.Elasticsearch;
 
 namespace Micro.Auth.Api
 {
