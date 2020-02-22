@@ -58,6 +58,7 @@ namespace Micro.Auth.Api.Measurements
                 RateUnit = TimeUnit.Seconds
             });
         }
+
         public async Task<T> RecordTimeCreateUser<T>(Func<Task<T>> fn)
         {
             return await MeasureTimeAsync(fn, new TimerOptions
@@ -89,6 +90,7 @@ namespace Micro.Auth.Api.Measurements
                 Tags = new MetricTags("exceptionType", exceptionType)
             });
         }
+
         public async Task RecordTimeToSendActivationEmail(Func<Task> fn)
         {
             await MeasureTimeAsync(fn, new TimerOptions
@@ -159,6 +161,7 @@ namespace Micro.Auth.Api.Measurements
                 RateUnit = TimeUnit.Seconds
             });
         }
+
         public void MarkPasswordResetUserNotFound()
         {
             MeterMark(new MeterOptions
@@ -168,6 +171,7 @@ namespace Micro.Auth.Api.Measurements
                 RateUnit = TimeUnit.Seconds
             });
         }
+
         public async Task MeasureTimeToSendPasswordResetEmail(Func<Task> fn)
         {
             await MeasureTimeAsync(fn, new TimerOptions
@@ -177,6 +181,7 @@ namespace Micro.Auth.Api.Measurements
                 RateUnit = TimeUnit.Milliseconds
             });
         }
+
         public async Task MeasureTimeToResetPassword(Func<Task> fn)
         {
             await MeasureTimeAsync(fn, new TimerOptions
@@ -186,6 +191,7 @@ namespace Micro.Auth.Api.Measurements
                 RateUnit = TimeUnit.Milliseconds
             });
         }
+
         public void MarkFailedToResetPassword()
         {
             MeterMark(new MeterOptions
@@ -195,6 +201,7 @@ namespace Micro.Auth.Api.Measurements
                 RateUnit = TimeUnit.Seconds
             });
         }
+
         public void MarkResetPasswordException(string exception)
         {
             MeterMark(new MeterOptions
@@ -206,5 +213,46 @@ namespace Micro.Auth.Api.Measurements
             });
         }
 
+        public void MarkPasswordChangeSuccess()
+        {
+            MeterMark(new MeterOptions
+            {
+                Name = "UsersController.ChangePassword.Success",
+                MeasurementUnit = Unit.Requests,
+                RateUnit = TimeUnit.Seconds
+            });
+        }
+
+        public void MarkPasswordChangeFailure(string failure)
+        {
+            MeterMark(new MeterOptions
+            {
+                Name = "UsersController.ChangePassword.BadRequest",
+                MeasurementUnit = Unit.Requests,
+                RateUnit = TimeUnit.Seconds,
+                Tags = new MetricTags("failure", failure)
+            });
+        }
+
+        public void MarkPasswordChangeUserNotFound()
+        {
+            MeterMark(new MeterOptions
+            {
+                Name = "UsersController.ChangePassword.UserNotFound",
+                MeasurementUnit = Unit.Requests,
+                RateUnit = TimeUnit.Seconds
+            });
+        }
+
+        public void MarkPasswordChangeException(string exceptionType)
+        {
+            MeterMark(new MeterOptions
+            {
+                Name = "UsersController.ChangePassword.Exception",
+                MeasurementUnit = Unit.Requests,
+                RateUnit = TimeUnit.Seconds,
+                Tags = new MetricTags("exceptionType", exceptionType)
+            });
+        }
     }
 }
