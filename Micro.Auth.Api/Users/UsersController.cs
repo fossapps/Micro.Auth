@@ -83,7 +83,6 @@ namespace Micro.Auth.Api.Users
         [ProducesResponseType(typeof(IdentityResult), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(IdentityResult), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-
         public async Task<IActionResult> Create(CreateUserRequest request)
         {
             try
@@ -121,6 +120,7 @@ namespace Micro.Auth.Api.Users
                 });
             }
         }
+
 
         [HttpPost("activation/sendEmail")]
         [ProducesResponseType(typeof(void), StatusCodes.Status202Accepted)]
@@ -190,6 +190,38 @@ namespace Micro.Auth.Api.Users
             {
                 _metrics.UsersControllerMetrics().MarkExceptionActivation(e.GetType().FullName);
                 _logger.LogCritical(e, "unexpected error during email confirmation");
+                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
+                {
+                    Title = "error handling request"
+                });
+            }
+        }
+
+
+        [HttpPost("password/requestReset")]
+        [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> RequestPasswordReset(RequestPasswordReset request)
+        {
+            try
+            {
+                await _metrics.UsersControllerMetrics().MeasureTimeToSendPasswordResetEmail(async () =>
+                    await _userService.RequestPasswordReset(request.Login));
+                return Accepted();
+            }
+            catch (UserNotFoundException)
+            {
+                _metrics.UsersControllerMetrics().MarkPasswordResetUserNotFound();
+                return NotFound(new ProblemDetails
+                {
+                    Title = "user not found"
+                });
+            }
+            catch (EmailSendingFailureException e)
+            {
+                _logger.LogError("error sending email", e);
+                _metrics.UsersControllerMetrics().MarkEmailSendingFailure();
                 return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
                 {
                     Title = "error handling request"

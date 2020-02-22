@@ -21,6 +21,7 @@ namespace Micro.Auth.Api.Users
         Task SendActivationEmail(User user);
         Task<(SignInResult, LoginSuccessResponse)> Login(LoginRequest loginRequest);
         Task ConfirmEmail(ConfirmEmailRequest request);
+        Task RequestPasswordReset(string login);
     }
 
     public class UserService : IUserService
@@ -115,6 +116,24 @@ namespace Micro.Auth.Api.Users
         {
             var user = await GetUserByLogin(request.Login);
             await ConfirmEmail(user, request.Token);
+        }
+
+        public async Task RequestPasswordReset(string login)
+        {
+            var user = await GetUserByLogin(login);
+            if (user == null)
+            {
+                throw new UserNotFoundException();
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var mailMessage = await _mailBuilder.ForgotPasswordEmail().Build(new ForgotPasswordEmailDetails
+                {
+                    Name = user.UserName,
+                    PasswordResetUrl = _emailUrlBuilder.BuildPasswordResetFormUrl(token)
+                },
+                new MailAddress(user.Email, user.UserName));
+            await _mailService.SendAsync(mailMessage);
         }
 
         private async Task ConfirmEmail(User user, string token)
