@@ -228,5 +228,42 @@ namespace Micro.Auth.Api.Users
                 });
             }
         }
+
+        [HttpPost("password/reset")]
+        [ProducesResponseType(typeof(void), StatusCodes.Status202Accepted)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
+        {
+            try
+            {
+                await _metrics.UsersControllerMetrics().MeasureTimeToResetPassword(async () =>
+                    await _userService.ResetPassword(request));
+                return Accepted();
+            }
+            catch (UserNotFoundException e)
+            {
+                _logger.LogWarning("user not found while resetting password: ", e);
+                _metrics.UsersControllerMetrics().MarkPasswordResetUserNotFound();
+                return NotFound(new ProblemDetails {Type = "NotFound", Title = "user not found"});
+            }
+            catch (PasswordResetFailedException e)
+            {
+                _logger.LogWarning("failed resetting password", e);
+                _metrics.UsersControllerMetrics().MarkFailedToResetPassword();
+                return Unauthorized(new ProblemDetails {Title = "failed to reset"});
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("caught exception", e);
+                _metrics.UsersControllerMetrics().MarkResetPasswordException(e.GetType().FullName);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
+                {
+                    Title = "error handling request"
+                });
+            }
+        }
     }
 }

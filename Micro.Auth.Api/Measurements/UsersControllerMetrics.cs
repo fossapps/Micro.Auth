@@ -177,5 +177,34 @@ namespace Micro.Auth.Api.Measurements
                 RateUnit = TimeUnit.Milliseconds
             });
         }
+        public async Task MeasureTimeToResetPassword(Func<Task> fn)
+        {
+            await MeasureTimeAsync(fn, new TimerOptions
+            {
+                Name = "UsersController.ResetPassword.TimeToSendPasswordResetEmail",
+                DurationUnit = TimeUnit.Milliseconds,
+                RateUnit = TimeUnit.Milliseconds
+            });
+        }
+        public void MarkFailedToResetPassword()
+        {
+            MeterMark(new MeterOptions
+            {
+                Name = "UsersController.RequestPasswordReset.FailedToReset",
+                MeasurementUnit = Unit.Requests,
+                RateUnit = TimeUnit.Seconds
+            });
+        }
+        public void MarkResetPasswordException(string exception)
+        {
+            MeterMark(new MeterOptions
+            {
+                Name = "UsersController.RequestPasswordReset.Exception",
+                Tags = new MetricTags("name", exception),
+                MeasurementUnit = Unit.Requests,
+                RateUnit = TimeUnit.Seconds
+            });
+        }
+
     }
 }

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Micro.Auth.Api.Users.Exceptions
+namespace Micro.Auth.Api.Users.ViewModels
 {
     public class RequestPasswordReset
     {

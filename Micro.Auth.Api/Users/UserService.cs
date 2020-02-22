@@ -22,6 +22,7 @@ namespace Micro.Auth.Api.Users
         Task<(SignInResult, LoginSuccessResponse)> Login(LoginRequest loginRequest);
         Task ConfirmEmail(ConfirmEmailRequest request);
         Task RequestPasswordReset(string login);
+        Task ResetPassword(ResetPasswordRequest request);
     }
 
     public class UserService : IUserService
@@ -134,6 +135,21 @@ namespace Micro.Auth.Api.Users
                 },
                 new MailAddress(user.Email, user.UserName));
             await _mailService.SendAsync(mailMessage);
+        }
+
+        public async Task ResetPassword(ResetPasswordRequest request)
+        {
+            var user = await GetUserByLogin(request.Login);
+            if (user == null)
+            {
+                throw new UserNotFoundException();
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, request.Token, request.NewPassword);
+            if (!result.Succeeded)
+            {
+                throw new PasswordResetFailedException(result.Errors);
+            }
         }
 
         private async Task ConfirmEmail(User user, string token)
