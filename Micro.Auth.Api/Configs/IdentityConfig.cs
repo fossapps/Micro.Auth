@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Micro.Auth.Api.Configs
 {
-    // todo: document identity config
     public class IdentityConfig
     {
         public PasswordOptions PasswordRequirements { set; get; }
