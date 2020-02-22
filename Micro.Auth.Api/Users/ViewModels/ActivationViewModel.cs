@@ -7,4 +7,13 @@ namespace Micro.Auth.Api.Users.ViewModels
         [Required]
         public string Login { get; set; }
     }
+    public class ConfirmEmailRequest
+    {
+        [Required]
+        public string Login { get; set; }
+
+        [Required]
+        public string Token { get; set;  }
+    }
+
 }

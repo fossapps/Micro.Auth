@@ -129,5 +129,35 @@ namespace Micro.Auth.Api.Measurements
                 Tags = new MetricTags("exceptionType", exceptionType)
             });
         }
+
+        public async Task RecordTimeToConfirmEmail(Func<Task> fn)
+        {
+            await MeasureTimeAsync(fn, new TimerOptions
+            {
+                Name = "UsersController.Activation.TimeToConfirmEmail",
+                DurationUnit = TimeUnit.Milliseconds,
+                RateUnit = TimeUnit.Milliseconds
+            });
+        }
+
+        public void MarkSuccessfulConfirmation()
+        {
+            MeterMark(new MeterOptions
+            {
+                Name = "UsersController.Activation.SuccessfulConfirmation",
+                MeasurementUnit = Unit.Requests,
+                RateUnit = TimeUnit.Seconds
+            });
+        }
+
+        public void MarkFailedToConfirmActivation()
+        {
+            MeterMark(new MeterOptions
+            {
+                Name = "UsersController.Activation.FailedToConfirm",
+                MeasurementUnit = Unit.Errors,
+                RateUnit = TimeUnit.Seconds
+            });
+        }
     }
 }

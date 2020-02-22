@@ -20,6 +20,7 @@ namespace Micro.Auth.Api.Users
         Task SendActivationEmail(string login);
         Task SendActivationEmail(User user);
         Task<(SignInResult, LoginSuccessResponse)> Login(LoginRequest loginRequest);
+        Task ConfirmEmail(ConfirmEmailRequest request);
     }
 
     public class UserService : IUserService
@@ -108,6 +109,25 @@ namespace Micro.Auth.Api.Users
             var user = await GetUserByLogin(loginRequest.Login);
             loginRequest.User = user;
             return await AuthenticateUser(loginRequest);
+        }
+
+        public async Task ConfirmEmail(ConfirmEmailRequest request)
+        {
+            var user = await GetUserByLogin(request.Login);
+            await ConfirmEmail(user, request.Token);
+        }
+
+        private async Task ConfirmEmail(User user, string token)
+        {
+            if (user == null)
+            {
+                throw new UserNotFoundException();
+            }
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (!result.Succeeded)
+            {
+                throw new EmailConfirmationFailedException(result.ToString());
+            }
         }
 
         private Task<User> GetUserByLogin(string usernameOrEmail)
