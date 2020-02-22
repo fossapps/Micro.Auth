@@ -3,7 +3,7 @@ namespace Micro.Auth.Api.Keys
     public interface IKeyContainer
     {
         void SetKey(SigningKey key);
-        SigningKey GetKey();
+        SigningKey? GetKey();
     }
 
     public class KeyContainer : IKeyContainer

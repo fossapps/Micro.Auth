@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using App.Metrics;
 using Micro.Auth.Api.Authentication;
 using Micro.Auth.Api.Users;
+using Micro.Auth.Api.Users.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

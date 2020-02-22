@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using FossApps.KeyStore;
 using FossApps.KeyStore.Models;
 using Micro.Auth.Api.Keys;
+using Micro.Auth.Api.Keys.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Rest;
 using Moq;

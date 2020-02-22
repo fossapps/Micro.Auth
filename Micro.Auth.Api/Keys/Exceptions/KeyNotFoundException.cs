@@ -1,6 +1,6 @@
 using System;
 
-namespace Micro.Auth.Api.Keys
+namespace Micro.Auth.Api.Keys.Exceptions
 {
     public class KeyNotFoundException : Exception
     {

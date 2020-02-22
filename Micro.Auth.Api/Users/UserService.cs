@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Micro.Auth.Api.Models;
 using Micro.Auth.Api.RefreshTokens;
 using Micro.Auth.Api.Tokens;
+using Micro.Auth.Api.Users.Exceptions;
 using Micro.Auth.Api.Users.ViewModels;
 using Micro.Auth.Api.Uuid;
 using Micro.Mails;

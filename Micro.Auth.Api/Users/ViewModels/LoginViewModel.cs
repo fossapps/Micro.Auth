@@ -3,7 +3,7 @@ using System.Net;
 using Micro.Auth.Api.Models;
 using Micro.Auth.Api.RefreshTokens;
 
-namespace Micro.Auth.Api.Users
+namespace Micro.Auth.Api.Users.ViewModels
 {
     public class LoginRequest
     {
