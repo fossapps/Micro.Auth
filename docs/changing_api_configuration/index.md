@@ -1,5 +1,5 @@
 # Default configuration
-The default configuration when you run this service can be found at appsettings.json file on `Micro.KeyStore.Api` project
+The default configuration when you run this service can be found at appsettings.json file on `Micro.Auth.Api` project
 
 ## Overwriting default configuration
 There are two ways to overwrite default configuration:

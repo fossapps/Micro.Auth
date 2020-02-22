@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Micro.Auth.Api.Models;
+using Micro.Auth.Api.RefreshTokens.Exceptions;
 using Micro.Auth.Api.Uuid;
 using Microsoft.EntityFrameworkCore;
 

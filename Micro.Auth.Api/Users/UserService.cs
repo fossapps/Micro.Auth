@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Micro.Auth.Api.Models;
 using Micro.Auth.Api.RefreshTokens;
 using Micro.Auth.Api.Tokens;
+using Micro.Auth.Api.Users.Exceptions;
 using Micro.Auth.Api.Users.ViewModels;
 using Micro.Auth.Api.Uuid;
 using Micro.Mails;
@@ -15,7 +16,6 @@ namespace Micro.Auth.Api.Users
     public interface IUserService
     {
         Task<IdentityResult> Create(CreateUserRequest request);
-        Task<IdentityResult> Remove(User email);
         Task<(SignInResult, LoginSuccessResponse)> Login(LoginRequest loginRequest);
     }
 
@@ -63,11 +63,6 @@ namespace Micro.Auth.Api.Users
             {
                 throw new SendingEmailFailedException("sending email failed", e);
             }
-        }
-
-        public Task<IdentityResult> Remove(User email)
-        {
-            return _userManager.DeleteAsync(email);
         }
 
         public async Task<(SignInResult, LoginSuccessResponse)> Login(LoginRequest loginRequest)

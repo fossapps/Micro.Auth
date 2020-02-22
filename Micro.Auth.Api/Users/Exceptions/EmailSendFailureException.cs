@@ -1,6 +1,6 @@
 using System;
 
-namespace Micro.Auth.Api.Users
+namespace Micro.Auth.Api.Users.Exceptions
 {
     public class SendingEmailFailedException : Exception
     {

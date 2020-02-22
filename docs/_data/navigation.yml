@@ -11,7 +11,19 @@ docs:
         url: /api_docs/
       - title: "Changing Configuration"
         url: /changing_api_configuration/
+      - title: "Dependencies"
+        url: /dependencies/
 
+  - title: Service Configurations
+    children:
+      - title: "Setting Up Cors"
+        url: /cors/
+      - title: "Setting Up Email Client"
+        url: /emails/
+      - title: "Setting Up logging"
+        url: /logging/
+      - title: "Monitoring/Alerts"
+        url: /monitoring/
   - title: Automations
     children:
       - title: "Automatic Releases"

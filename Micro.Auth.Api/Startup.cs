@@ -31,16 +31,18 @@ namespace Micro.Auth.Api
             services.AddControllers();
             services.ConfigureSwagger();
             services.RegisterWorkers();
+            services.AddCorsPolicies(Configuration.GetSection("CorsConfig").Get<CorsConfig>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, IOptions<CorsConfig> corsConfig)
         {
             loggerFactory.AddSerilog();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseCorsPolicy(corsConfig.Value);
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

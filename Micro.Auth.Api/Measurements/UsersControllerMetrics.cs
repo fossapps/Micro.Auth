@@ -68,7 +68,18 @@ namespace Micro.Auth.Api.Measurements
             });
         }
 
-        public void MarkException(string exceptionType)
+        public void MarkFindUserException(string exceptionType)
+        {
+            MeterMark(new MeterOptions
+            {
+                Name = "UsersController.FindUser.Exception",
+                MeasurementUnit = Unit.Items,
+                RateUnit = TimeUnit.Seconds,
+                Tags = new MetricTags("exceptionType", exceptionType)
+            });
+        }
+
+        public void MarkCreateAccountException(string exceptionType)
         {
             MeterMark(new MeterOptions
             {

@@ -31,32 +31,56 @@ namespace Micro.Auth.Api.Users
         [ProducesResponseType(typeof(FindByUsernameResponse), StatusCodes.Status200OK)]
         public async Task<ActionResult<FindByUsernameResponse>> FindByUsername(string username)
         {
-            var user = await _userRepository.FindByUsername(username);
-            _metrics.UsersControllerMetrics().MarkFindUserByUsername();
-            return Ok(new FindByUsernameResponse
+            try
             {
-                Available = user == null,
-                Username = username,
-            });
+                var user = await _userRepository.FindByUsername(username);
+                _metrics.UsersControllerMetrics().MarkFindUserByUsername();
+                return Ok(new FindByUsernameResponse
+                {
+                    Available = user == null,
+                    Username = username,
+                });
+            }
+            catch (Exception e)
+            {
+                _metrics.UsersControllerMetrics().MarkFindUserException(e.GetType().FullName);
+                _logger.LogError("caught exception", e);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
+                {
+                    Title = "error handling request"
+                });
+            }
         }
-
 
         [HttpGet("findByEmail/{email}")]
         [ProducesResponseType(typeof(FindByEmailResponse), StatusCodes.Status200OK)]
         public async Task<ActionResult<FindByUsernameResponse>> FindByEmail(string email)
         {
-            var user = await _userRepository.FindByEmail(email);
-            _metrics.UsersControllerMetrics().MarkFindUserByEmail();
-            return Ok(new FindByEmailResponse
+            try
             {
-                Available = user == null,
-                Email = email,
-            });
+                var user = await _userRepository.FindByEmail(email);
+                _metrics.UsersControllerMetrics().MarkFindUserByEmail();
+                return Ok(new FindByEmailResponse
+                {
+                    Available = user == null,
+                    Email = email,
+                });
+            }
+            catch (Exception e)
+            {
+                _metrics.UsersControllerMetrics().MarkFindUserException(e.GetType().FullName);
+                _logger.LogError("caught exception", e);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
+                {
+                    Title = "error handling request"
+                });
+            }
         }
 
         [HttpPost]
         [ProducesResponseType(typeof(IdentityResult), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(IdentityResult), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Create(CreateUserRequest request)
         {
             try
@@ -64,6 +88,7 @@ namespace Micro.Auth.Api.Users
                 var result = await _metrics.UsersControllerMetrics().RecordTimeCreateUser(async () => await _userService.Create(request));
                 if (!result.Succeeded)
                 {
+                    _logger.LogDebug("bad request: ", result.Errors);
                     _metrics.UsersControllerMetrics().MarkBadRequest();
                     return BadRequest(result);
                 }
@@ -73,7 +98,7 @@ namespace Micro.Auth.Api.Users
             }
             catch (Exception e)
             {
-                _metrics.UsersControllerMetrics().MarkException(e.GetType().FullName);
+                _metrics.UsersControllerMetrics().MarkCreateAccountException(e.GetType().FullName);
                 _logger.LogCritical(e, "error while trying to create user");
                 return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
                 {

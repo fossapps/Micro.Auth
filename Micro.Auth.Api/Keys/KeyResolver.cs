@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using FossApps.KeyStore;
 using FossApps.KeyStore.Models;
+using Micro.Auth.Api.Keys.Exceptions;
 
 namespace Micro.Auth.Api.Keys
 {
