@@ -2,6 +2,9 @@ using System;
 using System.Threading.Tasks;
 using App.Metrics;
 using Micro.Auth.Api.Authentication;
+using Micro.Auth.Api.Authentication.ViewModels;
+using Micro.Auth.Api.RefreshTokens;
+using Micro.Auth.Api.RefreshTokens.Exceptions;
 using Micro.Auth.Api.Users;
 using Micro.Auth.Api.Users.ViewModels;
 using Microsoft.AspNetCore.Http;
@@ -20,7 +23,7 @@ namespace Micro.Auth.UnitTest.Authentication
         public async Task TestLoginReturnsBadRequestForNoWrongAuthData()
         {
             var mockLogger = new Mock<ILogger<SessionController>>();
-            var controller = new SessionController(mockLogger.Object, null, null);
+            var controller = new SessionController(mockLogger.Object, null, null, null);
             var response = await controller.New("Bearer randomtoken");
             Assert.IsInstanceOf<BadRequestObjectResult>(response);
         }
@@ -31,7 +34,7 @@ namespace Micro.Auth.UnitTest.Authentication
             var mockLogger = new Mock<ILogger<SessionController>>();
             var mockUserService = new Mock<IUserService>();
             mockUserService.Setup(x => x.Login(It.IsAny<LoginRequest>())).ThrowsAsync(new Exception());
-            var controller = new SessionController(mockLogger.Object, null, null);
+            var controller = new SessionController(mockLogger.Object, null, null, null);
             var response = await controller.New("Bearer bmlzaDpwYXNz");
             Assert.IsInstanceOf<ObjectResult>(response);
             Assert.AreEqual(500, (response as ObjectResult)?.StatusCode);
@@ -43,7 +46,7 @@ namespace Micro.Auth.UnitTest.Authentication
             var mockLogger = new Mock<ILogger<SessionController>>();
             var mockUserService = new Mock<IUserService>();
             mockUserService.Setup(x => x.Login(It.IsAny<LoginRequest>())).ReturnsAsync((SignInResult.Failed, null));
-            var controller = new SessionController(mockLogger.Object, mockUserService.Object, null);
+            var controller = new SessionController(mockLogger.Object, mockUserService.Object, null, null);
             var response = await controller.New("Bearer bmlzaDpwYXNz");
             Assert.IsInstanceOf<UnauthorizedObjectResult>(response);
         }
@@ -58,7 +61,7 @@ namespace Micro.Auth.UnitTest.Authentication
                 Jwt = "testJwtToken",
                 RefreshToken = "testRefreshToken"
             }));
-            var controller = new SessionController(mockLogger.Object, mockUserService.Object, null);
+            var controller = new SessionController(mockLogger.Object, mockUserService.Object, null, null);
             var response = await controller.New("Bearer bmlzaDpwYXNz");
             Assert.IsInstanceOf<OkObjectResult>(response);
             Assert.AreEqual("testJwtToken", ((response as OkObjectResult)?.Value as LoginSuccessResponse)?.Jwt);
@@ -68,36 +71,36 @@ namespace Micro.Auth.UnitTest.Authentication
         [Test]
         public async Task TestRefreshReturnsNewJwtIfCorrect()
         {
-            // var refreshTokenService = new Mock<IRefreshTokenService>();
-            // refreshTokenService.Setup(x => x.Refresh("testRefreshToken")).ReturnsAsync("sampleJwt");
-            // var controller = new SessionController(null, null, null, refreshTokenService.Object);
-            // var response = await controller.Refresh("Bearer testRefreshToken");
-            // Assert.IsInstanceOf<OkObjectResult>(response);
-            // Assert.IsInstanceOf<RefreshTokenSuccessResponse>((response as OkObjectResult)?.Value);
-            // var successResponse = (response as OkObjectResult)?.Value as RefreshTokenSuccessResponse;
-            // Assert.AreEqual("sampleJwt", successResponse?.Jwt);
+            var refreshTokenService = new Mock<IRefreshTokenService>();
+            refreshTokenService.Setup(x => x.Refresh("testRefreshToken")).ReturnsAsync("sampleJwt");
+            var controller = new SessionController(null, null, null, refreshTokenService.Object);
+            var response = await controller.Refresh("Bearer testRefreshToken");
+            Assert.IsInstanceOf<OkObjectResult>(response);
+            Assert.IsInstanceOf<RefreshTokenSuccessResponse>((response as OkObjectResult)?.Value);
+            var successResponse = (response as OkObjectResult)?.Value as RefreshTokenSuccessResponse;
+            Assert.AreEqual("sampleJwt", successResponse?.Jwt);
         }
 
         [Test]
         public async Task TestRefreshReturnsNotFoundWhenNotFound()
         {
-            // var refreshTokenService = new Mock<IRefreshTokenService>();
-            // refreshTokenService.Setup(x => x.Refresh("testRefreshToken")).ThrowsAsync(new RefreshTokenNotFoundException());
-            // var controller = new SessionController(null, null, null, refreshTokenService.Object);
-            // var response = await controller.Refresh("Bearer testRefreshToken");
-            // Assert.IsInstanceOf<NotFoundObjectResult>(response);
+            var refreshTokenService = new Mock<IRefreshTokenService>();
+            refreshTokenService.Setup(x => x.Refresh("testRefreshToken")).ThrowsAsync(new RefreshTokenNotFoundException());
+            var controller = new SessionController(null, null, null, refreshTokenService.Object);
+            var response = await controller.Refresh("Bearer testRefreshToken");
+            Assert.IsInstanceOf<NotFoundObjectResult>(response);
         }
 
         [Test]
         public async Task TestRefreshReturnsServerErrorWhenOtherExceptionsAreThrown()
         {
-            // var refreshTokenService = new Mock<IRefreshTokenService>();
-            // var mockLogger = new Mock<ILogger<SessionController>>();
-            // refreshTokenService.Setup(x => x.Refresh("testRefreshToken")).ThrowsAsync(new Exception());
-            // var controller = new SessionController(mockLogger.Object, null, null, refreshTokenService.Object);
-            // var response = await controller.Refresh("Bearer testRefreshToken");
-            // Assert.IsInstanceOf<ObjectResult>(response);
-            // Assert.AreEqual(StatusCodes.Status500InternalServerError, (response as ObjectResult)?.StatusCode);
+            var refreshTokenService = new Mock<IRefreshTokenService>();
+            var mockLogger = new Mock<ILogger<SessionController>>();
+            refreshTokenService.Setup(x => x.Refresh("testRefreshToken")).ThrowsAsync(new Exception());
+            var controller = new SessionController(mockLogger.Object, null, null, refreshTokenService.Object);
+            var response = await controller.Refresh("Bearer testRefreshToken");
+            Assert.IsInstanceOf<ObjectResult>(response);
+            Assert.AreEqual(StatusCodes.Status500InternalServerError, (response as ObjectResult)?.StatusCode);
         }
     }
 }

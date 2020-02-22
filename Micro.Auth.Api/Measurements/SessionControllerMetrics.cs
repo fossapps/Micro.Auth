@@ -46,6 +46,27 @@ namespace Micro.Auth.Api.Measurements
             });
         }
 
+        public void MarkLoginException(string exceptionName)
+        {
+            MeterMark(new MeterOptions
+            {
+                Name = "SessionController.New.Exception",
+                MeasurementUnit = Unit.Requests,
+                RateUnit = TimeUnit.Seconds,
+                Tags = new MetricTags("exception", exceptionName)
+            });
+        }
+
+        public void MarkBadAuthData()
+        {
+            MeterMark(new MeterOptions
+            {
+                Name = "SessionController.New.BadAuthData",
+                MeasurementUnit = Unit.Requests,
+                RateUnit = TimeUnit.Seconds,
+            });
+        }
+
         public void MarkException(string exceptionName)
         {
             MeterMark(new MeterOptions

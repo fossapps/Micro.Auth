@@ -1,10 +1,14 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using App.Metrics;
 using Micro.Auth.Api.Measurements;
+using Micro.Auth.Api.UserData.Extensions;
 using Micro.Auth.Api.Users.Exceptions;
 using Micro.Auth.Api.Users.ViewModels;
 using Micro.Mails.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -121,7 +125,6 @@ namespace Micro.Auth.Api.Users
             }
         }
 
-
         [HttpPost("activation/sendEmail")]
         [ProducesResponseType(typeof(void), StatusCodes.Status202Accepted)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
@@ -197,7 +200,6 @@ namespace Micro.Auth.Api.Users
             }
         }
 
-
         [HttpPost("password/requestReset")]
         [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -262,6 +264,46 @@ namespace Micro.Auth.Api.Users
                 return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
                 {
                     Title = "error handling request"
+                });
+            }
+        }
+
+        [HttpPost("password/change")]
+        [Authorize]
+        [ProducesResponseType(typeof(void), StatusCodes.Status202Accepted)]
+        [ProducesResponseType(typeof(IEnumerable<IdentityError>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(IEnumerable<ProblemDetails>), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> ChangePassword(ChangePasswordRequest request)
+        {
+            try
+            {
+                var result = await _userService.ChangePassword(this.GetUserId(), request);
+                if (!result.Succeeded)
+                {
+                    var errorMessage = string.Join(",", result.Errors.Select(x => x.Code).OrderBy(x => x));
+                    _metrics.UsersControllerMetrics().MarkPasswordChangeFailure(errorMessage);
+                    return BadRequest(result.Errors);
+                }
+
+                _metrics.UsersControllerMetrics().MarkPasswordChangeSuccess();
+                return Accepted();
+            }
+            catch (UserNotFoundException e)
+            {
+                _metrics.UsersControllerMetrics().MarkPasswordChangeUserNotFound();
+                _logger.LogError(e, "impossible happened, user not found", this.GetUserId());
+                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
+                {
+                    Title = "unknown error"
+                });
+            }
+            catch (Exception e)
+            {
+                _metrics.UsersControllerMetrics().MarkPasswordChangeException(e.GetType().FullName);
+                _logger.LogWarning(e, "caught exception");
+                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
+                {
+                    Title = "unknown error"
                 });
             }
         }
