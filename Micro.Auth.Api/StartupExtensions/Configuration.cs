@@ -12,6 +12,7 @@ namespace Micro.Auth.Api.StartupExtensions
             services.Configure<Mail>(configuration.GetSection("EmailConfig"));
             services.Configure<ElasticConfiguration>(configuration.GetSection("ElasticConfiguration"));
             services.Configure<CorsConfig>(configuration.GetSection("CorsConfig"));
+            services.Configure<KeyGenerationConfig>(configuration.GetSection("KeyGenerationConfig"));
         }
     }
 }

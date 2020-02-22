@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using App.Metrics;
 using FossApps.KeyStore;
 using FossApps.KeyStore.Models;
+using Micro.Auth.Api.Configs;
 using Micro.Auth.Api.Keys;
 using Micro.Auth.Api.Measurements;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Micro.Auth.Api.Workers
 {
@@ -19,13 +21,15 @@ namespace Micro.Auth.Api.Workers
         private readonly IKeyContainer _keyContainer;
         private readonly IKeyStoreClient _keyStoreClient;
         private readonly IMetrics _metrics;
+        private readonly KeyGenerationConfig _keyGenerationConfig;
 
-        public KeyGenerationWorker(ILogger<KeyGenerationWorker> logger, IKeyContainer keyContainer, IKeyStoreClient keyStoreClient, IMetrics metrics)
+        public KeyGenerationWorker(ILogger<KeyGenerationWorker> logger, IKeyContainer keyContainer, IKeyStoreClient keyStoreClient, IMetrics metrics, IOptions<KeyGenerationConfig> keyGenerationConfig)
         {
             _logger = logger;
             _keyContainer = keyContainer;
             _keyStoreClient = keyStoreClient;
             _metrics = metrics;
+            _keyGenerationConfig = keyGenerationConfig.Value;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -51,7 +55,7 @@ namespace Micro.Auth.Api.Workers
                         break;
                 }
 
-                await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(_keyGenerationConfig.TimeBetweenGenerationInSeconds), stoppingToken);
             }
         }
 
