@@ -42,7 +42,7 @@ namespace Micro.Auth.Api
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseCorsPolicy(env, corsConfig.Value);
+            app.UseCorsPolicy(corsConfig.Value);
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

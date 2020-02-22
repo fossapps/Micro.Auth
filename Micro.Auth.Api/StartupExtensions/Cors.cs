@@ -36,14 +36,8 @@ namespace Micro.Auth.Api.StartupExtensions
             });
         }
 
-        public static void UseCorsPolicy(this IApplicationBuilder app, IWebHostEnvironment env, CorsConfig config)
+        public static void UseCorsPolicy(this IApplicationBuilder app, CorsConfig config)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseCors("development");
-                return;
-            }
-
             app.UseCors(config.PolicyToUse);
         }
     }
