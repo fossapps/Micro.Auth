@@ -1,6 +1,8 @@
+using System;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using Micro.Mails.Exceptions;
 
 namespace Micro.Mails
 {
@@ -16,9 +18,22 @@ namespace Micro.Mails
             _smtpClient = client;
         }
 
-        public Task SendAsync(MailMessage mailMessage)
+        /// <summary>
+        /// Send Email given MailMessage
+        /// </summary>
+        /// <param name="mailMessage"></param>
+        /// <returns></returns>
+        /// <exception cref="EmailSendingFailureException"></exception>
+        public async Task SendAsync(MailMessage mailMessage)
         {
-            return _smtpClient.SendMailAsync(mailMessage);
+            try
+            {
+                await _smtpClient.SendMailAsync(mailMessage);
+            }
+            catch (Exception e)
+            {
+                throw new EmailSendingFailureException(e.Message, e);
+            }
         }
     }
 }
