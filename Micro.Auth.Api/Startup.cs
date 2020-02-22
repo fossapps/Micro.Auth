@@ -27,7 +27,7 @@ namespace Micro.Auth.Api
             services.AddMetrics();
             services.ConfigureRequiredDependencies(Configuration);
             services.ConfigureHealthChecks();
-            services.ConfigureIdentityServices();
+            services.ConfigureIdentityServices(Configuration);
             services.AddControllers();
             services.ConfigureSwagger();
             services.RegisterWorkers();
