@@ -66,5 +66,16 @@ namespace Micro.Auth.Api.Measurements
                 RateUnit = TimeUnit.Seconds,
             });
         }
+
+        public void MarkException(string exceptionName)
+        {
+            MeterMark(new MeterOptions
+            {
+                Name = "SessionController.Refresh.Exception",
+                MeasurementUnit = Unit.Requests,
+                RateUnit = TimeUnit.Seconds,
+                Tags = new MetricTags("exception", exceptionName)
+            });
+        }
     }
 }

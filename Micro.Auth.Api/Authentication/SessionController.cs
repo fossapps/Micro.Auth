@@ -4,7 +4,10 @@ using System.Text;
 using System.Threading.Tasks;
 using App.Metrics;
 using Micro.Auth.Api.Authentication.Exceptions;
+using Micro.Auth.Api.Authentication.ViewModels;
 using Micro.Auth.Api.Measurements;
+using Micro.Auth.Api.RefreshTokens;
+using Micro.Auth.Api.RefreshTokens.Exceptions;
 using Micro.Auth.Api.UserData.Extensions;
 using Micro.Auth.Api.Users;
 using Micro.Auth.Api.Users.ViewModels;
@@ -22,12 +25,14 @@ namespace Micro.Auth.Api.Authentication
         private readonly ILogger<SessionController> _logger;
         private readonly IUserService _userService;
         private readonly IMetrics _metrics;
+        private readonly IRefreshTokenService _refreshTokenService;
 
-        public SessionController(ILogger<SessionController> logger, IUserService userService, IMetrics metrics)
+        public SessionController(ILogger<SessionController> logger, IUserService userService, IMetrics metrics, IRefreshTokenService refreshTokenService)
         {
             _logger = logger;
             _userService = userService;
             _metrics = metrics;
+            _refreshTokenService = refreshTokenService;
         }
 
         [HttpPost("new")]
@@ -73,6 +78,46 @@ namespace Micro.Auth.Api.Authentication
                 return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
                 {
                     Title = "error handling request"
+                });
+            }
+        }
+
+        [HttpPost("refresh")]
+        [ProducesResponseType(typeof(RefreshTokenSuccessResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Refresh(
+            [FromHeader(Name = "Authorization")]
+            [Required]
+            [StartsWith("Bearer")]
+            string authorization
+        )
+        {
+            var token = GetBearerToken(authorization);
+            try
+            {
+                var jwt = await _refreshTokenService.Refresh(token);
+                return Ok(new RefreshTokenSuccessResponse
+                {
+                    Jwt = jwt
+                });
+            }
+            catch (RefreshTokenNotFoundException)
+            {
+                _metrics.SessionController().MarkTokenNotFoundInDb();
+                return NotFound(new ProblemDetails
+                {
+                    Title = "token is invalid"
+                });
+            }
+            catch (Exception e)
+            {
+                _logger.LogCritical(e, "error processing request");
+                _metrics.SessionController().MarkException(e.GetType().FullName);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
+                {
+                    Detail = "error processing request"
                 });
             }
         }
