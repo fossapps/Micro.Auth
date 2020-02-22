@@ -11,7 +11,8 @@ docs:
         url: /api_docs/
       - title: "Changing Configuration"
         url: /changing_api_configuration/
-
+      - title: "Dependencies"
+        url: /dependencies/
   - title: Automations
     children:
       - title: "Automatic Releases"
