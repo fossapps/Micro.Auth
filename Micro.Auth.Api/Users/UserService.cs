@@ -15,7 +15,6 @@ namespace Micro.Auth.Api.Users
     public interface IUserService
     {
         Task<IdentityResult> Create(CreateUserRequest request);
-        Task<IdentityResult> Remove(User email);
         Task<(SignInResult, LoginSuccessResponse)> Login(LoginRequest loginRequest);
     }
 
@@ -63,11 +62,6 @@ namespace Micro.Auth.Api.Users
             {
                 throw new SendingEmailFailedException("sending email failed", e);
             }
-        }
-
-        public Task<IdentityResult> Remove(User email)
-        {
-            return _userManager.DeleteAsync(email);
         }
 
         public async Task<(SignInResult, LoginSuccessResponse)> Login(LoginRequest loginRequest)
