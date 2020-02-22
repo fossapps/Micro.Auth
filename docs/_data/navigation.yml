@@ -22,6 +22,8 @@ docs:
         url: /emails/
       - title: "Setting Up logging"
         url: /logging/
+      - title: "Monitoring/Alerts"
+        url: /monitoring/
   - title: Automations
     children:
       - title: "Automatic Releases"
