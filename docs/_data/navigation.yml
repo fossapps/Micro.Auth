@@ -21,7 +21,7 @@ docs:
       - title: "Setting Up Email Client"
         url: /emails/
       - title: "Setting Up logging"
-        url: /logging/
+        url: /elk_logging/
       - title: "Monitoring/Alerts"
         url: /monitoring/
       - title: "Authentication Options"
