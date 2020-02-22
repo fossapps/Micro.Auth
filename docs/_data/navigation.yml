@@ -18,6 +18,8 @@ docs:
     children:
       - title: "Setting Up Cors"
         url: /cors/
+      - title: "Setting Up Email Client"
+        url: /emails/
   - title: Automations
     children:
       - title: "Automatic Releases"
