@@ -129,5 +129,82 @@ namespace Micro.Auth.Api.Measurements
                 Tags = new MetricTags("exceptionType", exceptionType)
             });
         }
+
+        public async Task RecordTimeToConfirmEmail(Func<Task> fn)
+        {
+            await MeasureTimeAsync(fn, new TimerOptions
+            {
+                Name = "UsersController.Activation.TimeToConfirmEmail",
+                DurationUnit = TimeUnit.Milliseconds,
+                RateUnit = TimeUnit.Milliseconds
+            });
+        }
+
+        public void MarkSuccessfulConfirmation()
+        {
+            MeterMark(new MeterOptions
+            {
+                Name = "UsersController.Activation.SuccessfulConfirmation",
+                MeasurementUnit = Unit.Requests,
+                RateUnit = TimeUnit.Seconds
+            });
+        }
+
+        public void MarkFailedToConfirmActivation()
+        {
+            MeterMark(new MeterOptions
+            {
+                Name = "UsersController.Activation.FailedToConfirm",
+                MeasurementUnit = Unit.Errors,
+                RateUnit = TimeUnit.Seconds
+            });
+        }
+        public void MarkPasswordResetUserNotFound()
+        {
+            MeterMark(new MeterOptions
+            {
+                Name = "UsersController.RequestPasswordReset.UserNotFound",
+                MeasurementUnit = Unit.Requests,
+                RateUnit = TimeUnit.Seconds
+            });
+        }
+        public async Task MeasureTimeToSendPasswordResetEmail(Func<Task> fn)
+        {
+            await MeasureTimeAsync(fn, new TimerOptions
+            {
+                Name = "UsersController.RequestPasswordReset.TimeToSendPasswordResetEmail",
+                DurationUnit = TimeUnit.Milliseconds,
+                RateUnit = TimeUnit.Milliseconds
+            });
+        }
+        public async Task MeasureTimeToResetPassword(Func<Task> fn)
+        {
+            await MeasureTimeAsync(fn, new TimerOptions
+            {
+                Name = "UsersController.ResetPassword.TimeToSendPasswordResetEmail",
+                DurationUnit = TimeUnit.Milliseconds,
+                RateUnit = TimeUnit.Milliseconds
+            });
+        }
+        public void MarkFailedToResetPassword()
+        {
+            MeterMark(new MeterOptions
+            {
+                Name = "UsersController.RequestPasswordReset.FailedToReset",
+                MeasurementUnit = Unit.Requests,
+                RateUnit = TimeUnit.Seconds
+            });
+        }
+        public void MarkResetPasswordException(string exception)
+        {
+            MeterMark(new MeterOptions
+            {
+                Name = "UsersController.RequestPasswordReset.Exception",
+                Tags = new MetricTags("name", exception),
+                MeasurementUnit = Unit.Requests,
+                RateUnit = TimeUnit.Seconds
+            });
+        }
+
     }
 }

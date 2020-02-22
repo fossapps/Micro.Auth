@@ -20,6 +20,9 @@ namespace Micro.Auth.Api.Users
         Task SendActivationEmail(string login);
         Task SendActivationEmail(User user);
         Task<(SignInResult, LoginSuccessResponse)> Login(LoginRequest loginRequest);
+        Task ConfirmEmail(ConfirmEmailRequest request);
+        Task RequestPasswordReset(string login);
+        Task ResetPassword(ResetPasswordRequest request);
     }
 
     public class UserService : IUserService
@@ -108,6 +111,58 @@ namespace Micro.Auth.Api.Users
             var user = await GetUserByLogin(loginRequest.Login);
             loginRequest.User = user;
             return await AuthenticateUser(loginRequest);
+        }
+
+        public async Task ConfirmEmail(ConfirmEmailRequest request)
+        {
+            var user = await GetUserByLogin(request.Login);
+            await ConfirmEmail(user, request.Token);
+        }
+
+        public async Task RequestPasswordReset(string login)
+        {
+            var user = await GetUserByLogin(login);
+            if (user == null)
+            {
+                throw new UserNotFoundException();
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var mailMessage = await _mailBuilder.ForgotPasswordEmail().Build(new ForgotPasswordEmailDetails
+                {
+                    Name = user.UserName,
+                    PasswordResetUrl = _emailUrlBuilder.BuildPasswordResetFormUrl(token)
+                },
+                new MailAddress(user.Email, user.UserName));
+            await _mailService.SendAsync(mailMessage);
+        }
+
+        public async Task ResetPassword(ResetPasswordRequest request)
+        {
+            var user = await GetUserByLogin(request.Login);
+            if (user == null)
+            {
+                throw new UserNotFoundException();
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, request.Token, request.NewPassword);
+            if (!result.Succeeded)
+            {
+                throw new PasswordResetFailedException(result.Errors);
+            }
+        }
+
+        private async Task ConfirmEmail(User user, string token)
+        {
+            if (user == null)
+            {
+                throw new UserNotFoundException();
+            }
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (!result.Succeeded)
+            {
+                throw new EmailConfirmationFailedException(result.ToString());
+            }
         }
 
         private Task<User> GetUserByLogin(string usernameOrEmail)
