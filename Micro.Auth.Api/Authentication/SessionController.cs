@@ -59,6 +59,7 @@ namespace Micro.Auth.Api.Authentication
             }
             catch (BadBasicAuthorizationDataException e)
             {
+                _metrics.SessionController().MarkBadAuthData();
                 _logger.LogInformation(e.Message, e);
                 return BadRequest(new ProblemDetails
                 {
@@ -67,7 +68,8 @@ namespace Micro.Auth.Api.Authentication
             }
             catch (Exception e)
             {
-                _logger.LogWarning(e.Message, e);
+                _metrics.SessionController().MarkLoginException(e.GetType().FullName);
+                _logger.LogError(e.Message, e);
                 return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
                 {
                     Title = "error handling request"
