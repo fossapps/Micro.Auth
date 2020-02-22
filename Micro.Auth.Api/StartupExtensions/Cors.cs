@@ -18,8 +18,7 @@ namespace Micro.Auth.Api.StartupExtensions
                         builder
                             .AllowAnyOrigin()
                             .AllowAnyHeader()
-                            .AllowAnyMethod()
-                            .AllowCredentials();
+                            .AllowAnyMethod();
                     });
                 x.AddPolicy("production", builder =>
                 {

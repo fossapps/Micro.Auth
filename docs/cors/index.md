@@ -16,6 +16,8 @@ Auth services comes with two policies included so you can choose which one to us
 ### development (default)
 This policy is meant to be used on development environment and for testing/staging purposes, this is not a policy one should be using in production environment
 
+*Note: This policy can't allow credentials when there's allow any origin, if you wish to allow credentials on local, you'll have to use production settings and whitelist localhost on your origin list*
+
 ### production
 This policy actually reads the `CorsConfig` configuration section and sets those values for cors.
 Imagine you wanted to allow example.com and test.com as your allowed domains, and x-client-id, x-authorization-token as your allowed headers, you could simply set those values on your configuration and use development policy
