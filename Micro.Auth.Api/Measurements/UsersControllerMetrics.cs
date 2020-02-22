@@ -89,5 +89,45 @@ namespace Micro.Auth.Api.Measurements
                 Tags = new MetricTags("exceptionType", exceptionType)
             });
         }
+        public async Task RecordTimeToSendActivationEmail(Func<Task> fn)
+        {
+            await MeasureTimeAsync(fn, new TimerOptions
+            {
+                Name = "UsersController.Activation.TimeToSendActivationEmail",
+                DurationUnit = TimeUnit.Milliseconds,
+                RateUnit = TimeUnit.Milliseconds
+            });
+        }
+
+        public void MarkUserNotFoundActivation()
+        {
+            MeterMark(new MeterOptions
+            {
+                Name = "UsersController.Activation.UserNotFound",
+                MeasurementUnit = Unit.Errors,
+                RateUnit = TimeUnit.Seconds
+            });
+        }
+
+        public void MarkEmailSendingFailure()
+        {
+            MeterMark(new MeterOptions
+            {
+                Name = "UsersController.Mail.SendingFailed",
+                MeasurementUnit = Unit.Items,
+                RateUnit = TimeUnit.Seconds,
+            });
+        }
+
+        public void MarkExceptionActivation(string exceptionType)
+        {
+            MeterMark(new MeterOptions
+            {
+                Name = "UsersController.Activation.Exception",
+                MeasurementUnit = Unit.Items,
+                RateUnit = TimeUnit.Seconds,
+                Tags = new MetricTags("exceptionType", exceptionType)
+            });
+        }
     }
 }

@@ -32,6 +32,7 @@ namespace Micro.Auth.Api.StartupExtensions
             services.AddSingleton<ITokenFactory, TokenFactory>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+            services.AddSingleton(new EmailUrlBuilder("http://localhost:5000/"));
             services.AddSingleton(SetupMailService(configuration.GetSection("EmailConfig").Get<Mail>()));
             services.AddSingleton(SetupMailBuilder(configuration.GetSection("EmailConfig").Get<Mail>()));
             services.AddSingleton(SetupKeyStoreHttpClient(configuration.GetSection("Services").Get<Services>().KeyStore));

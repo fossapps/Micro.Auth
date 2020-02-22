@@ -9,6 +9,7 @@ using Micro.Auth.Api.Users.ViewModels;
 using Micro.Auth.Api.Uuid;
 using Micro.Mails;
 using Micro.Mails.Content;
+using Micro.Mails.Exceptions;
 using Microsoft.AspNetCore.Identity;
 
 namespace Micro.Auth.Api.Users
@@ -16,6 +17,8 @@ namespace Micro.Auth.Api.Users
     public interface IUserService
     {
         Task<IdentityResult> Create(CreateUserRequest request);
+        Task SendActivationEmail(string login);
+        Task SendActivationEmail(User user);
         Task<(SignInResult, LoginSuccessResponse)> Login(LoginRequest loginRequest);
     }
 
@@ -28,8 +31,9 @@ namespace Micro.Auth.Api.Users
         private readonly IUuidService _uuidService;
         private readonly MailBuilder _mailBuilder;
         private readonly IMailService _mailService;
+        private readonly EmailUrlBuilder _emailUrlBuilder;
 
-        public UserService(UserManager<User> userManager, IRefreshTokenRepository refreshTokenRepository, SignInManager<User> signInManager, ITokenFactory tokenFactory, IUuidService uuidService, MailBuilder mailBuilder, IMailService mailService)
+        public UserService(UserManager<User> userManager, IRefreshTokenRepository refreshTokenRepository, SignInManager<User> signInManager, ITokenFactory tokenFactory, IUuidService uuidService, MailBuilder mailBuilder, IMailService mailService, EmailUrlBuilder emailUrlBuilder)
         {
             _userManager = userManager;
             _refreshTokenRepository = refreshTokenRepository;
@@ -38,8 +42,15 @@ namespace Micro.Auth.Api.Users
             _uuidService = uuidService;
             _mailBuilder = mailBuilder;
             _mailService = mailService;
+            _emailUrlBuilder = emailUrlBuilder;
         }
 
+        /// <summary>
+        /// Create and send activation email
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <exception cref="EmailSendingFailureException"></exception>
         public async Task<IdentityResult> Create(CreateUserRequest request)
         {
             var result = await _userManager.CreateAsync(new User
@@ -52,17 +63,44 @@ namespace Micro.Auth.Api.Users
                 return result;
             }
 
-            try
+            await SendActivationEmail(request.Username);
+            return result;
+        }
+
+        public async Task SendActivationEmail(string login)
+        {
+            await SendActivationEmail(await GetUserByLogin(login));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        /// <exception cref="UserNotFoundException"></exception>
+        /// <exception cref="UserAlreadyActivatedException"></exception>
+        /// <exception cref="EmailSendingFailureException"></exception>
+        public async Task SendActivationEmail(User user)
+        {
+            if (user == null)
             {
-                var mail = await _mailBuilder.ActivationEmail().Build(new ActivationMailData {Name = request.Username},
-                    new MailAddress(request.Email, request.Username));
-                await _mailService.SendAsync(mail);
-                return result;
+                throw new UserNotFoundException();
             }
-            catch (Exception e)
+
+            if (user.EmailConfirmed)
             {
-                throw new SendingEmailFailedException("sending email failed", e);
+                throw new UserAlreadyActivatedException();
             }
+
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            _emailUrlBuilder.BuildActivationUrl(token);
+            var mail = await _mailBuilder.ActivationEmail()
+                .Build(new ActivationMailData
+                {
+                    Name = user.UserName,
+                    ActivationUrl = _emailUrlBuilder.BuildActivationUrl(token)
+                }, new MailAddress(user.Email, user.UserName));
+            await _mailService.SendAsync(mail);
         }
 
         public async Task<(SignInResult, LoginSuccessResponse)> Login(LoginRequest loginRequest)
