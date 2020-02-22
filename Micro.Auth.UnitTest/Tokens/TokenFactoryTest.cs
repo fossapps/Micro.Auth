@@ -1,8 +1,8 @@
-using System.Buffers.Text;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
+using Micro.Auth.Api.Configs;
 using Micro.Auth.Api.Keys;
 using Micro.Auth.Api.Tokens;
 using Microsoft.AspNetCore.Identity;
@@ -29,7 +29,14 @@ namespace Micro.Auth.UnitTest.Tokens
             var key = SigningKey.Create();
             key.KeyId = "keyId";
             keyContainer.Setup(x => x.GetKey()).Returns(key);
-            var tokenFactory = new TokenFactory(keyContainer.Object, mockOptions.Object);
+            var mockIdentityConfigOption = new Mock<IOptions<IdentityConfig>>();
+            mockIdentityConfigOption.Setup(x => x.Value).Returns(new IdentityConfig
+            {
+                Audiences = new List<string> {"aud1", "aud2"},
+                Issuer = "auth_test",
+                IssueForAudience = "issuer"
+            });
+            var tokenFactory = new TokenFactory(keyContainer.Object, mockOptions.Object, mockIdentityConfigOption.Object);
             var claims = new []
             {
                 new Claim("name", "Alice"),

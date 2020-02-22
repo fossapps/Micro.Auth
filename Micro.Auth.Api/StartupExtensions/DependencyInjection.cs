@@ -32,19 +32,16 @@ namespace Micro.Auth.Api.StartupExtensions
             services.AddSingleton<ITokenFactory, TokenFactory>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             services.AddScoped<IRefreshTokenService, RefreshTokenService>();
-            services.AddSingleton(new EmailUrlBuilder("http://localhost:5000/"));
-            services.AddSingleton(SetupMailService(configuration.GetSection("EmailConfig").Get<Mail>()));
-            services.AddSingleton(SetupMailBuilder(configuration.GetSection("EmailConfig").Get<Mail>()));
+            services.SetupMail(configuration);
             services.AddSingleton(SetupKeyStoreHttpClient(configuration.GetSection("Services").Get<Services>().KeyStore));
         }
 
-        private static MailBuilder SetupMailBuilder(Mail mailConfig)
+        private static void SetupMail(this IServiceCollection services, IConfiguration configuration)
         {
-            return new MailBuilder(mailConfig.DefaultSender);
-        }
-        private static IMailService SetupMailService(Mail mailConfig)
-        {
-            return new SmtpMailService(mailConfig.Smtp);
+            var emailConfig = configuration.GetSection("EmailConfig").Get<Mail>();
+            services.AddSingleton(new EmailUrlBuilder(emailConfig.EmailUrlConfig));
+            services.AddSingleton<IMailService>(new SmtpMailService(emailConfig.Smtp));
+            services.AddSingleton(new MailBuilder(emailConfig.DefaultSender));
         }
 
         private static IKeyStoreClient SetupKeyStoreHttpClient(KeyStoreConfig config)

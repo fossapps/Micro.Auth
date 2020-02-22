@@ -2,21 +2,21 @@ namespace Micro.Mails
 {
     public class EmailUrlBuilder
     {
-        private readonly string _baseUrl;
+        private readonly EmailUrlConfig _config;
 
-        public EmailUrlBuilder(string baseUrl)
+        public EmailUrlBuilder(EmailUrlConfig config)
         {
-            _baseUrl = baseUrl;
+            _config = config;
         }
 
         public string BuildActivationUrl(string activationToken)
         {
-            return $"{_baseUrl}/account/activate/{activationToken}";
+            return $"{_config.AuthenticationUrlEndpoint}/account/activate/{activationToken}";
         }
 
         public string BuildPasswordResetFormUrl(string activationToken)
         {
-            return $"{_baseUrl}/account/reset/{activationToken}";
+            return $"{_config.AuthenticationUrlEndpoint}/account/reset/{activationToken}";
         }
     }
 }

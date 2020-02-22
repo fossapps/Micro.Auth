@@ -48,7 +48,10 @@ namespace Micro.Auth.Api.Authentication
                 {
                     var problem = ProcessErrorResult(result);
                     _metrics.SessionController().MarkBadLoginAttempt(problem);
-                    return Unauthorized(problem);
+                    return Unauthorized(new ProblemDetails
+                    {
+                        Title = problem
+                    });
                 }
 
                 _metrics.SessionController().MarkSuccessfulLoginAttempt();
