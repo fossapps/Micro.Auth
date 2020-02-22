@@ -14,19 +14,18 @@ namespace Micro.Auth.Api.StartupExtensions
                 c.ResolveConflictingActions(apiDescription => apiDescription.Last());
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Title",
+                    Title = "Micro.Auth",
                     Version = "v1"
                 });
             });
-
         }
 
         public static void AddSwaggerWithUi(this IApplicationBuilder app)
         {
-            app.UseSwagger();
+            app.UseSwagger(x => x.SerializeAsV2 = true);
             app.UseSwaggerUI(x =>
             {
-                x.RoutePrefix = "swagger";
+                x.RoutePrefix = "";
                 x.SwaggerEndpoint("/swagger/v1/swagger.json", "V1");
             });
         }
