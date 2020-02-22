@@ -24,6 +24,8 @@ docs:
         url: /logging/
       - title: "Monitoring/Alerts"
         url: /monitoring/
+      - title: "Authentication Options"
+        url: /auth_options/
   - title: Automations
     children:
       - title: "Automatic Releases"
