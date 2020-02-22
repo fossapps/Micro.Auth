@@ -13,6 +13,11 @@ docs:
         url: /changing_api_configuration/
       - title: "Dependencies"
         url: /dependencies/
+
+  - title: Service Configurations
+    children:
+      - title: "Setting Up Cors"
+        url: /cors/
   - title: Automations
     children:
       - title: "Automatic Releases"
