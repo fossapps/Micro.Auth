@@ -20,6 +20,8 @@ docs:
         url: /cors/
       - title: "Setting Up Email Client"
         url: /emails/
+      - title: "Setting Up logging"
+        url: /logging/
   - title: Automations
     children:
       - title: "Automatic Releases"
