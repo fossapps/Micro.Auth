@@ -21,4 +21,4 @@ jobs:
       - name: Push to nuget
         run: |
           cd Micro.Auth.Sdk
-          dotnet nuget push ./bin/Release/Micro.Auth.Sdk* -k ${{secrets.NUGET_TOKEN}} -s https://api.nuget.org/v3/index.json
+          dotnet nuget push ./bin/Release/Micro.Auth.Sdk* -k ${{secrets.NUGET_TOKEN}} -s https://api.nuget.org/v3/index.json --skip-duplicate
