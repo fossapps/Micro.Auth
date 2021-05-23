@@ -1,0 +1,24 @@
+name: Publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.203
+      - name: Build
+        run: |
+          cd Micro.Auth.Sdk
+          TAG="${GITHUB_REF/refs\/tags\/v/}"
+          dotnet pack --include-symbols -p:PackageVersion=$TAG -c Release
+      - name: Push to nuget
+        run: |
+          cd Micro.Auth.Sdk
+          dotnet nuget push ./bin/Release/Fossapps.Micro.KeyStore* -k ${{secrets.NUGET_TOKEN}} -s https://api.nuget.org/v3/index.json

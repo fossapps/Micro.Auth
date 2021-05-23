@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Micro.Auth.UnitTest", "Micr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Micro.Mails", "Micro.Mails\Micro.Mails.csproj", "{2F9F8AA4-8559-441D-92CF-B917744C89C6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Micro.Auth.Sdk", "Micro.Auth.Sdk\Micro.Auth.Sdk.csproj", "{A3521EA0-BA6B-462E-896A-A8650A2FE148}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{2F9F8AA4-8559-441D-92CF-B917744C89C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F9F8AA4-8559-441D-92CF-B917744C89C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F9F8AA4-8559-441D-92CF-B917744C89C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3521EA0-BA6B-462E-896A-A8650A2FE148}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3521EA0-BA6B-462E-896A-A8650A2FE148}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3521EA0-BA6B-462E-896A-A8650A2FE148}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3521EA0-BA6B-462E-896A-A8650A2FE148}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
