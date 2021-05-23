@@ -1,8 +1,8 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using FossApps.KeyStore;
-using FossApps.KeyStore.Models;
+using Fossapps.Micro.KeyStore;
+using Fossapps.Micro.KeyStore.Models;
 using Micro.Auth.Api.HealthCheck;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
