@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
-using FossApps.KeyStore;
-using FossApps.KeyStore.Models;
+using Fossapps.Micro.KeyStore;
+using Fossapps.Micro.KeyStore.Models;
 using Micro.Auth.Api.Keys;
 using Micro.Auth.Api.Keys.Exceptions;
 using Microsoft.AspNetCore.Http;

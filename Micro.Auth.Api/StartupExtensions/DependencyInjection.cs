@@ -1,5 +1,5 @@
 using System;
-using FossApps.KeyStore;
+using Fossapps.Micro.KeyStore;
 using Micro.Auth.Api.Configs;
 using Micro.Auth.Api.Keys;
 using Micro.Auth.Api.Models;

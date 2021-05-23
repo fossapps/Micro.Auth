@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 
 namespace Micro.Auth.Api.UserData.Extensions
 {
@@ -6,7 +7,8 @@ namespace Micro.Auth.Api.UserData.Extensions
     {
         public static string? GetUserAgent(this ControllerBase controller)
         {
-            var containsData = controller?.HttpContext?.Request?.Headers?.TryGetValue("User-Agent", out var userAgent);
+            var userAgent = StringValues.Empty;
+            var containsData = controller?.HttpContext?.Request?.Headers?.TryGetValue("User-Agent", out userAgent);
             return containsData.HasValue && containsData.Value ? userAgent.ToString() : null;
         }
     }
