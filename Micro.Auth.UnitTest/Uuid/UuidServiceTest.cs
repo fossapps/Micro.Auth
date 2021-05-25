@@ -1,4 +1,4 @@
-using Micro.Auth.Api.Uuid;
+using Micro.Auth.Common;
 using NUnit.Framework;
 
 namespace Micro.Auth.UnitTest.Uuid

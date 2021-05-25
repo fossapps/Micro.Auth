@@ -7,6 +7,7 @@ using Micro.Auth.Api.Measurements;
 using Micro.Auth.Api.UserData.Extensions;
 using Micro.Auth.Api.Users.Exceptions;
 using Micro.Auth.Api.Users.ViewModels;
+using Micro.Auth.Storage;
 using Micro.Mails.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

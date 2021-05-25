@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using Micro.Auth.Api.Models;
+using Micro.Auth.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;

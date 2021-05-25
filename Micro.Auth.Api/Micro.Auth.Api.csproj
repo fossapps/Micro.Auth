@@ -29,7 +29,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Micro.Sdks\Micro.Sdks.csproj" />
+      <ProjectReference Include="..\Micro.Auth.Common\Micro.Auth.Common.csproj" />
+      <ProjectReference Include="..\Micro.Auth.Storage\Micro.Auth.Storage.csproj" />
       <ProjectReference Include="..\Micro.Mails\Micro.Mails.csproj" />
     </ItemGroup>
 
