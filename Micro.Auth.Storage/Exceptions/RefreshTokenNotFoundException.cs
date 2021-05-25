@@ -1,6 +1,6 @@
 using System;
 
-namespace Micro.Auth.Api.RefreshTokens.Exceptions
+namespace Micro.Auth.Storage.Exceptions
 {
     public class RefreshTokenNotFoundException : Exception
     {

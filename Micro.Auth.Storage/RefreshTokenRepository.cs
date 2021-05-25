@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Micro.Auth.Api.RefreshTokens.Exceptions;
 using Micro.Auth.Common;
+using Micro.Auth.Storage.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Micro.Auth.Storage

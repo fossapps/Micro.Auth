@@ -1,4 +1,4 @@
-using Micro.Auth.Api.Workers;
+using Micro.Auth.Business.Workers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Micro.Auth.Api.StartupExtensions

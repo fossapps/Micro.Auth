@@ -1,10 +1,10 @@
 using System;
 using Fossapps.Micro.KeyStore;
 using Micro.Auth.Api.Configs;
-using Micro.Auth.Api.Keys;
-using Micro.Auth.Api.RefreshTokens;
-using Micro.Auth.Api.Tokens;
-using Micro.Auth.Api.Users;
+using Micro.Auth.Business.Keys;
+using Micro.Auth.Business.RefreshTokens;
+using Micro.Auth.Business.Tokens;
+using Micro.Auth.Business.Users;
 using Micro.Auth.Common;
 using Micro.Auth.Storage;
 using Micro.Mails;
