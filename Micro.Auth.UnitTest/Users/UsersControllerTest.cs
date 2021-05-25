@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Micro.Auth.Api.Users;
 using Micro.Auth.Api.Users.ViewModels;
+using Micro.Auth.Business.Users;
 using Micro.Auth.Storage;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

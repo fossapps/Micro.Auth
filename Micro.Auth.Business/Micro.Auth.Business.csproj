@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="App.Metrics.Abstractions" Version="4.2.0" />
+      <PackageReference Include="Fossapps.Micro.KeyStore" Version="1.10.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.6" />
+      <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="5.0.6" />
+      <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.7.1" />
+      <PackageReference Include="PemUtils" Version="3.0.0.82" />
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.7.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Micro.Auth.Storage\Micro.Auth.Storage.csproj" />
+      <ProjectReference Include="..\Micro.Mails\Micro.Mails.csproj" />
+    </ItemGroup>
+
+</Project>

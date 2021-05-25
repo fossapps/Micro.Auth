@@ -1,8 +1,8 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Micro.Auth.Api.HealthCheck;
-using Micro.Auth.Api.Keys;
+using Micro.Auth.Api.Internal.HealthCheck;
+using Micro.Auth.Business.Keys;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Moq;
 using NUnit.Framework;

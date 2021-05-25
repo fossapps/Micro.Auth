@@ -1,5 +1,5 @@
-using Micro.Auth.Api.Configs;
-using Micro.Auth.Api.StartupExtensions;
+using Micro.Auth.Api.Internal.Configs;
+using Micro.Auth.Api.Internal.StartupExtensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
