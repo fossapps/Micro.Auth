@@ -1,5 +1,10 @@
-namespace Micro.Auth.Api.Uuid
+﻿namespace Micro.Auth.Common
 {
+    public interface IUuidService
+    {
+        string GenerateUuId();
+    }
+
     public class UuidService : IUuidService
     {
         public string GenerateUuId()
@@ -8,3 +13,4 @@ namespace Micro.Auth.Api.Uuid
         }
     }
 }
+

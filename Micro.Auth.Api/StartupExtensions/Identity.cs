@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using Micro.Auth.Api.Configs;
 using Micro.Auth.Api.Keys;
-using Micro.Auth.Api.Models;
+using Micro.Auth.Storage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;

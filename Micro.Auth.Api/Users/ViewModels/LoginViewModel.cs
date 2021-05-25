@@ -1,7 +1,6 @@
 using System;
 using System.Net;
-using Micro.Auth.Api.Models;
-using Micro.Auth.Api.RefreshTokens;
+using Micro.Auth.Storage;
 
 namespace Micro.Auth.Api.Users.ViewModels
 {

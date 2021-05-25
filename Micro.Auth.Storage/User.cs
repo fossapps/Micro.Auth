@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace Micro.Auth.Api.Models
+namespace Micro.Auth.Storage
 {
     public class User : IdentityUser
     {

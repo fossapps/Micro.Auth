@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using Micro.Auth.Api.Models;
 using Micro.Auth.Api.Tokens;
 using Micro.Auth.Api.Users;
+using Micro.Auth.Storage;
 using Microsoft.AspNetCore.Identity;
 
 namespace Micro.Auth.Api.RefreshTokens

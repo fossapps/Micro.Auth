@@ -1,4 +1,4 @@
-namespace Micro.Auth.Api.Configs
+namespace Micro.Auth.Storage
 {
     public class DatabaseConfig
     {

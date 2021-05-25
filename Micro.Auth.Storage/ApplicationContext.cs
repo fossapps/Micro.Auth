@@ -1,11 +1,9 @@
-using Micro.Auth.Api.Configs;
-using Micro.Auth.Api.RefreshTokens;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Npgsql;
 
-namespace Micro.Auth.Api.Models
+namespace Micro.Auth.Storage
 {
     public class ApplicationContext : IdentityDbContext
     {
@@ -33,12 +31,10 @@ namespace Micro.Auth.Api.Models
                 Password = _db.Password,
                 SslMode = SslMode.Disable
             };
-            optionsBuilder.UseNpgsql(connection.ConnectionString);
-        }
-
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
+            optionsBuilder.UseNpgsql(connection.ConnectionString, options =>
+            {
+                options.MigrationsAssembly("Micro.Auth.Storage");
+            });
         }
     }
 }

@@ -1,12 +1,11 @@
 using System;
 using System.Net.Mail;
 using System.Threading.Tasks;
-using Micro.Auth.Api.Models;
-using Micro.Auth.Api.RefreshTokens;
 using Micro.Auth.Api.Tokens;
 using Micro.Auth.Api.Users.Exceptions;
 using Micro.Auth.Api.Users.ViewModels;
-using Micro.Auth.Api.Uuid;
+using Micro.Auth.Common;
+using Micro.Auth.Storage;
 using Micro.Mails;
 using Micro.Mails.Content;
 using Micro.Mails.Exceptions;

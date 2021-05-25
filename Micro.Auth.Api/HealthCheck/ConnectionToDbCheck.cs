@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Micro.Auth.Api.Models;
+using Micro.Auth.Storage;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Micro.Auth.Api.HealthCheck

@@ -1,8 +1,7 @@
 using System.Threading.Tasks;
-using Micro.Auth.Api.Models;
 using Microsoft.AspNetCore.Identity;
 
-namespace Micro.Auth.Api.Users
+namespace Micro.Auth.Storage
 {
     public interface IUserRepository
     {

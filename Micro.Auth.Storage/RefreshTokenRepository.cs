@@ -1,12 +1,11 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Micro.Auth.Api.Models;
 using Micro.Auth.Api.RefreshTokens.Exceptions;
-using Micro.Auth.Api.Uuid;
+using Micro.Auth.Common;
 using Microsoft.EntityFrameworkCore;
 
-namespace Micro.Auth.Api.RefreshTokens
+namespace Micro.Auth.Storage
 {
     public interface IRefreshTokenRepository
     {
