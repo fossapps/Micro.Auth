@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using App.Metrics;
-using Micro.Auth.Api.UserData.Extensions;
+using Micro.Auth.Api.Internal.UserData.Extensions;
 using Micro.Auth.Api.Users.ViewModels;
 using Micro.Auth.Business.Measurements;
 using Micro.Auth.Business.Users;

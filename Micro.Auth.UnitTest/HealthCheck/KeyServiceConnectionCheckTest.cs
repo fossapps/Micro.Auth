@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Fossapps.Micro.KeyStore;
 using Fossapps.Micro.KeyStore.Models;
-using Micro.Auth.Api.HealthCheck;
+using Micro.Auth.Api.Internal.HealthCheck;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Rest;

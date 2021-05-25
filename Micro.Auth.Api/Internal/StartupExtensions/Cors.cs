@@ -1,11 +1,9 @@
 using System.Linq;
-using Micro.Auth.Api.Configs;
+using Micro.Auth.Api.Internal.Configs;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
-namespace Micro.Auth.Api.StartupExtensions
+namespace Micro.Auth.Api.Internal.StartupExtensions
 {
     public static class Cors
     {

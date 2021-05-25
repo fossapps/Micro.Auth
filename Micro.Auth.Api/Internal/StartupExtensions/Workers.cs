@@ -1,7 +1,7 @@
 using Micro.Auth.Business.Workers;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Micro.Auth.Api.StartupExtensions
+namespace Micro.Auth.Api.Internal.StartupExtensions
 {
     public static class Workers
     {

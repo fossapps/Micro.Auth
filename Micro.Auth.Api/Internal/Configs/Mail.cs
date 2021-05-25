@@ -1,6 +1,6 @@
 using Micro.Mails;
 
-namespace Micro.Auth.Api.Configs
+namespace Micro.Auth.Api.Internal.Configs
 {
     public class Mail
     {

@@ -4,7 +4,7 @@ using App.Metrics;
 using App.Metrics.AspNetCore;
 using App.Metrics.Extensions.Configuration;
 using App.Metrics.Formatters.InfluxDB;
-using Micro.Auth.Api.StartupExtensions;
+using Micro.Auth.Api.Internal.StartupExtensions;
 using Micro.Auth.Storage;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore.Storage;

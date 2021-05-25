@@ -1,6 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Micro.Auth.Api.HealthCheck;
+using Micro.Auth.Api.Internal.HealthCheck;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
@@ -10,7 +10,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Micro.Auth.Api.StartupExtensions
+namespace Micro.Auth.Api.Internal.StartupExtensions
 {
     public static class HealthChecks
     {

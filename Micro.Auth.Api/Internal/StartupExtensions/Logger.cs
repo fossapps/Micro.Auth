@@ -1,11 +1,11 @@
 using System;
-using Micro.Auth.Api.Configs;
+using Micro.Auth.Api.Internal.Configs;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;
 
-namespace Micro.Auth.Api.StartupExtensions
+namespace Micro.Auth.Api.Internal.StartupExtensions
 {
     public static class Logger
     {

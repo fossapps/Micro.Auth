@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Micro.Auth.Api.UserData.Extensions
+namespace Micro.Auth.Api.Internal.UserData.Extensions
 {
     public static class LocationExtension
     {

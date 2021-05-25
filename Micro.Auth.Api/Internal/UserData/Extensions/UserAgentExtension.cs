@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 
-namespace Micro.Auth.Api.UserData.Extensions
+namespace Micro.Auth.Api.Internal.UserData.Extensions
 {
     public static class UserAgentExtension
     {

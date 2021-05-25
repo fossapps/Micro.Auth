@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Micro.Auth.Business.Keys;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace Micro.Auth.Api.HealthCheck
+namespace Micro.Auth.Api.Internal.HealthCheck
 {
     public class KeyCreatedCheck : IHealthCheck
     {

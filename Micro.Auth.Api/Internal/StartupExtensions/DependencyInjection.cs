@@ -1,6 +1,6 @@
 using System;
 using Fossapps.Micro.KeyStore;
-using Micro.Auth.Api.Configs;
+using Micro.Auth.Api.Internal.Configs;
 using Micro.Auth.Business.Keys;
 using Micro.Auth.Business.RefreshTokens;
 using Micro.Auth.Business.Tokens;
@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Micro.Auth.Api.StartupExtensions
+namespace Micro.Auth.Api.Internal.StartupExtensions
 {
     public static class DependencyInjection
     {

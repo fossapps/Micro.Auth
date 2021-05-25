@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Micro.Auth.Storage;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace Micro.Auth.Api.HealthCheck
+namespace Micro.Auth.Api.Internal.HealthCheck
 {
     public class ConnectionToDbCheck : IHealthCheck
     {

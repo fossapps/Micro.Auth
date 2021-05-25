@@ -5,7 +5,7 @@ using Fossapps.Micro.KeyStore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 
-namespace Micro.Auth.Api.HealthCheck
+namespace Micro.Auth.Api.Internal.HealthCheck
 {
     public class KeyServiceConnectionCheck : IHealthCheck
     {

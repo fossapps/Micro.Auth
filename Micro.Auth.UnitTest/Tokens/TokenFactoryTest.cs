@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using Micro.Auth.Api.Configs;
 using Micro.Auth.Business.Configs;
 using Micro.Auth.Business.Keys;
 using Micro.Auth.Business.Tokens;

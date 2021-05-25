@@ -1,10 +1,10 @@
-using Micro.Auth.Api.Configs;
+using Micro.Auth.Api.Internal.Configs;
 using Micro.Auth.Business.Configs;
 using Micro.Auth.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Micro.Auth.Api.StartupExtensions
+namespace Micro.Auth.Api.Internal.StartupExtensions
 {
     public static class Configuration
     {
