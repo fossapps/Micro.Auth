@@ -22,6 +22,10 @@ namespace Micro.Auth.Api.GraphQL
             FieldAsync<NonNullGraphType<ResultType>, Result>("sendActivationEmail",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>> {Name = "login"}),
                 resolve: x => userService.SendActivationEmail(x.GetArgument<string>("login")));
+
+            FieldAsync<NonNullGraphType<ResultType>, Result>("requestPasswordReset",
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>> {Name = "login"}),
+                resolve: x => userService.RequestPasswordReset(x.GetArgument<string>("login")));
         }
     }
 }

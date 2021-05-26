@@ -86,37 +86,6 @@ namespace Micro.Auth.Api.Users
             }
         }
 
-        [HttpPost("password/requestReset")]
-        [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> RequestPasswordReset(RequestPasswordReset request)
-        {
-            try
-            {
-                await _metrics.UsersControllerMetrics().MeasureTimeToSendPasswordResetEmail(async () =>
-                    await _userService.RequestPasswordReset(request.Login));
-                return Accepted();
-            }
-            catch (UserNotFoundException)
-            {
-                _metrics.UsersControllerMetrics().MarkPasswordResetUserNotFound();
-                return NotFound(new ProblemDetails
-                {
-                    Title = "user not found"
-                });
-            }
-            catch (EmailSendingFailureException e)
-            {
-                _logger.LogError("error sending email", e);
-                _metrics.UsersControllerMetrics().MarkEmailSendingFailure();
-                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
-                {
-                    Title = "error handling request"
-                });
-            }
-        }
-
         [HttpPost("password/reset")]
         [ProducesResponseType(typeof(void), StatusCodes.Status202Accepted)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]

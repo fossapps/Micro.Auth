@@ -20,7 +20,7 @@ namespace Micro.Auth.Business.Users
         Task<Result> SendActivationEmail(string login);
         Task<(SignInResult, LoginSuccessResponse)> Login(LoginRequest loginRequest);
         Task<User> ConfirmEmail(VerifyEmailInput input);
-        Task RequestPasswordReset(string login);
+        Task<Result> RequestPasswordReset(string login);
         Task ResetPassword(ResetPasswordRequest request);
         Task<IdentityResult> ChangePassword(string userId, ChangePasswordRequest request);
     }
@@ -122,7 +122,7 @@ namespace Micro.Auth.Business.Users
             return User.FromDbUser(user);
         }
 
-        public async Task RequestPasswordReset(string login)
+        public async Task<Result> RequestPasswordReset(string login)
         {
             var user = await GetUserByLogin(login);
             if (user == null)
@@ -138,6 +138,7 @@ namespace Micro.Auth.Business.Users
                 },
                 new MailAddress(user.Email, user.UserName));
             await _mailService.SendAsync(mailMessage);
+            return new Result(true);
         }
 
         public async Task ResetPassword(ResetPasswordRequest request)
