@@ -11,12 +11,13 @@ namespace Micro.Auth.Api.GraphQL
     {
         public Mutation(IUserService userService)
         {
-            FieldAsync<UserType, User>("register",
+            FieldAsync<NonNullGraphType<UserType>, User>("register",
                 arguments: new QueryArguments(RegisterInputType.BuildArgument()),
-                resolve: x => userService.Create(x.GetArgument<RegisterInput>("RegisterInput")));
-            FieldAsync<UserType, User>("verifyEmail",
+                resolve: x => userService.Create(x.GetArgument<RegisterInput>("input")));
+
+            FieldAsync<NonNullGraphType<UserType>, User>("verifyEmail",
                 arguments: new QueryArguments(VerifyEmailInputType.BuildArgument()),
-                resolve: x => userService.ConfirmEmail(x.GetArgument<VerifyEmailInput>("RegisterInput")));
+                resolve: x => userService.ConfirmEmail(x.GetArgument<VerifyEmailInput>("input")));
         }
     }
 }

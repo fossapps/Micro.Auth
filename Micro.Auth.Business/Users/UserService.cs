@@ -97,12 +97,11 @@ namespace Micro.Auth.Business.Users
             }
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            _emailUrlBuilder.BuildActivationUrl(token);
             var mail = await _mailBuilder.ActivationEmail()
                 .Build(new ActivationMailData
                 {
                     Name = user.UserName,
-                    ActivationUrl = _emailUrlBuilder.BuildActivationUrl(token)
+                    ActivationUrl = _emailUrlBuilder.BuildActivationUrl(token, user.Email)
                 }, new MailAddress(user.Email, user.UserName));
             await _mailService.SendAsync(mail);
         }
@@ -117,7 +116,16 @@ namespace Micro.Auth.Business.Users
         public async Task<User> ConfirmEmail(VerifyEmailInput input)
         {
             var user = await GetUserByLogin(input.Login);
-            await ConfirmEmail(user, input.Token);
+            if (user == null)
+            {
+                throw new UserNotFoundException();
+            }
+            var result = await _userManager.ConfirmEmailAsync(user, input.Token);
+            if (!result.Succeeded)
+            {
+                throw new EmailConfirmationFailedException(result.Errors.First().Description);
+            }
+
             return User.FromDbUser(user);
         }
 
@@ -163,19 +171,6 @@ namespace Micro.Auth.Business.Users
             }
 
             return await _userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
-        }
-
-        private async Task ConfirmEmail(Micro.Auth.Storage.User user, string token)
-        {
-            if (user == null)
-            {
-                throw new UserNotFoundException();
-            }
-            var result = await _userManager.ConfirmEmailAsync(user, token);
-            if (!result.Succeeded)
-            {
-                throw new EmailConfirmationFailedException(result.Errors.First().Description);
-            }
         }
 
         private Task<Micro.Auth.Storage.User> GetUserByLogin(string usernameOrEmail)

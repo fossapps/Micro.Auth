@@ -19,6 +19,7 @@ namespace Micro.Auth.Api.Internal.StartupExtensions
             services.AddScoped<Mutation>();
             services.AddScoped<UserType>();
             services.AddScoped<RegisterInputType>();
+            services.AddScoped<VerifyEmailInputType>();
             services.AddScoped<ISchema, AuthSchema>();
             services
                 .AddGraphQL(options =>
