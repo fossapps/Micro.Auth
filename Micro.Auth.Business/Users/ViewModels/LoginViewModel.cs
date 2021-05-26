@@ -2,7 +2,7 @@ using System;
 using System.Net;
 using Micro.Auth.Storage;
 
-namespace Micro.Auth.Business.Users
+namespace Micro.Auth.Business.Users.ViewModels
 {
     public class LoginRequest
     {

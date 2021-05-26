@@ -4,6 +4,7 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using Micro.Auth.Business.Tokens;
 using Micro.Auth.Business.Users.Exceptions;
+using Micro.Auth.Business.Users.ViewModels;
 using Micro.Auth.Common;
 using Micro.Auth.Storage;
 using Micro.Mails;
@@ -17,9 +18,8 @@ namespace Micro.Auth.Business.Users
     {
         Task<User> Create(RegisterInput request);
         Task SendActivationEmail(string login);
-        Task SendActivationEmail(Micro.Auth.Storage.User user);
         Task<(SignInResult, LoginSuccessResponse)> Login(LoginRequest loginRequest);
-        Task ConfirmEmail(ConfirmEmailRequest request);
+        Task<User> ConfirmEmail(VerifyEmailInput input);
         Task RequestPasswordReset(string login);
         Task ResetPassword(ResetPasswordRequest request);
         Task<IdentityResult> ChangePassword(string userId, ChangePasswordRequest request);
@@ -68,13 +68,7 @@ namespace Micro.Auth.Business.Users
 
             var dbUser = await _userManager.FindByEmailAsync(request.Email);
             await SendActivationEmail(dbUser);
-            return new User
-            {
-                Email = dbUser.Email,
-                Id = dbUser.Id,
-                EmailConfirmed = dbUser.EmailConfirmed,
-                LockoutEnd = dbUser.LockoutEnd?.DateTime
-            };
+            return User.FromDbUser(dbUser);
         }
 
         public async Task SendActivationEmail(string login)
@@ -120,10 +114,11 @@ namespace Micro.Auth.Business.Users
             return await AuthenticateUser(loginRequest);
         }
 
-        public async Task ConfirmEmail(ConfirmEmailRequest request)
+        public async Task<User> ConfirmEmail(VerifyEmailInput input)
         {
-            var user = await GetUserByLogin(request.Login);
-            await ConfirmEmail(user, request.Token);
+            var user = await GetUserByLogin(input.Login);
+            await ConfirmEmail(user, input.Token);
+            return User.FromDbUser(user);
         }
 
         public async Task RequestPasswordReset(string login)
@@ -179,7 +174,7 @@ namespace Micro.Auth.Business.Users
             var result = await _userManager.ConfirmEmailAsync(user, token);
             if (!result.Succeeded)
             {
-                throw new EmailConfirmationFailedException(result.ToString());
+                throw new EmailConfirmationFailedException(result.Errors.First().Description);
             }
         }
 

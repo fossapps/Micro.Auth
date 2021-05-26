@@ -10,6 +10,7 @@ using Micro.Auth.Api.Internal.ValidationAttributes;
 using Micro.Auth.Business.Measurements;
 using Micro.Auth.Business.RefreshTokens;
 using Micro.Auth.Business.Users;
+using Micro.Auth.Business.Users.ViewModels;
 using Micro.Auth.Storage.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

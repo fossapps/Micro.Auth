@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Micro.Auth.Business.Users
+namespace Micro.Auth.Business.Users.ViewModels
 {
     public class RequestPasswordReset
     {

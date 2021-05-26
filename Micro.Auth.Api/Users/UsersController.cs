@@ -8,6 +8,7 @@ using Micro.Auth.Api.Users.ViewModels;
 using Micro.Auth.Business.Measurements;
 using Micro.Auth.Business.Users;
 using Micro.Auth.Business.Users.Exceptions;
+using Micro.Auth.Business.Users.ViewModels;
 using Micro.Auth.Storage;
 using Micro.Mails.Exceptions;
 using Microsoft.AspNetCore.Authorization;
@@ -118,43 +119,6 @@ namespace Micro.Auth.Api.Users
                 return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
                 {
                     Status = StatusCodes.Status500InternalServerError,
-                    Title = "error handling request"
-                });
-            }
-        }
-
-        [HttpPost("activation/confirm")]
-        [ProducesResponseType(typeof(void), StatusCodes.Status202Accepted)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ConfirmEmail(ConfirmEmailRequest request)
-        {
-            try
-            {
-                await _metrics.UsersControllerMetrics()
-                    .RecordTimeToConfirmEmail(async () =>  await _userService.ConfirmEmail(request));
-                _metrics.UsersControllerMetrics().MarkSuccessfulConfirmation();
-                return Accepted();
-            }
-            catch (UserNotFoundException)
-            {
-                _logger.LogInformation($"user not found {request.Login}");
-                _metrics.UsersControllerMetrics().MarkUserNotFoundActivation();
-                return NotFound(new ProblemDetails {Type = "NotFound", Title = "user not found"});
-            }
-            catch (EmailConfirmationFailedException e)
-            {
-                _logger.LogInformation("EmailConfirmationFailed", e);
-                _metrics.UsersControllerMetrics().MarkFailedToConfirmActivation();
-                return Unauthorized(new ProblemDetails {Title = "failed to confirm"});
-            }
-            catch (Exception e)
-            {
-                _metrics.UsersControllerMetrics().MarkExceptionActivation(e.GetType().FullName);
-                _logger.LogCritical(e, "unexpected error during email confirmation");
-                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
-                {
                     Title = "error handling request"
                 });
             }
