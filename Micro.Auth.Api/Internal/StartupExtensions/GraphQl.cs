@@ -21,9 +21,15 @@ namespace Micro.Auth.Api.Internal.StartupExtensions
             services.AddScoped<RegisterInputType>();
             services.AddScoped<ISchema, AuthSchema>();
             services
-                .AddGraphQL()
+                .AddGraphQL(options =>
+                {
+                    options.UnhandledExceptionDelegate = ctx =>
+                    {
+                        ctx.ErrorMessage = ctx.OriginalException.Message;
+                    };
+                })
                 .AddSystemTextJson()
-                .AddErrorInfoProvider(opts => opts.ExposeExceptionStackTrace = true);
+                .AddErrorInfoProvider(opts => opts.ExposeExceptionStackTrace = false);
         }
     }
 }

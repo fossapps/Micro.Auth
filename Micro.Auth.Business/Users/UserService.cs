@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using Micro.Auth.Business.Tokens;
@@ -62,7 +63,7 @@ namespace Micro.Auth.Business.Users
             }, request.Password);
             if (!result.Succeeded)
             {
-                throw new CreateUserFailedException();
+                throw new CreateUserFailedException(result.Errors.First().Description);
             }
 
             var dbUser = await _userManager.FindByEmailAsync(request.Email);

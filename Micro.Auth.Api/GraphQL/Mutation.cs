@@ -10,7 +10,7 @@ namespace Micro.Auth.Api.GraphQL
     {
         public Mutation(IUserService userService)
         {
-            Field<UserType>("register",
+            FieldAsync<UserType, User>("register",
                 arguments: new QueryArguments(RegisterInputType.BuildArgument()),
                 resolve: x => userService.Create(x.GetArgument<RegisterInput>("RegisterInput")));
         }
