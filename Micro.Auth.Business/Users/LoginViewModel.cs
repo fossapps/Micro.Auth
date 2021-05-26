@@ -11,7 +11,7 @@ namespace Micro.Auth.Business.Users
         public string UserAgent { set; get; }
         public IPAddress IpAddress { set; get; }
         public string Location { set; get; }
-        public User User { set; get; }
+        public Micro.Auth.Storage.User User { set; get; }
     }
 
     public static class LoginRequestExtensions

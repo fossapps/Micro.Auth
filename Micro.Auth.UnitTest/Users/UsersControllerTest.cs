@@ -17,13 +17,13 @@ namespace Micro.Auth.UnitTest.Users
         public async Task TestFindUserByUsername()
         {
             var mockUserRepository = new Mock<IUserRepository>();
-            mockUserRepository.Setup(x => x.FindByUsername("testUsername")).ReturnsAsync(new User
+            mockUserRepository.Setup(x => x.FindByUsername("testUsername")).ReturnsAsync(new Micro.Auth.Storage.User
             {
                 Id = "test",
                 UserName = "something",
                 Email = "email"
             });
-            mockUserRepository.Setup(x => x.FindByUsername("testNonExistentUser")).ReturnsAsync(null as User);
+            mockUserRepository.Setup(x => x.FindByUsername("testNonExistentUser")).ReturnsAsync(null as Micro.Auth.Storage.User);
             var mockUserService = new Mock<IUserService>();
             var mockLogger = new Mock<ILogger<UsersController>>();
             var controller = new UsersController(mockUserRepository.Object, mockUserService.Object, mockLogger.Object, null);
@@ -35,13 +35,13 @@ namespace Micro.Auth.UnitTest.Users
         public async Task TestFindUserByEmail()
         {
             var mockUserRepository = new Mock<IUserRepository>();
-            mockUserRepository.Setup(x => x.FindByEmail("dev@devcurate.co")).ReturnsAsync(new User
+            mockUserRepository.Setup(x => x.FindByEmail("dev@devcurate.co")).ReturnsAsync(new Micro.Auth.Storage.User
             {
                 Id = "test",
                 UserName = "something",
                 Email = "dev@devcurate.co"
             });
-            mockUserRepository.Setup(x => x.FindByUsername("notfound@devcurate.co")).ReturnsAsync(null as User);
+            mockUserRepository.Setup(x => x.FindByUsername("notfound@devcurate.co")).ReturnsAsync(null as Micro.Auth.Storage.User);
             var mockUserService = new Mock<IUserService>();
             var mockLogger = new Mock<ILogger<UsersController>>();
             var controller = new UsersController(mockUserRepository.Object, mockUserService.Object, mockLogger.Object, null);

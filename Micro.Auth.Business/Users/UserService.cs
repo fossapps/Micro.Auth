@@ -14,9 +14,9 @@ namespace Micro.Auth.Business.Users
 {
     public interface IUserService
     {
-        Task<IdentityResult> Create(CreateUserRequest request);
+        Task<User> Create(RegisterInput request);
         Task SendActivationEmail(string login);
-        Task SendActivationEmail(User user);
+        Task SendActivationEmail(Micro.Auth.Storage.User user);
         Task<(SignInResult, LoginSuccessResponse)> Login(LoginRequest loginRequest);
         Task ConfirmEmail(ConfirmEmailRequest request);
         Task RequestPasswordReset(string login);
@@ -26,16 +26,16 @@ namespace Micro.Auth.Business.Users
 
     public class UserService : IUserService
     {
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<Micro.Auth.Storage.User> _userManager;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
-        private readonly SignInManager<User> _signInManager;
+        private readonly SignInManager<Micro.Auth.Storage.User> _signInManager;
         private readonly ITokenFactory _tokenFactory;
         private readonly IUuidService _uuidService;
         private readonly MailBuilder _mailBuilder;
         private readonly IMailService _mailService;
         private readonly EmailUrlBuilder _emailUrlBuilder;
 
-        public UserService(UserManager<User> userManager, IRefreshTokenRepository refreshTokenRepository, SignInManager<User> signInManager, ITokenFactory tokenFactory, IUuidService uuidService, MailBuilder mailBuilder, IMailService mailService, EmailUrlBuilder emailUrlBuilder)
+        public UserService(UserManager<Micro.Auth.Storage.User> userManager, IRefreshTokenRepository refreshTokenRepository, SignInManager<Micro.Auth.Storage.User> signInManager, ITokenFactory tokenFactory, IUuidService uuidService, MailBuilder mailBuilder, IMailService mailService, EmailUrlBuilder emailUrlBuilder)
         {
             _userManager = userManager;
             _refreshTokenRepository = refreshTokenRepository;
@@ -53,20 +53,27 @@ namespace Micro.Auth.Business.Users
         /// <param name="request"></param>
         /// <returns></returns>
         /// <exception cref="EmailSendingFailureException"></exception>
-        public async Task<IdentityResult> Create(CreateUserRequest request)
+        public async Task<User> Create(RegisterInput request)
         {
-            var result = await _userManager.CreateAsync(new User
+            var result = await _userManager.CreateAsync(new Micro.Auth.Storage.User
             {
                 Email = request.Email,
                 UserName = request.Username
             }, request.Password);
             if (!result.Succeeded)
             {
-                return result;
+                throw new CreateUserFailedException();
             }
 
-            await SendActivationEmail(request.Username);
-            return result;
+            var dbUser = await _userManager.FindByEmailAsync(request.Email);
+            await SendActivationEmail(dbUser);
+            return new User
+            {
+                Email = dbUser.Email,
+                Id = dbUser.Id,
+                EmailConfirmed = dbUser.EmailConfirmed,
+                LockoutEnd = dbUser.LockoutEnd?.DateTime
+            };
         }
 
         public async Task SendActivationEmail(string login)
@@ -82,7 +89,7 @@ namespace Micro.Auth.Business.Users
         /// <exception cref="UserNotFoundException"></exception>
         /// <exception cref="UserAlreadyActivatedException"></exception>
         /// <exception cref="EmailSendingFailureException"></exception>
-        public async Task SendActivationEmail(User user)
+        public async Task SendActivationEmail(Micro.Auth.Storage.User user)
         {
             if (user == null)
             {
@@ -130,7 +137,7 @@ namespace Micro.Auth.Business.Users
             var mailMessage = await _mailBuilder.ForgotPasswordEmail().Build(new ForgotPasswordEmailDetails
                 {
                     Name = user.UserName,
-                    PasswordResetUrl = _emailUrlBuilder.BuildPasswordResetFormUrl(token)
+                    PasswordResetUrl = _emailUrlBuilder.BuildPasswordResetFormUrl(token, user.Email)
                 },
                 new MailAddress(user.Email, user.UserName));
             await _mailService.SendAsync(mailMessage);
@@ -162,7 +169,7 @@ namespace Micro.Auth.Business.Users
             return await _userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
         }
 
-        private async Task ConfirmEmail(User user, string token)
+        private async Task ConfirmEmail(Micro.Auth.Storage.User user, string token)
         {
             if (user == null)
             {
@@ -175,7 +182,7 @@ namespace Micro.Auth.Business.Users
             }
         }
 
-        private Task<User> GetUserByLogin(string usernameOrEmail)
+        private Task<Micro.Auth.Storage.User> GetUserByLogin(string usernameOrEmail)
         {
             return usernameOrEmail.Contains("@")
                 ? _userManager.FindByEmailAsync(usernameOrEmail)

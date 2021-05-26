@@ -85,48 +85,6 @@ namespace Micro.Auth.Api.Users
             }
         }
 
-        [HttpPost]
-        [ProducesResponseType(typeof(IdentityResult), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(IdentityResult), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Create(CreateUserRequest request)
-        {
-            try
-            {
-                var result = await _metrics.UsersControllerMetrics()
-                    .RecordTimeCreateUser(async () => await _userService.Create(request));
-                if (!result.Succeeded)
-                {
-                    _logger.LogDebug("bad request: ", result.Errors);
-                    _metrics.UsersControllerMetrics().MarkBadRequest();
-                    return BadRequest(result);
-                }
-
-                _metrics.UsersControllerMetrics().MarkAccountCreated();
-                return Ok(result);
-            }
-            catch (EmailSendingFailureException e)
-            {
-                _logger.LogError(e, "email sending failed");
-                _metrics.UsersControllerMetrics().MarkCreateAccountException(e.GetType().FullName);
-                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
-                {
-                    Status = StatusCodes.Status500InternalServerError,
-                    Title = "error handling request",
-                });
-            }
-            catch (Exception e)
-            {
-                _metrics.UsersControllerMetrics().MarkCreateAccountException(e.GetType().FullName);
-                _logger.LogCritical(e, "error while trying to create user");
-                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
-                {
-                    Status = StatusCodes.Status500InternalServerError,
-                    Title = "error handling request",
-                });
-            }
-        }
-
         [HttpPost("activation/sendEmail")]
         [ProducesResponseType(typeof(void), StatusCodes.Status202Accepted)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]

@@ -12,7 +12,7 @@ namespace Micro.Auth.Business.Users
     {
         [Required]
         public string Login { set; get; }
-        
+
         [Required]
         public string Token { set; get; }
         

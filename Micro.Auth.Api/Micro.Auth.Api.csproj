@@ -6,37 +6,42 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="App.Metrics" Version="4.2.0" />
-      <PackageReference Include="App.Metrics.AspNetCore.Mvc" Version="4.2.0" />
-      <PackageReference Include="App.Metrics.Extensions.Configuration" Version="4.2.0" />
-      <PackageReference Include="App.Metrics.Reporting.InfluxDB" Version="4.2.0" />
-      <PackageReference Include="Fossapps.Micro.KeyStore" Version="1.10.0" />
-      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.6" />
-      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.6" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.6">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-      <PackageReference Include="Microsoft.Extensions.Logging.Slack" Version="1.1.0" />
-      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.6" />
-      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.1" />
-      <None Include="./appsettings.ci.json" CopyToPublishDirectory="Always" />
-      <PackageReference Include="PemUtils" Version="3.0.0.82" />
-      <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.2.3" />
-      <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
-      <PackageReference Include="Serilog.Sinks.ElasticSearch" Version="8.4.1" />
-      <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
+        <PackageReference Include="App.Metrics" Version="4.2.0" />
+        <PackageReference Include="App.Metrics.AspNetCore.Mvc" Version="4.2.0" />
+        <PackageReference Include="App.Metrics.Extensions.Configuration" Version="4.2.0" />
+        <PackageReference Include="App.Metrics.Reporting.InfluxDB" Version="4.2.0" />
+        <PackageReference Include="Fossapps.Micro.KeyStore" Version="1.10.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.6" />
+        <PackageReference Include="GraphQL" Version="4.5.0" />
+        <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="5.0.2" />
+        <PackageReference Include="GraphQL.Server.Transports.AspNetCore.SystemTextJson" Version="5.0.2" />
+        <PackageReference Include="GraphQL.Server.Ui.GraphiQL" Version="5.0.2" />
+        <PackageReference Include="GraphQL.SystemTextJson" Version="4.5.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.6" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.6">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Logging.Slack" Version="1.1.0" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.6" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.1" />
+        <None Include="./appsettings.ci.json" CopyToPublishDirectory="Always" />
+        <PackageReference Include="PemUtils" Version="3.0.0.82" />
+        <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.2.3" />
+        <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
+        <PackageReference Include="Serilog.Sinks.ElasticSearch" Version="8.4.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Micro.Auth.Business\Micro.Auth.Business.csproj" />
-      <ProjectReference Include="..\Micro.Auth.Common\Micro.Auth.Common.csproj" />
-      <ProjectReference Include="..\Micro.Auth.Storage\Micro.Auth.Storage.csproj" />
-      <ProjectReference Include="..\Micro.Mails\Micro.Mails.csproj" />
+        <ProjectReference Include="..\Micro.Auth.Business\Micro.Auth.Business.csproj" />
+        <ProjectReference Include="..\Micro.Auth.Common\Micro.Auth.Common.csproj" />
+        <ProjectReference Include="..\Micro.Auth.Storage\Micro.Auth.Storage.csproj" />
+        <ProjectReference Include="..\Micro.Mails\Micro.Mails.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Internal" />
+        <Folder Include="Internal" />
     </ItemGroup>
 
     <Target Name="Install githooks" BeforeTargets="Build">

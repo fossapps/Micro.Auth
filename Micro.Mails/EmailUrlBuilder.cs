@@ -14,9 +14,9 @@ namespace Micro.Mails
             return $"{_config.AuthenticationUrlEndpoint}/account/activate/{activationToken}";
         }
 
-        public string BuildPasswordResetFormUrl(string activationToken)
+        public string BuildPasswordResetFormUrl(string activationToken, string email)
         {
-            return $"{_config.AuthenticationUrlEndpoint}/account/reset/{activationToken}";
+            return $"{_config.AuthenticationUrlEndpoint}/account/reset/{email}/{activationToken}";
         }
     }
 }

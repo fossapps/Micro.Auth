@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Micro.Auth.Business.Users
 {
-    public class CreateUserRequest
+    public class RegisterInput
     {
         [Required]
         [MinLength(3)]
