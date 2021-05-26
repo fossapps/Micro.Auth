@@ -86,44 +86,6 @@ namespace Micro.Auth.Api.Users
             }
         }
 
-        [HttpPost("activation/sendEmail")]
-        [ProducesResponseType(typeof(void), StatusCodes.Status202Accepted)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> SendActivationEmail(SendActivationEmailRequest request)
-        {
-            try
-            {
-                await _metrics.UsersControllerMetrics()
-                    .RecordTimeToSendActivationEmail(async () =>
-                        await _userService.SendActivationEmail(request.Login));
-                return Accepted();
-            }
-            catch (UserNotFoundException)
-            {
-                _metrics.UsersControllerMetrics().MarkUserNotFoundActivation();
-                return NotFound(new ProblemDetails {Type = "NotFound", Title = "user not found"});
-            }
-            catch (EmailSendingFailureException e)
-            {
-                _metrics.UsersControllerMetrics().MarkEmailSendingFailure();
-                _metrics.UsersControllerMetrics().MarkExceptionActivation(e.GetType().FullName);
-                _logger.LogWarning(e, "failed to send activation email");
-                return BadRequest(new ProblemDetails {Title = "failed to send email"});
-            }
-            catch (Exception e)
-            {
-                _metrics.UsersControllerMetrics().MarkExceptionActivation(e.GetType().FullName);
-                _logger.LogCritical(e, "unexpected error while sending activation email");
-                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
-                {
-                    Status = StatusCodes.Status500InternalServerError,
-                    Title = "error handling request"
-                });
-            }
-        }
-
         [HttpPost("password/requestReset")]
         [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

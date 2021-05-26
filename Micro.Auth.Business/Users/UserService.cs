@@ -17,7 +17,7 @@ namespace Micro.Auth.Business.Users
     public interface IUserService
     {
         Task<User> Create(RegisterInput request);
-        Task SendActivationEmail(string login);
+        Task<Result> SendActivationEmail(string login);
         Task<(SignInResult, LoginSuccessResponse)> Login(LoginRequest loginRequest);
         Task<User> ConfirmEmail(VerifyEmailInput input);
         Task RequestPasswordReset(string login);
@@ -71,20 +71,12 @@ namespace Micro.Auth.Business.Users
             return User.FromDbUser(dbUser);
         }
 
-        public async Task SendActivationEmail(string login)
+        public async Task<Result> SendActivationEmail(string login)
         {
-            await SendActivationEmail(await GetUserByLogin(login));
+            return await SendActivationEmail(await GetUserByLogin(login));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="user"></param>
-        /// <returns></returns>
-        /// <exception cref="UserNotFoundException"></exception>
-        /// <exception cref="UserAlreadyActivatedException"></exception>
-        /// <exception cref="EmailSendingFailureException"></exception>
-        public async Task SendActivationEmail(Micro.Auth.Storage.User user)
+        private async Task<Result> SendActivationEmail(Micro.Auth.Storage.User user)
         {
             if (user == null)
             {
@@ -104,6 +96,7 @@ namespace Micro.Auth.Business.Users
                     ActivationUrl = _emailUrlBuilder.BuildActivationUrl(token, user.Email)
                 }, new MailAddress(user.Email, user.UserName));
             await _mailService.SendAsync(mail);
+            return new Result(true);
         }
 
         public async Task<(SignInResult, LoginSuccessResponse)> Login(LoginRequest loginRequest)

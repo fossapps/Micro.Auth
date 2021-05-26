@@ -18,6 +18,10 @@ namespace Micro.Auth.Api.GraphQL
             FieldAsync<NonNullGraphType<UserType>, User>("verifyEmail",
                 arguments: new QueryArguments(VerifyEmailInputType.BuildArgument()),
                 resolve: x => userService.ConfirmEmail(x.GetArgument<VerifyEmailInput>("input")));
+
+            FieldAsync<NonNullGraphType<ResultType>, Result>("sendActivationEmail",
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>> {Name = "login"}),
+                resolve: x => userService.SendActivationEmail(x.GetArgument<string>("login")));
         }
     }
 }
