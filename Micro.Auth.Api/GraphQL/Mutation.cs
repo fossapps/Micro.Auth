@@ -26,6 +26,15 @@ namespace Micro.Auth.Api.GraphQL
             FieldAsync<NonNullGraphType<ResultType>, Result>("requestPasswordReset",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>> {Name = "login"}),
                 resolve: x => userService.RequestPasswordReset(x.GetArgument<string>("login")));
+
+            // todo: find a way to get UserId
+            FieldAsync<NonNullGraphType<UserType>, User>("changePassword",
+                arguments: new QueryArguments(ChangePasswordInput.BuildArgument()),
+                resolve: x => userService.ChangePassword("/////----/////", x.GetArgument<ChangePasswordRequest>("input")));
+
+            FieldAsync<NonNullGraphType<UserType>, User>("resetPassword",
+                arguments: new QueryArguments(ResetPasswordInput.BuildArgument()),
+                resolve: x => userService.ResetPassword(x.GetArgument<ResetPasswordRequest>("input")));
         }
     }
 }

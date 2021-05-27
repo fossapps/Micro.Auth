@@ -1,19 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using App.Metrics;
-using Micro.Auth.Api.Internal.UserData.Extensions;
 using Micro.Auth.Api.Users.ViewModels;
 using Micro.Auth.Business.Measurements;
 using Micro.Auth.Business.Users;
 using Micro.Auth.Business.Users.Exceptions;
 using Micro.Auth.Business.Users.ViewModels;
 using Micro.Auth.Storage;
-using Micro.Mails.Exceptions;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -119,46 +113,6 @@ namespace Micro.Auth.Api.Users
                 return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
                 {
                     Title = "error handling request"
-                });
-            }
-        }
-
-        [HttpPost("password/change")]
-        [Authorize]
-        [ProducesResponseType(typeof(void), StatusCodes.Status202Accepted)]
-        [ProducesResponseType(typeof(IEnumerable<IdentityError>), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(IEnumerable<ProblemDetails>), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ChangePassword(ChangePasswordRequest request)
-        {
-            try
-            {
-                var result = await _userService.ChangePassword(this.GetUserId(), request);
-                if (!result.Succeeded)
-                {
-                    var errorMessage = string.Join(",", result.Errors.Select(x => x.Code).OrderBy(x => x));
-                    _metrics.UsersControllerMetrics().MarkPasswordChangeFailure(errorMessage);
-                    return BadRequest(result.Errors);
-                }
-
-                _metrics.UsersControllerMetrics().MarkPasswordChangeSuccess();
-                return Accepted();
-            }
-            catch (UserNotFoundException e)
-            {
-                _metrics.UsersControllerMetrics().MarkPasswordChangeUserNotFound();
-                _logger.LogError(e, "impossible happened, user not found", this.GetUserId());
-                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
-                {
-                    Title = "unknown error"
-                });
-            }
-            catch (Exception e)
-            {
-                _metrics.UsersControllerMetrics().MarkPasswordChangeException(e.GetType().FullName);
-                _logger.LogWarning(e, "caught exception");
-                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
-                {
-                    Title = "unknown error"
                 });
             }
         }

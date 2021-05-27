@@ -21,8 +21,8 @@ namespace Micro.Auth.Business.Users
         Task<(SignInResult, LoginSuccessResponse)> Login(LoginRequest loginRequest);
         Task<User> ConfirmEmail(VerifyEmailInput input);
         Task<Result> RequestPasswordReset(string login);
-        Task ResetPassword(ResetPasswordRequest request);
-        Task<IdentityResult> ChangePassword(string userId, ChangePasswordRequest request);
+        Task<User> ResetPassword(ResetPasswordRequest request);
+        Task<User> ChangePassword(string userId, ChangePasswordRequest request);
     }
 
     public class UserService : IUserService
@@ -141,7 +141,7 @@ namespace Micro.Auth.Business.Users
             return new Result(true);
         }
 
-        public async Task ResetPassword(ResetPasswordRequest request)
+        public async Task<User> ResetPassword(ResetPasswordRequest request)
         {
             var user = await GetUserByLogin(request.Login);
             if (user == null)
@@ -154,9 +154,11 @@ namespace Micro.Auth.Business.Users
             {
                 throw new PasswordResetFailedException(result.Errors);
             }
+
+            return User.FromDbUser(user);
         }
 
-        public async Task<IdentityResult> ChangePassword(string userId, ChangePasswordRequest request)
+        public async Task<User> ChangePassword(string userId, ChangePasswordRequest request)
         {
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
@@ -164,7 +166,8 @@ namespace Micro.Auth.Business.Users
                 throw new UserNotFoundException();
             }
 
-            return await _userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
+            await _userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
+            return User.FromDbUser(user);
         }
 
         private Task<Micro.Auth.Storage.User> GetUserByLogin(string usernameOrEmail)

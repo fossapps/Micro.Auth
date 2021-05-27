@@ -20,6 +20,8 @@ namespace Micro.Auth.Api.Internal.StartupExtensions
             services.AddScoped<UserType>();
             services.AddScoped<ResultType>();
             services.AddScoped<RegisterInputType>();
+            services.AddScoped<ChangePasswordInput>();
+            services.AddScoped<ResetPasswordInput>();
             services.AddScoped<VerifyEmailInputType>();
             services.AddScoped<ISchema, AuthSchema>();
             services
