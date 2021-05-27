@@ -18,6 +18,7 @@ namespace Micro.Auth.Api.Internal.StartupExtensions
             services.AddScoped<Query>();
             services.AddScoped<Mutation>();
             services.AddScoped<UserType>();
+            services.AddScoped<AvailabilityResultType>();
             services.AddScoped<ResultType>();
             services.AddScoped<RegisterInputType>();
             services.AddScoped<ChangePasswordInput>();

@@ -1,16 +1,12 @@
 using System;
 using System.Threading.Tasks;
-using App.Metrics;
 using Micro.Auth.Api.Authentication;
 using Micro.Auth.Api.Authentication.ViewModels;
-using Micro.Auth.Api.Users;
-using Micro.Auth.Api.Users.ViewModels;
 using Micro.Auth.Business.RefreshTokens;
 using Micro.Auth.Business.Users;
 using Micro.Auth.Business.Users.ViewModels;
 using Micro.Auth.Storage.Exceptions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;

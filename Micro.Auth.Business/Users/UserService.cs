@@ -20,11 +20,14 @@ namespace Micro.Auth.Business.Users
         Task<Result> SendActivationEmail(string login);
         Task<(SignInResult, LoginSuccessResponse)> Login(LoginRequest loginRequest);
         Task<User> ConfirmEmail(VerifyEmailInput input);
+        Task<AvailabilityResponse> AvailabilityByEmail(string email);
+        Task<AvailabilityResponse> AvailabilityByLogin(string login);
         Task<Result> RequestPasswordReset(string login);
         Task<User> ResetPassword(ResetPasswordRequest request);
         Task<User> ChangePassword(string userId, ChangePasswordRequest request);
         Task<User> FindById(string id);
         Task<User> FindByLogin(string login);
+        Task<User> FindByEmail(string login);
     }
 
     public class UserService : IUserService
@@ -93,6 +96,16 @@ namespace Micro.Auth.Business.Users
             return User.FromDbUser(user);
         }
 
+        public async Task<User> FindByEmail(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                throw new UserNotFoundException();
+            }
+            return User.FromDbUser(user);
+        }
+
         public async Task<Result> SendActivationEmail(string login)
         {
             return await SendActivationEmail(await GetUserByLogin(login));
@@ -142,6 +155,18 @@ namespace Micro.Auth.Business.Users
             }
 
             return User.FromDbUser(user);
+        }
+
+        public async Task<AvailabilityResponse> AvailabilityByEmail(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            return new AvailabilityResponse(user == null);
+        }
+
+        public async Task<AvailabilityResponse> AvailabilityByLogin(string login)
+        {
+            var user = await _userManager.FindByNameAsync(login);
+            return new AvailabilityResponse(user == null);
         }
 
         public async Task<Result> RequestPasswordReset(string login)

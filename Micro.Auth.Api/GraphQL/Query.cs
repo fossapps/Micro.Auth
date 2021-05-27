@@ -2,6 +2,7 @@ using GraphQL;
 using GraphQL.Types;
 using Micro.Auth.Api.GraphQL.Types;
 using Micro.Auth.Business.Users;
+using Micro.Auth.Business.Users.ViewModels;
 
 namespace Micro.Auth.Api.GraphQL
 {
@@ -17,9 +18,21 @@ namespace Micro.Auth.Api.GraphQL
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>> {Name = "login"}),
                 resolve: x => userService.FindByLogin(x.GetArgument<string>("login")));
 
+            FieldAsync<NonNullGraphType<UserType>, User>("userByEmail",
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>> {Name = "email"}),
+                resolve: x => userService.FindByEmail(x.GetArgument<string>("email")));
+
             // todo: find a way to get user id and add it here...
             FieldAsync<NonNullGraphType<UserType>, User>("me",
                 resolve: x => userService.FindByLogin("cyberhck"));
+
+            FieldAsync<NonNullGraphType<AvailabilityResultType>, AvailabilityResponse>("availabilityByUsername",
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>> {Name = "username"}),
+                resolve: x => userService.AvailabilityByLogin(x.GetArgument<string>("username")));
+
+            FieldAsync<NonNullGraphType<AvailabilityResultType>, AvailabilityResponse>("availabilityByEmail",
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>> {Name = "email"}),
+                resolve: x => userService.AvailabilityByEmail(x.GetArgument<string>("email")));
         }
     }
 }
