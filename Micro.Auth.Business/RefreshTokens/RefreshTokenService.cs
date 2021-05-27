@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Micro.Auth.Business.Tokens;
 using Micro.Auth.Storage;
@@ -8,6 +9,7 @@ namespace Micro.Auth.Business.RefreshTokens
     public interface IRefreshTokenService
     {
         Task<string> Refresh(string token);
+        Task<IEnumerable<RefreshToken>> GetForUser(string userId);
     }
 
     public class RefreshTokenService : IRefreshTokenService
@@ -31,6 +33,11 @@ namespace Micro.Auth.Business.RefreshTokens
             var user = await _userRepository.FindById(refreshToken.User);
             var principal = await _signInManager.CreateUserPrincipalAsync(user);
             return _tokenFactory.GenerateJwtToken(principal);
+        }
+
+        public async Task<IEnumerable<RefreshToken>> GetForUser(string userId)
+        {
+            return await _refreshTokenRepository.FindByUser(userId);
         }
     }
 }

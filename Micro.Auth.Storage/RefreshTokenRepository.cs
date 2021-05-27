@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Micro.Auth.Common;
@@ -10,7 +11,7 @@ namespace Micro.Auth.Storage
     public interface IRefreshTokenRepository
     {
         Task<RefreshToken> FindById(string id);
-        Task<RefreshToken> FindByUser(string userId);
+        Task<IEnumerable<RefreshToken>> FindByUser(string userId);
         Task<RefreshToken> Create(RefreshToken token);
         Task Delete(string id);
         Task<RefreshToken> TouchLastUsed(string id);
@@ -32,9 +33,9 @@ namespace Micro.Auth.Storage
             return _db.RefreshTokens.AsNoTracking().Where(x => x.Id == id).FirstOrDefaultAsync();
         }
 
-        public Task<RefreshToken> FindByUser(string userId)
+        public async Task<IEnumerable<RefreshToken>> FindByUser(string userId)
         {
-            return _db.RefreshTokens.AsNoTracking().Where(x => x.User == userId).FirstOrDefaultAsync();
+            return await _db.RefreshTokens.AsNoTracking().Where(x => x.User == userId).ToListAsync();
         }
 
         public async Task<RefreshToken> Create(RefreshToken token)

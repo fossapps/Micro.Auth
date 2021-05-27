@@ -1,11 +1,14 @@
+using System.Collections.Generic;
 using GraphQL.Types;
-using Micro.Auth.Business.Users;
+using Micro.Auth.Business.RefreshTokens;
+using Micro.Auth.Storage;
+using User = Micro.Auth.Business.Users.User;
 
 namespace Micro.Auth.Api.GraphQL.Types
 {
     public sealed class UserType : ObjectGraphType<User>
     {
-        public UserType()
+        public UserType(IRefreshTokenService refreshTokenService)
         {
             Name = "User";
             Field("id", x => x.Id).Description("user id");
@@ -13,6 +16,7 @@ namespace Micro.Auth.Api.GraphQL.Types
             Field("email", x => x.Email).Description("email");
             Field("email_confirmed", x => x.EmailConfirmed).Description("email confirmed");
             Field("lockout_end", x => x.LockoutEnd, true).Description("point at which lockout ends");
+            FieldAsync<NonNullGraphType<ListGraphType<NonNullGraphType<RefreshTokenType>>>, IEnumerable<RefreshToken>>("sessions", resolve: x => refreshTokenService.GetForUser(x.Source.Id));
         }
     }
 }
