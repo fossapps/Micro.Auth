@@ -23,6 +23,8 @@ namespace Micro.Auth.Business.Users
         Task<Result> RequestPasswordReset(string login);
         Task<User> ResetPassword(ResetPasswordRequest request);
         Task<User> ChangePassword(string userId, ChangePasswordRequest request);
+        Task<User> FindById(string id);
+        Task<User> FindByLogin(string login);
     }
 
     public class UserService : IUserService
@@ -69,6 +71,26 @@ namespace Micro.Auth.Business.Users
             var dbUser = await _userManager.FindByEmailAsync(request.Email);
             await SendActivationEmail(dbUser);
             return User.FromDbUser(dbUser);
+        }
+
+        public async Task<User> FindById(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                throw new UserNotFoundException();
+            }
+            return User.FromDbUser(user);
+        }
+
+        public async Task<User> FindByLogin(string login)
+        {
+            var user = await GetUserByLogin(login);
+            if (user == null)
+            {
+                throw new UserNotFoundException();
+            }
+            return User.FromDbUser(user);
         }
 
         public async Task<Result> SendActivationEmail(string login)
