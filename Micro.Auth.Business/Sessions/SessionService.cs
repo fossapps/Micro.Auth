@@ -73,7 +73,7 @@ namespace Micro.Auth.Business.Sessions
             }
             var principal = await _signInManager.CreateUserPrincipalAsync(login.User);
             var jwt = _tokenFactory.GenerateJwtToken(principal);
-            var refreshToken = await _refreshTokenRepository.Create(login.ToRefreshToken(_uuidService.GenerateUuId()));
+            var refreshToken = await _refreshTokenRepository.Create(login.ToRefreshToken(_uuidService.GenerateUuId("session")));
             var res = new LoginSuccessResponse
             {
                 RefreshToken = refreshToken.Value,

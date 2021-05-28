@@ -40,7 +40,7 @@ namespace Micro.Auth.Storage
 
         public async Task<RefreshToken> Create(RefreshToken token)
         {
-            token.Id = _uuid.GenerateUuId();
+            token.Id = _uuid.GenerateUuId("refresh_token");
             var result = await _db.RefreshTokens.AddAsync(token);
             await _db.SaveChangesAsync();
             return result.Entity;
