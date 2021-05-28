@@ -25,14 +25,14 @@ namespace Micro.Auth.Api.Authentication
         private readonly ILogger<SessionController> _logger;
         private readonly IUserService _userService;
         private readonly IMetrics _metrics;
-        private readonly IRefreshTokenService _refreshTokenService;
+        private readonly ISessionService _sessionService;
 
-        public SessionController(ILogger<SessionController> logger, IUserService userService, IMetrics metrics, IRefreshTokenService refreshTokenService)
+        public SessionController(ILogger<SessionController> logger, IUserService userService, IMetrics metrics, ISessionService sessionService)
         {
             _logger = logger;
             _userService = userService;
             _metrics = metrics;
-            _refreshTokenService = refreshTokenService;
+            _sessionService = sessionService;
         }
 
         [HttpPost("new")]
@@ -97,7 +97,7 @@ namespace Micro.Auth.Api.Authentication
             var token = GetBearerToken(authorization);
             try
             {
-                var jwt = await _refreshTokenService.Refresh(token);
+                var jwt = await _sessionService.Refresh(token);
                 return Ok(new RefreshTokenSuccessResponse
                 {
                     Jwt = jwt

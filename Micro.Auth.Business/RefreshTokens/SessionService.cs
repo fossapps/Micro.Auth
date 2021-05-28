@@ -6,20 +6,20 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Micro.Auth.Business.RefreshTokens
 {
-    public interface IRefreshTokenService
+    public interface ISessionService
     {
         Task<string> Refresh(string token);
         Task<IEnumerable<RefreshToken>> GetForUser(string userId);
     }
 
-    public class RefreshTokenService : IRefreshTokenService
+    public class SessionService : ISessionService
     {
         private readonly IRefreshTokenRepository _refreshTokenRepository;
         private readonly IUserRepository _userRepository;
         private readonly SignInManager<User> _signInManager;
         private readonly ITokenFactory _tokenFactory;
 
-        public RefreshTokenService(IRefreshTokenRepository refreshTokenRepository, IUserRepository userRepository, SignInManager<User> signInManager, ITokenFactory tokenFactory)
+        public SessionService(IRefreshTokenRepository refreshTokenRepository, IUserRepository userRepository, SignInManager<User> signInManager, ITokenFactory tokenFactory)
         {
             _refreshTokenRepository = refreshTokenRepository;
             _userRepository = userRepository;

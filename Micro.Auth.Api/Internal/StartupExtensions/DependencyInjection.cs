@@ -31,7 +31,7 @@ namespace Micro.Auth.Api.Internal.StartupExtensions
             services.AddSingleton<IKeyResolver, KeyResolver>();
             services.AddSingleton<ITokenFactory, TokenFactory>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
-            services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+            services.AddScoped<ISessionService, SessionService>();
             services.SetupMail(configuration);
             services.AddSingleton(SetupKeyStoreHttpClient(configuration.GetSection("Services").Get<Services>().KeyStore));
         }

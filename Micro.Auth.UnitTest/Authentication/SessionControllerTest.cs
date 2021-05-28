@@ -69,7 +69,7 @@ namespace Micro.Auth.UnitTest.Authentication
         [Test]
         public async Task TestRefreshReturnsNewJwtIfCorrect()
         {
-            var refreshTokenService = new Mock<IRefreshTokenService>();
+            var refreshTokenService = new Mock<ISessionService>();
             refreshTokenService.Setup(x => x.Refresh("testRefreshToken")).ReturnsAsync("sampleJwt");
             var controller = new SessionController(null, null, null, refreshTokenService.Object);
             var response = await controller.Refresh("Bearer testRefreshToken");
@@ -82,7 +82,7 @@ namespace Micro.Auth.UnitTest.Authentication
         [Test]
         public async Task TestRefreshReturnsNotFoundWhenNotFound()
         {
-            var refreshTokenService = new Mock<IRefreshTokenService>();
+            var refreshTokenService = new Mock<ISessionService>();
             refreshTokenService.Setup(x => x.Refresh("testRefreshToken")).ThrowsAsync(new RefreshTokenNotFoundException());
             var controller = new SessionController(null, null, null, refreshTokenService.Object);
             var response = await controller.Refresh("Bearer testRefreshToken");
@@ -92,7 +92,7 @@ namespace Micro.Auth.UnitTest.Authentication
         [Test]
         public async Task TestRefreshReturnsServerErrorWhenOtherExceptionsAreThrown()
         {
-            var refreshTokenService = new Mock<IRefreshTokenService>();
+            var refreshTokenService = new Mock<ISessionService>();
             var mockLogger = new Mock<ILogger<SessionController>>();
             refreshTokenService.Setup(x => x.Refresh("testRefreshToken")).ThrowsAsync(new Exception());
             var controller = new SessionController(mockLogger.Object, null, null, refreshTokenService.Object);
