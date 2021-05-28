@@ -1,10 +1,7 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Micro.Auth.Business.EmailVerification;
-using Micro.Auth.Business.Extensions;
-using Micro.Auth.Business.Users.Exceptions;
-using Micro.Auth.Business.Users.ViewModels;
+using Micro.Auth.Business.Internal.Extensions;
 using Microsoft.AspNetCore.Identity;
 
 namespace Micro.Auth.Business.Users

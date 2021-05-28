@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
+using Micro.Auth.Business.Common;
 using Micro.Auth.Business.Users;
-using Micro.Auth.Business.Users.ViewModels;
 
 namespace Micro.Auth.Business.PasswordManager
 {

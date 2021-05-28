@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Micro.Auth.Business.Users.ViewModels;
 using Micro.Auth.Storage;
 using Microsoft.AspNetCore.Identity;
 

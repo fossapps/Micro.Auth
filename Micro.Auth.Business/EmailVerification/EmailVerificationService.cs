@@ -1,10 +1,9 @@
 using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
-using Micro.Auth.Business.Extensions;
+using Micro.Auth.Business.Common;
+using Micro.Auth.Business.Internal.Extensions;
 using Micro.Auth.Business.Users;
-using Micro.Auth.Business.Users.Exceptions;
-using Micro.Auth.Business.Users.ViewModels;
 using Micro.Mails;
 using Micro.Mails.Content;
 using Microsoft.AspNetCore.Identity;

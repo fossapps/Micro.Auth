@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Micro.Auth.Business.Keys;
+using Micro.Auth.Business.Internal.Keys;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Micro.Auth.Api.Internal.HealthCheck

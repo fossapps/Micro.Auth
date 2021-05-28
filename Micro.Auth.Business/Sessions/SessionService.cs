@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Micro.Auth.Business.Extensions;
-using Micro.Auth.Business.Tokens;
-using Micro.Auth.Business.Users.ViewModels;
+using Micro.Auth.Business.Internal.Extensions;
+using Micro.Auth.Business.Internal.Tokens;
 using Micro.Auth.Common;
 using Micro.Auth.Storage;
 using Microsoft.AspNetCore.Identity;

@@ -1,5 +1,5 @@
 using GraphQL.Types;
-using Micro.Auth.Business.Users.ViewModels;
+using Micro.Auth.Business.Availability;
 
 namespace Micro.Auth.Api.GraphQL.Types
 {

@@ -2,10 +2,10 @@ using GraphQL;
 using GraphQL.Types;
 using Micro.Auth.Api.GraphQL.Inputs;
 using Micro.Auth.Api.GraphQL.Types;
+using Micro.Auth.Business.Common;
 using Micro.Auth.Business.EmailVerification;
 using Micro.Auth.Business.PasswordManager;
 using Micro.Auth.Business.Users;
-using Micro.Auth.Business.Users.ViewModels;
 
 namespace Micro.Auth.Api.GraphQL
 {

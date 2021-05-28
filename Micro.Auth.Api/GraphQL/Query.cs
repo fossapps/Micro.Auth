@@ -3,7 +3,6 @@ using GraphQL.Types;
 using Micro.Auth.Api.GraphQL.Types;
 using Micro.Auth.Business.Availability;
 using Micro.Auth.Business.Users;
-using Micro.Auth.Business.Users.ViewModels;
 
 namespace Micro.Auth.Api.GraphQL
 {
