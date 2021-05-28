@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using GraphQL.Types;
-using Micro.Auth.Business.RefreshTokens;
+using Micro.Auth.Business.Sessions;
 using Micro.Auth.Storage;
 using User = Micro.Auth.Business.Users.User;
 

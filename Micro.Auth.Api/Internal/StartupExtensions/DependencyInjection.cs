@@ -1,8 +1,11 @@
 using System;
 using Fossapps.Micro.KeyStore;
 using Micro.Auth.Api.Internal.Configs;
+using Micro.Auth.Business.Availability;
+using Micro.Auth.Business.EmailVerification;
 using Micro.Auth.Business.Keys;
-using Micro.Auth.Business.RefreshTokens;
+using Micro.Auth.Business.PasswordManager;
+using Micro.Auth.Business.Sessions;
 using Micro.Auth.Business.Tokens;
 using Micro.Auth.Business.Users;
 using Micro.Auth.Common;
@@ -28,6 +31,9 @@ namespace Micro.Auth.Api.Internal.StartupExtensions
             services.AddScoped<IRoleStore<IdentityRole>, RoleStore<IdentityRole>>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPasswordManager, PasswordManager>();
+            services.AddScoped<IEmailVerificationService, EmailVerificationService>();
+            services.AddScoped<IAvailabilityService, AvailabilityService>();
             services.AddSingleton<IKeyResolver, KeyResolver>();
             services.AddSingleton<ITokenFactory, TokenFactory>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();

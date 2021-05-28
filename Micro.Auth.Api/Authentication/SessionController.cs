@@ -8,7 +8,7 @@ using Micro.Auth.Api.Authentication.ViewModels;
 using Micro.Auth.Api.Internal.UserData.Extensions;
 using Micro.Auth.Api.Internal.ValidationAttributes;
 using Micro.Auth.Business.Measurements;
-using Micro.Auth.Business.RefreshTokens;
+using Micro.Auth.Business.Sessions;
 using Micro.Auth.Business.Users;
 using Micro.Auth.Business.Users.ViewModels;
 using Micro.Auth.Storage.Exceptions;
@@ -23,14 +23,12 @@ namespace Micro.Auth.Api.Authentication
     public class SessionController : ControllerBase
     {
         private readonly ILogger<SessionController> _logger;
-        private readonly IUserService _userService;
         private readonly IMetrics _metrics;
         private readonly ISessionService _sessionService;
 
-        public SessionController(ILogger<SessionController> logger, IUserService userService, IMetrics metrics, ISessionService sessionService)
+        public SessionController(ILogger<SessionController> logger, IMetrics metrics, ISessionService sessionService)
         {
             _logger = logger;
-            _userService = userService;
             _metrics = metrics;
             _sessionService = sessionService;
         }
@@ -41,7 +39,7 @@ namespace Micro.Auth.Api.Authentication
             try
             {
                 var (login, password) = GetBasicAuthData(authorization);
-                var (result, response) = await _userService.Login(new LoginRequest
+                var (result, response) = await _sessionService.Login(new LoginRequest
                 {
                     Login = login,
                     Password = password,
