@@ -1,4 +1,6 @@
 using GraphQL;
+using GraphQL.DataLoader;
+using GraphQL.Execution;
 using GraphQL.Server;
 using GraphQL.SystemTextJson;
 using GraphQL.Types;
@@ -15,17 +17,19 @@ namespace Micro.Auth.Api.Internal.StartupExtensions
         {
             services.AddSingleton<IDocumentExecuter, DocumentExecuter>();
             services.AddSingleton<IDocumentWriter, DocumentWriter>();
-            services.AddScoped<Query>();
-            services.AddScoped<Mutation>();
-            services.AddScoped<UserType>();
-            services.AddScoped<AvailabilityResultType>();
-            services.AddScoped<ResultType>();
-            services.AddScoped<RegisterInputType>();
-            services.AddScoped<RefreshTokenType>();
-            services.AddScoped<ChangePasswordInput>();
-            services.AddScoped<ResetPasswordInput>();
-            services.AddScoped<VerifyEmailInputType>();
-            services.AddScoped<ISchema, AuthSchema>();
+            services.AddSingleton<IDataLoaderContextAccessor, DataLoaderContextAccessor>();
+            services.AddSingleton<IDocumentExecutionListener, DataLoaderDocumentListener>();
+            services.AddTransient<Query>();
+            services.AddTransient<Mutation>();
+            services.AddTransient<UserType>();
+            services.AddTransient<AvailabilityResultType>();
+            services.AddTransient<ResultType>();
+            services.AddTransient<RegisterInputType>();
+            services.AddTransient<RefreshTokenType>();
+            services.AddTransient<ChangePasswordInput>();
+            services.AddTransient<ResetPasswordInput>();
+            services.AddTransient<VerifyEmailInputType>();
+            services.AddTransient<ISchema, AuthSchema>();
             services
                 .AddGraphQL(options =>
                 {
@@ -34,6 +38,7 @@ namespace Micro.Auth.Api.Internal.StartupExtensions
                         ctx.ErrorMessage = ctx.OriginalException.Message;
                     };
                 })
+                .AddDataLoader()
                 .AddSystemTextJson()
                 .AddErrorInfoProvider(opts => opts.ExposeExceptionStackTrace = false);
         }

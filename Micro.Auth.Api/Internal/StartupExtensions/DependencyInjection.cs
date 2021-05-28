@@ -24,20 +24,20 @@ namespace Micro.Auth.Api.Internal.StartupExtensions
     {
         public static void ConfigureRequiredDependencies(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<ApplicationContext>();
-            services.AddScoped<DbContext, ApplicationContext>();
+            services.AddDbContext<ApplicationContext>(ServiceLifetime.Transient);
+            services.AddTransient<DbContext, ApplicationContext>();
             services.AddSingleton<IUuidService, UuidService>();
             services.AddSingleton<IKeyContainer, KeyContainer>();
-            services.AddScoped<IRoleStore<IdentityRole>, RoleStore<IdentityRole>>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IPasswordManager, PasswordManager>();
-            services.AddScoped<IEmailVerificationService, EmailVerificationService>();
-            services.AddScoped<IAvailabilityService, AvailabilityService>();
+            services.AddTransient<IRoleStore<IdentityRole>, RoleStore<IdentityRole>>();
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IPasswordManager, PasswordManager>();
+            services.AddTransient<IEmailVerificationService, EmailVerificationService>();
+            services.AddTransient<IAvailabilityService, AvailabilityService>();
             services.AddSingleton<IKeyResolver, KeyResolver>();
             services.AddSingleton<ITokenFactory, TokenFactory>();
-            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
-            services.AddScoped<ISessionService, SessionService>();
+            services.AddTransient<IRefreshTokenRepository, RefreshTokenRepository>();
+            services.AddTransient<ISessionService, SessionService>();
             services.SetupMail(configuration);
             services.AddSingleton(SetupKeyStoreHttpClient(configuration.GetSection("Services").Get<Services>().KeyStore));
         }
