@@ -5,6 +5,7 @@ using GraphQL.Server;
 using GraphQL.SystemTextJson;
 using GraphQL.Types;
 using Micro.Auth.Api.GraphQL;
+using Micro.Auth.Api.GraphQL.DataLoaders;
 using Micro.Auth.Api.GraphQL.Inputs;
 using Micro.Auth.Api.GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,7 @@ namespace Micro.Auth.Api.Internal.StartupExtensions
             services.AddTransient<ResetPasswordInput>();
             services.AddTransient<VerifyEmailInputType>();
             services.AddTransient<ISchema, AuthSchema>();
+            services.AddTransient<UserByIdDataLoader>();
             services
                 .AddGraphQL(options =>
                 {

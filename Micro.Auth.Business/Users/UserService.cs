@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Micro.Auth.Business.EmailVerification;
 using Micro.Auth.Business.Internal.Extensions;
+using Micro.Auth.Storage;
 using Microsoft.AspNetCore.Identity;
 
 namespace Micro.Auth.Business.Users
@@ -12,17 +14,20 @@ namespace Micro.Auth.Business.Users
         Task<User> FindById(string id);
         Task<User> FindByLogin(string login);
         Task<User> FindByEmail(string login);
+        Task<IEnumerable<User>> List();
     }
 
     public class UserService : IUserService
     {
         private readonly UserManager<Micro.Auth.Storage.User> _userManager;
         private readonly IEmailVerificationService _emailVerificationService;
+        private readonly IUserRepository _userRepository;
 
-        public UserService(UserManager<Micro.Auth.Storage.User> userManager, IEmailVerificationService emailVerificationService)
+        public UserService(UserManager<Micro.Auth.Storage.User> userManager, IEmailVerificationService emailVerificationService, IUserRepository userRepository)
         {
             _userManager = userManager;
             _emailVerificationService = emailVerificationService;
+            _userRepository = userRepository;
         }
 
         public async Task<User> Create(RegisterInput request)
@@ -70,6 +75,12 @@ namespace Micro.Auth.Business.Users
                 throw new UserNotFoundException();
             }
             return User.FromDbUser(user);
+        }
+
+        public async Task<IEnumerable<User>> List()
+        {
+            var users = await _userRepository.List();
+            return users.Select(User.FromDbUser);
         }
     }
 }

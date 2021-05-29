@@ -1,24 +1,33 @@
+using System.Collections.Generic;
 using GraphQL;
+using GraphQL.DataLoader;
 using GraphQL.Types;
+using Micro.Auth.Api.GraphQL.DataLoaders;
 using Micro.Auth.Api.GraphQL.Types;
 using Micro.Auth.Business.Availability;
 using Micro.Auth.Business.Users;
 
 namespace Micro.Auth.Api.GraphQL
 {
-    public class Query : ObjectGraphType
+    public sealed class Query : ObjectGraphType
     {
-        public Query(IUserService userService, IAvailabilityService availabilityService)
+        public Query(IUserService userService, IAvailabilityService availabilityService, UserByIdDataLoader userLoader)
         {
-            FieldAsync<NonNullGraphType<UserType>, User>("user",
-                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>> {Name = "id"}),
-                resolve: x => userService.FindById(x.GetArgument<string>("id")));
+            Field<UserType, User>().Name("user").Argument<NonNullGraphType<StringGraphType>>("id").ResolveAsync(
+                x =>
+                {
+                    var user = userLoader.LoadAsync(x.GetArgument<string>("id"));
+                    return user;
+                });
 
-            FieldAsync<NonNullGraphType<UserType>, User>("userByLogin",
+            Field<NonNullGraphType<ListGraphType<UserType>>, IEnumerable<User>>().Name("users").ResolveAsync(
+                x => userService.List());
+
+            FieldAsync<UserType, User>("userByLogin",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>> {Name = "login"}),
                 resolve: x => userService.FindByLogin(x.GetArgument<string>("login")));
 
-            FieldAsync<NonNullGraphType<UserType>, User>("userByEmail",
+            FieldAsync<UserType, User>("userByEmail",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>> {Name = "email"}),
                 resolve: x => userService.FindByEmail(x.GetArgument<string>("email")));
 
