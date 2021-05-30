@@ -1,5 +1,6 @@
 using System;
 using GraphQL.Types;
+using Micro.Auth.Api.GraphQL.Directives;
 
 namespace Micro.Auth.Api.GraphQL
 {
@@ -9,6 +10,8 @@ namespace Micro.Auth.Api.GraphQL
         {
             Query = query;
             Mutation = mutation;
+            Directives.Register(new AuthorizeDirective());
+            RegisterVisitor(typeof(AuthorizeDirectiveVisitor));
         }
     }
 }

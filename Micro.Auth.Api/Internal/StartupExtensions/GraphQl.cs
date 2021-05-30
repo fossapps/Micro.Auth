@@ -6,6 +6,7 @@ using GraphQL.SystemTextJson;
 using GraphQL.Types;
 using Micro.Auth.Api.GraphQL;
 using Micro.Auth.Api.GraphQL.DataLoaders;
+using Micro.Auth.Api.GraphQL.Directives;
 using Micro.Auth.Api.GraphQL.Inputs;
 using Micro.Auth.Api.GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,6 +34,7 @@ namespace Micro.Auth.Api.Internal.StartupExtensions
             services.AddTransient<ISchema, AuthSchema>();
             services.AddTransient<UserByIdDataLoader>();
             services.AddTransient<SessionByUserDataLoader>();
+            services.AddScoped<AuthorizeDirectiveVisitor>();
             services
                 .AddGraphQL(options =>
                 {
