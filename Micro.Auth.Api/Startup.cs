@@ -1,3 +1,11 @@
+using GraphQL;
+using GraphQL.Server;
+using GraphQL.Server.Ui.GraphiQL;
+using GraphQL.SystemTextJson;
+using GraphQL.Types;
+using Micro.Auth.Api.GraphQL;
+using Micro.Auth.Api.GraphQL.Inputs;
+using Micro.Auth.Api.GraphQL.Types;
 using Micro.Auth.Api.Internal.Configs;
 using Micro.Auth.Api.Internal.StartupExtensions;
 using Microsoft.AspNetCore.Builder;
@@ -23,6 +31,7 @@ namespace Micro.Auth.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.ConfigureGraphQl();
             services.AddConfiguration(Configuration);
             services.AddMetrics();
             services.ConfigureRequiredDependencies(Configuration);
@@ -47,6 +56,12 @@ namespace Micro.Auth.Api
             app.UseAuthentication();
             app.UseAuthorization();
             app.AddSwaggerWithUi();
+            app.UseGraphQL<ISchema>();
+            app.UseGraphQLGraphiQL(new GraphiQLOptions
+            {
+                SubscriptionsEndPoint = null,
+                GraphQLEndPoint = "/graphql"
+            }, "/ui/graphql");
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

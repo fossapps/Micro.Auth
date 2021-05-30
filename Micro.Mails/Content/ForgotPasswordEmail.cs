@@ -18,7 +18,7 @@ namespace Micro.Mails.Content
             return messageBuilder
                 .From(new MailAddress(MailConfig.From, MailConfig.Name))
                 .WithSender(new MailAddress(MailConfig.From, MailConfig.Name))
-                .WithSubject("Activate your Email")
+                .WithSubject("You requested to reset your password")
                 .WithHtmlBody(content)
                 .AddRecipients(mailMessageCollection)
                 .Build();

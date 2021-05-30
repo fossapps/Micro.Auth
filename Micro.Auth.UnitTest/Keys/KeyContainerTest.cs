@@ -1,4 +1,4 @@
-using Micro.Auth.Business.Keys;
+using Micro.Auth.Business.Internal.Keys;
 using NUnit.Framework;
 
 namespace Micro.Auth.UnitTest.Keys

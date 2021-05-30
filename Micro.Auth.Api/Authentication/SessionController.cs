@@ -7,9 +7,8 @@ using Micro.Auth.Api.Authentication.Exceptions;
 using Micro.Auth.Api.Authentication.ViewModels;
 using Micro.Auth.Api.Internal.UserData.Extensions;
 using Micro.Auth.Api.Internal.ValidationAttributes;
-using Micro.Auth.Business.Measurements;
-using Micro.Auth.Business.RefreshTokens;
-using Micro.Auth.Business.Users;
+using Micro.Auth.Business.Internal.Measurements;
+using Micro.Auth.Business.Sessions;
 using Micro.Auth.Storage.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,16 +21,14 @@ namespace Micro.Auth.Api.Authentication
     public class SessionController : ControllerBase
     {
         private readonly ILogger<SessionController> _logger;
-        private readonly IUserService _userService;
         private readonly IMetrics _metrics;
-        private readonly IRefreshTokenService _refreshTokenService;
+        private readonly ISessionService _sessionService;
 
-        public SessionController(ILogger<SessionController> logger, IUserService userService, IMetrics metrics, IRefreshTokenService refreshTokenService)
+        public SessionController(ILogger<SessionController> logger, IMetrics metrics, ISessionService sessionService)
         {
             _logger = logger;
-            _userService = userService;
             _metrics = metrics;
-            _refreshTokenService = refreshTokenService;
+            _sessionService = sessionService;
         }
 
         [HttpPost("new")]
@@ -40,7 +37,7 @@ namespace Micro.Auth.Api.Authentication
             try
             {
                 var (login, password) = GetBasicAuthData(authorization);
-                var (result, response) = await _userService.Login(new LoginRequest
+                var (result, response) = await _sessionService.Login(new LoginRequest
                 {
                     Login = login,
                     Password = password,
@@ -96,7 +93,7 @@ namespace Micro.Auth.Api.Authentication
             var token = GetBearerToken(authorization);
             try
             {
-                var jwt = await _refreshTokenService.Refresh(token);
+                var jwt = await _sessionService.Refresh(token);
                 return Ok(new RefreshTokenSuccessResponse
                 {
                     Jwt = jwt

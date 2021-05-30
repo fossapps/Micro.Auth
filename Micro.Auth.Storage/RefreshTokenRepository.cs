@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Micro.Auth.Common;
@@ -10,7 +11,8 @@ namespace Micro.Auth.Storage
     public interface IRefreshTokenRepository
     {
         Task<RefreshToken> FindById(string id);
-        Task<RefreshToken> FindByUser(string userId);
+        Task<IEnumerable<RefreshToken>> FindByUser(string userId);
+        Task<ILookup<string, RefreshToken>> FindByUserIds(IEnumerable<string> userIds);
         Task<RefreshToken> Create(RefreshToken token);
         Task Delete(string id);
         Task<RefreshToken> TouchLastUsed(string id);
@@ -27,19 +29,25 @@ namespace Micro.Auth.Storage
             _uuid = uuid;
         }
 
+        public async Task<ILookup<string, RefreshToken>> FindByUserIds(IEnumerable<string> users)
+        {
+            var results = await _db.RefreshTokens.AsNoTracking().Where(x => users.Contains(x.User)).ToListAsync();
+            return results.ToLookup(x => x.User);
+        }
+
         public Task<RefreshToken> FindById(string id)
         {
             return _db.RefreshTokens.AsNoTracking().Where(x => x.Id == id).FirstOrDefaultAsync();
         }
 
-        public Task<RefreshToken> FindByUser(string userId)
+        public async Task<IEnumerable<RefreshToken>> FindByUser(string userId)
         {
-            return _db.RefreshTokens.AsNoTracking().Where(x => x.User == userId).FirstOrDefaultAsync();
+            return await _db.RefreshTokens.AsNoTracking().Where(x => x.User == userId).ToListAsync();
         }
 
         public async Task<RefreshToken> Create(RefreshToken token)
         {
-            token.Id = _uuid.GenerateUuId();
+            token.Id = _uuid.GenerateUuId("refresh_token");
             var result = await _db.RefreshTokens.AddAsync(token);
             await _db.SaveChangesAsync();
             return result.Entity;

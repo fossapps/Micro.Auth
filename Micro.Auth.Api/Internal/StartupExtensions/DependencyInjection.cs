@@ -1,9 +1,12 @@
 using System;
 using Fossapps.Micro.KeyStore;
 using Micro.Auth.Api.Internal.Configs;
-using Micro.Auth.Business.Keys;
-using Micro.Auth.Business.RefreshTokens;
-using Micro.Auth.Business.Tokens;
+using Micro.Auth.Business.Availability;
+using Micro.Auth.Business.EmailVerification;
+using Micro.Auth.Business.Internal.Keys;
+using Micro.Auth.Business.Internal.Tokens;
+using Micro.Auth.Business.PasswordManager;
+using Micro.Auth.Business.Sessions;
 using Micro.Auth.Business.Users;
 using Micro.Auth.Common;
 using Micro.Auth.Storage;
@@ -21,17 +24,20 @@ namespace Micro.Auth.Api.Internal.StartupExtensions
     {
         public static void ConfigureRequiredDependencies(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<ApplicationContext>();
-            services.AddScoped<DbContext, ApplicationContext>();
+            services.AddDbContext<ApplicationContext>(ServiceLifetime.Transient);
+            services.AddTransient<DbContext, ApplicationContext>();
             services.AddSingleton<IUuidService, UuidService>();
             services.AddSingleton<IKeyContainer, KeyContainer>();
-            services.AddScoped<IRoleStore<IdentityRole>, RoleStore<IdentityRole>>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddTransient<IRoleStore<IdentityRole>, RoleStore<IdentityRole>>();
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IPasswordManager, PasswordManager>();
+            services.AddTransient<IEmailVerificationService, EmailVerificationService>();
+            services.AddTransient<IAvailabilityService, AvailabilityService>();
             services.AddSingleton<IKeyResolver, KeyResolver>();
             services.AddSingleton<ITokenFactory, TokenFactory>();
-            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
-            services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+            services.AddTransient<IRefreshTokenRepository, RefreshTokenRepository>();
+            services.AddTransient<ISessionService, SessionService>();
             services.SetupMail(configuration);
             services.AddSingleton(SetupKeyStoreHttpClient(configuration.GetSection("Services").Get<Services>().KeyStore));
         }

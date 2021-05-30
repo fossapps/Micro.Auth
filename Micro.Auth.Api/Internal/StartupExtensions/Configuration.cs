@@ -1,5 +1,5 @@
 using Micro.Auth.Api.Internal.Configs;
-using Micro.Auth.Business.Configs;
+using Micro.Auth.Business.Internal.Configs;
 using Micro.Auth.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
