@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using GraphQL;
 using GraphQL.DataLoader;
 using GraphQL.Types;
@@ -14,14 +13,7 @@ namespace Micro.Auth.Api.GraphQL
         public Query(IUserService userService, IAvailabilityService availabilityService, UserByIdDataLoader userLoader)
         {
             Field<UserType, User>().Name("user").Argument<NonNullGraphType<StringGraphType>>("id").ResolveAsync(
-                x =>
-                {
-                    var user = userLoader.LoadAsync(x.GetArgument<string>("id"));
-                    return user;
-                });
-
-            Field<NonNullGraphType<ListGraphType<UserType>>, IEnumerable<User>>().Name("users").ResolveAsync(
-                x => userService.List());
+                x => userLoader.LoadAsync(x.GetArgument<string>("id")));
 
             FieldAsync<UserType, User>("userByLogin",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>> {Name = "login"}),

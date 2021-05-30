@@ -32,6 +32,7 @@ namespace Micro.Auth.Api.Internal.StartupExtensions
             services.AddTransient<VerifyEmailInputType>();
             services.AddTransient<ISchema, AuthSchema>();
             services.AddTransient<UserByIdDataLoader>();
+            services.AddTransient<SessionByUserDataLoader>();
             services
                 .AddGraphQL(options =>
                 {

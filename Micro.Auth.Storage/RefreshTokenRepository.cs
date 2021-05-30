@@ -12,6 +12,7 @@ namespace Micro.Auth.Storage
     {
         Task<RefreshToken> FindById(string id);
         Task<IEnumerable<RefreshToken>> FindByUser(string userId);
+        Task<ILookup<string, RefreshToken>> FindByUserIds(IEnumerable<string> userIds);
         Task<RefreshToken> Create(RefreshToken token);
         Task Delete(string id);
         Task<RefreshToken> TouchLastUsed(string id);
@@ -26,6 +27,12 @@ namespace Micro.Auth.Storage
         {
             _db = db;
             _uuid = uuid;
+        }
+
+        public async Task<ILookup<string, RefreshToken>> FindByUserIds(IEnumerable<string> users)
+        {
+            var results = await _db.RefreshTokens.AsNoTracking().Where(x => users.Contains(x.User)).ToListAsync();
+            return results.ToLookup(x => x.User);
         }
 
         public Task<RefreshToken> FindById(string id)
