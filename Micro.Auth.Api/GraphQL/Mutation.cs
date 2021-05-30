@@ -1,5 +1,6 @@
 using GraphQL;
 using GraphQL.Types;
+using Micro.Auth.Api.GraphQL.Directives.Extensions;
 using Micro.Auth.Api.GraphQL.Inputs;
 using Micro.Auth.Api.GraphQL.Types;
 using Micro.Auth.Api.Internal.UserData.Extensions;
@@ -33,7 +34,7 @@ namespace Micro.Auth.Api.GraphQL
 
             FieldAsync<NonNullGraphType<UserType>, User>("changePassword",
                 arguments: new QueryArguments(ChangePasswordInput.BuildArgument()),
-                resolve: x => passwordManager.ChangePassword(contextAccessor.GetUserId(), x.GetArgument<ChangePasswordRequest>("input")));
+                resolve: x => passwordManager.ChangePassword(contextAccessor.GetUserId(), x.GetArgument<ChangePasswordRequest>("input"))).Authorize();
 
             FieldAsync<NonNullGraphType<UserType>, User>("resetPassword",
                 arguments: new QueryArguments(ResetPasswordInput.BuildArgument()),

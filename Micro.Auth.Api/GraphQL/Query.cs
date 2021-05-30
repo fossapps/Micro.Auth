@@ -16,15 +16,15 @@ namespace Micro.Auth.Api.GraphQL
         public Query(IUserService userService, IAvailabilityService availabilityService, UserByIdDataLoader userLoader, IHttpContextAccessor context)
         {
             Field<UserType, User>().Name("user").Argument<NonNullGraphType<StringGraphType>>("id").ResolveAsync(
-                x => userLoader.LoadAsync(x.GetArgument<string>("id")));
+                x => userLoader.LoadAsync(x.GetArgument<string>("id"))).Authorize();
 
             FieldAsync<UserType, User>("userByLogin",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>> {Name = "login"}),
-                resolve: x => userService.FindByLogin(x.GetArgument<string>("login")));
+                resolve: x => userService.FindByLogin(x.GetArgument<string>("login"))).Authorize();
 
             FieldAsync<UserType, User>("userByEmail",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>> {Name = "email"}),
-                resolve: x => userService.FindByEmail(x.GetArgument<string>("email")));
+                resolve: x => userService.FindByEmail(x.GetArgument<string>("email"))).Authorize();
 
             FieldAsync<NonNullGraphType<UserType>, User>("me",
                 resolve: x => userService.FindById(context.GetUserId())).Authorize();
