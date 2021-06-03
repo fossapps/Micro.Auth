@@ -3,10 +3,12 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using Micro.Auth.Business.Internal.Configs;
+using Micro.Auth.Business.Internal.Extensions;
 using Micro.Auth.Business.Internal.Keys;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using static System.Int32;
 
 namespace Micro.Auth.Business.Internal.Tokens
 {
@@ -35,8 +37,8 @@ namespace Micro.Auth.Business.Internal.Tokens
             {
                 Issuer = _identityConfig.Issuer,
                 Audience = _identityConfig.IssueForAudience,
-                Subject = new ClaimsIdentity(principal.Claims.Where(x => x.Type != securityStampClaimType)),
-                Expires = DateTime.UtcNow.AddMinutes(15),
+                Subject = new ClaimsIdentity(principal.Claims.Where(x => !new []{"token_expiry", securityStampClaimType}.Contains(x.Type))),
+                Expires = DateTime.UtcNow.AddMinutes(principal.GetTokenExpiry()),
                 SigningCredentials = new SigningCredentials(new RsaSecurityKey(_keyContainer.GetKey().PrivateKey) {KeyId = _keyContainer.GetKey().KeyId}, SecurityAlgorithms.RsaSha512)
             };
             var tokenHandler = new JwtSecurityTokenHandler();

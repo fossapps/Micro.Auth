@@ -12,8 +12,7 @@ namespace Micro.Auth.Business.Sessions
     public interface ISessionService
     {
         Task<string> Refresh(string token);
-        Task<IEnumerable<RefreshToken>> GetForUser(string userId);
-        Task<(SignInResult, LoginSuccessResponse)> Login(LoginRequest loginRequest);
+        Task<(SignInResult, ServiceAccountLoginResponse)> Login(LoginRequest loginRequest);
     }
 
     public class SessionService : ISessionService
@@ -49,18 +48,14 @@ namespace Micro.Auth.Business.Sessions
             return _tokenFactory.GenerateJwtToken(principal);
         }
 
-        public async Task<IEnumerable<RefreshToken>> GetForUser(string userId)
-        {
-            return await _refreshTokenRepository.FindByUser(userId);
-        }
-        public async Task<(SignInResult, LoginSuccessResponse)> Login(LoginRequest loginRequest)
+        public async Task<(SignInResult, ServiceAccountLoginResponse)> Login(LoginRequest loginRequest)
         {
             var user = await _userManager.GetUserByLogin(loginRequest.Login);
             loginRequest.User = user;
             return await AuthenticateUser(loginRequest);
         }
 
-        private async Task<(SignInResult signInResult, LoginSuccessResponse login)> AuthenticateUser(LoginRequest login)
+        private async Task<(SignInResult signInResult, ServiceAccountLoginResponse login)> AuthenticateUser(LoginRequest login)
         {
             if (login.User == null)
             {
@@ -73,10 +68,17 @@ namespace Micro.Auth.Business.Sessions
             }
             var principal = await _signInManager.CreateUserPrincipalAsync(login.User);
             var jwt = _tokenFactory.GenerateJwtToken(principal);
-            var refreshToken = await _refreshTokenRepository.Create(login.ToRefreshToken(_uuidService.GenerateUuId("session")));
-            var res = new LoginSuccessResponse
+            if (!principal.IsServiceAccount())
             {
-                RefreshToken = refreshToken.Value,
+                var refreshToken = await _refreshTokenRepository.Create(login.ToRefreshToken(_uuidService.GenerateUuId("session")));
+                return (signInResult, new LoginSuccessResponse
+                {
+                    Jwt = jwt,
+                    RefreshToken = refreshToken.Value
+                });
+            }
+            var res = new ServiceAccountLoginResponse
+            {
                 Jwt = jwt
             };
             return (signInResult, res);
