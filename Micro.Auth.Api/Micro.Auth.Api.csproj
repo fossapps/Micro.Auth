@@ -12,6 +12,7 @@
         <PackageReference Include="App.Metrics.Reporting.InfluxDB" Version="4.2.0" />
         <PackageReference Include="Fossapps.Micro.KeyStore" Version="1.10.0" />
         <PackageReference Include="GraphQL.DataLoader" Version="4.5.0" />
+        <PackageReference Include="GraphQL.Server.Ui.Playground" Version="5.0.2" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.6" />
         <PackageReference Include="GraphQL" Version="4.5.0" />
         <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="5.0.2" />

@@ -4,9 +4,11 @@ using GraphQL.Execution;
 using GraphQL.Server;
 using GraphQL.SystemTextJson;
 using GraphQL.Types;
+using GraphQL.Utilities.Federation;
 using Micro.Auth.Api.GraphQL;
 using Micro.Auth.Api.GraphQL.DataLoaders;
 using Micro.Auth.Api.GraphQL.Directives;
+using Micro.Auth.Api.GraphQL.Federation;
 using Micro.Auth.Api.GraphQL.Inputs;
 using Micro.Auth.Api.GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,6 +48,13 @@ namespace Micro.Auth.Api.Internal.StartupExtensions
                 .AddDataLoader()
                 .AddSystemTextJson()
                 .AddErrorInfoProvider(opts => opts.ExposeExceptionStackTrace = false);
+        }
+
+        public static void EnableFederation(this IServiceCollection services)
+        {
+            services.AddTransient<AnyScalarGraphType>();
+            services.AddTransient<ServiceGraphType>();
+            services.AddTransient<EntityType>();
         }
     }
 }

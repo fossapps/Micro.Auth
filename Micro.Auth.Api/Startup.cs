@@ -1,6 +1,7 @@
 using GraphQL;
 using GraphQL.Server;
 using GraphQL.Server.Ui.GraphiQL;
+using GraphQL.Server.Ui.Playground;
 using GraphQL.SystemTextJson;
 using GraphQL.Types;
 using Micro.Auth.Api.GraphQL;
@@ -32,6 +33,7 @@ namespace Micro.Auth.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureGraphQl();
+            services.EnableFederation();
             services.AddConfiguration(Configuration);
             services.AddMetrics();
             services.ConfigureRequiredDependencies(Configuration);
@@ -62,6 +64,10 @@ namespace Micro.Auth.Api
                 SubscriptionsEndPoint = null,
                 GraphQLEndPoint = "/graphql"
             }, "/ui/graphql");
+            app.UseGraphQLPlayground(new PlaygroundOptions
+            {
+                GraphQLEndPoint = "/graphql",
+            }, "/ui/playground");
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
