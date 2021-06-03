@@ -1,5 +1,5 @@
 using System;
-using GraphQL.Types;
+using Micro.Auth.Api.GraphQL.Federation;
 using Micro.Auth.Api.GraphQL.Directives;
 
 namespace Micro.Auth.Api.GraphQL

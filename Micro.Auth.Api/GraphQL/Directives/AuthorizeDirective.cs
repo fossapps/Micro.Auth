@@ -1,4 +1,5 @@
 using GraphQL;
+using GraphQL.Resolvers;
 using GraphQL.Types;
 using GraphQL.Utilities;
 using Micro.Auth.Api.GraphQL.Directives.Exceptions;
@@ -9,6 +10,8 @@ namespace Micro.Auth.Api.GraphQL.Directives
     public class AuthorizeDirective : DirectiveGraphType
     {
         public const string DirectiveName = "authorize";
+        public override bool? Introspectable => true;
+
         public AuthorizeDirective() : base(
             DirectiveName,
             DirectiveLocation.Field,
@@ -41,7 +44,10 @@ namespace Micro.Auth.Api.GraphQL.Directives
                 return;
             }
 
-            throw new NotAuthorizedException();
+            field.Resolver = new AsyncFieldResolver<object>(async context =>
+            {
+                throw new NotAuthorizedException();
+            });
         }
     }
 }

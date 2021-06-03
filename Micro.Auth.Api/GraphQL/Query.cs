@@ -1,8 +1,12 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using GraphQL;
 using GraphQL.DataLoader;
 using GraphQL.Types;
+using GraphQL.Utilities.Federation;
 using Micro.Auth.Api.GraphQL.DataLoaders;
 using Micro.Auth.Api.GraphQL.Directives.Extensions;
+using Micro.Auth.Api.GraphQL.Federation;
 using Micro.Auth.Api.GraphQL.Types;
 using Micro.Auth.Api.Internal.UserData.Extensions;
 using Micro.Auth.Business.Availability;
@@ -11,7 +15,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Micro.Auth.Api.GraphQL
 {
-    public sealed class Query : ObjectGraphType
+    public sealed class Query : FederatedQuery
     {
         public Query(IUserService userService, IAvailabilityService availabilityService, UserByIdDataLoader userLoader, IHttpContextAccessor context)
         {
