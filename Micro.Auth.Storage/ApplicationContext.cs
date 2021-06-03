@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Npgsql;
@@ -35,6 +37,27 @@ namespace Micro.Auth.Storage
             {
                 options.MigrationsAssembly("Micro.Auth.Storage");
             });
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            var roles = new List<IdentityRole>
+            {
+                new IdentityRole("service_account") {Id = "9a6eb015-82d1-480c-b962-5aab596ef4f6", NormalizedName = "SERVICE_ACCOUNT"}
+            };
+            builder.Entity<IdentityRole>().HasData(roles);
+            var claims =
+            new List<IdentityRoleClaim<string>>{
+                new IdentityRoleClaim<string>()
+                {
+                    Id = 1,
+                    RoleId = roles[0].Id,
+                    ClaimType = "token_expiry",
+                    ClaimValue = "1440",
+                },
+            };
+            builder.Entity<IdentityRoleClaim<string>>().HasData(claims);
         }
     }
 }
