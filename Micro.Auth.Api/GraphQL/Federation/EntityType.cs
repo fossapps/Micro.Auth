@@ -9,6 +9,7 @@ namespace Micro.Auth.Api.GraphQL.Federation
         {
             Name = "_Entity";
             Type<UserType>();
+            Type<RefreshTokenType>();
         }
     }
 }
