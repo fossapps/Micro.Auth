@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace Micro.Auth.Api.Internal.UserData.Extensions
 {
@@ -13,7 +14,7 @@ namespace Micro.Auth.Api.Internal.UserData.Extensions
 
         public static string? GetUserId(this IHttpContextAccessor httpContextAccessor)
         {
-            return httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return httpContextAccessor.HttpContext?.User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
         }
     }
 }

@@ -1,4 +1,3 @@
-using GraphQL.Types;
 using Micro.Auth.Api.GraphQL.Federation;
 using Micro.Auth.Storage;
 
