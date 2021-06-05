@@ -10,7 +10,7 @@ namespace Micro.Auth.Api.GraphQL.Types
 {
     public sealed class UserType : FederatedObjectGraphType<User>
     {
-        public UserType(SessionByUserDataLoader sessionLoader)
+        public UserType(SessionByUserDataLoader sessionLoader, UserByIdDataLoader userLoader)
         {
             Name = "User";
             Key("id");
@@ -25,10 +25,7 @@ namespace Micro.Auth.Api.GraphQL.Types
             ResolveReferenceAsync(async ctx =>
             {
                 var id = ctx.Arguments["id"].ToString();
-                return new User
-                {
-                    Id = id,
-                };
+                return await userLoader.LoadAsync(id).GetResultAsync();
             });
         }
     }
