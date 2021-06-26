@@ -18,6 +18,12 @@ namespace Micro.Auth.Api.GraphQL.Directives
             DirectiveLocation.Query,
             DirectiveLocation.FieldDefinition)
         {
+            Description = "Used to check if a user has a set of permission";
+            Arguments = new QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>>
+            {
+                Name = "permission",
+                Description = "Permission to check for",
+            });
         }
     }
     public class RequirePermissionDirectiveVisitor : BaseSchemaNodeVisitor
