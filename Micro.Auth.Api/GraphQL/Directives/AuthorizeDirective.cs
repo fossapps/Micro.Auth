@@ -46,7 +46,7 @@ namespace Micro.Auth.Api.GraphQL.Directives
 
             field.Resolver = new AsyncFieldResolver<object>(async context =>
             {
-                throw new NotAuthorizedException();
+                throw new NotAuthenticatedException();
             });
         }
     }
