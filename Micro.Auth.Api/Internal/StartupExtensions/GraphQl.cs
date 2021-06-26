@@ -37,6 +37,7 @@ namespace Micro.Auth.Api.Internal.StartupExtensions
             services.AddTransient<UserByIdDataLoader>();
             services.AddTransient<SessionByUserDataLoader>();
             services.AddScoped<AuthorizeDirectiveVisitor>();
+            services.AddScoped<RequirePermissionDirectiveVisitor>();
             services
                 .AddGraphQL(options =>
                 {
