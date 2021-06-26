@@ -10,6 +10,7 @@ namespace Micro.Auth.Api.GraphQL.Directives
     public class RequirePermissionDirective : DirectiveGraphType
     {
         public const string DirectiveName = "requirePermission";
+        public override bool? Introspectable => false;
 
         public RequirePermissionDirective() : base(
             DirectiveName,
