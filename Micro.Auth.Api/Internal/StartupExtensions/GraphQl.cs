@@ -27,6 +27,7 @@ namespace Micro.Auth.Api.Internal.StartupExtensions
             services.AddTransient<UserType>();
             services.AddTransient<AvailabilityResultType>();
             services.AddTransient<ResultType>();
+            services.AddTransient<TokensType>();
             services.AddTransient<RegisterInputType>();
             services.AddTransient<RefreshTokenType>();
             services.AddTransient<ChangePasswordInput>();

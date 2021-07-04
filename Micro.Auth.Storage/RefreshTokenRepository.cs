@@ -39,6 +39,10 @@ namespace Micro.Auth.Storage
         {
             return _db.RefreshTokens.AsNoTracking().Where(x => x.Id == id).FirstOrDefaultAsync();
         }
+        private Task<RefreshToken> FindByValue(string value)
+        {
+            return _db.RefreshTokens.AsNoTracking().Where(x => x.Value == value).FirstOrDefaultAsync();
+        }
 
         public async Task<IEnumerable<RefreshToken>> FindByUser(string userId)
         {
@@ -61,7 +65,7 @@ namespace Micro.Auth.Storage
 
         public async Task<RefreshToken> TouchLastUsed(string id)
         {
-            var token = await FindById(id);
+            var token = await FindByValue(id);
             if (token == null)
             {
                 throw new RefreshTokenNotFoundException();
