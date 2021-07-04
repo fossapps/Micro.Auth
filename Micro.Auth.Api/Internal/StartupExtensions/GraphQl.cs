@@ -8,7 +8,6 @@ using GraphQL.Utilities.Federation;
 using Micro.Auth.Api.GraphQL;
 using Micro.Auth.Api.GraphQL.DataLoaders;
 using Micro.Auth.Api.GraphQL.Directives;
-using Micro.Auth.Api.GraphQL.Federation;
 using Micro.Auth.Api.GraphQL.Inputs;
 using Micro.Auth.Api.GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;

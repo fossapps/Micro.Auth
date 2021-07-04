@@ -2,13 +2,12 @@ using System.Collections.Generic;
 using GraphQL.DataLoader;
 using GraphQL.Types;
 using Micro.Auth.Api.GraphQL.DataLoaders;
-using Micro.Auth.Api.GraphQL.Federation;
 using Micro.Auth.Storage;
 using User = Micro.Auth.Business.Users.User;
 
 namespace Micro.Auth.Api.GraphQL.Types
 {
-    public sealed class UserType : FederatedObjectGraphType<User>
+    public sealed class UserType : Micro.GraphQL.Federation.ObjectGraphType<User>
     {
         public UserType(SessionByUserDataLoader sessionLoader, UserByIdDataLoader userLoader)
         {

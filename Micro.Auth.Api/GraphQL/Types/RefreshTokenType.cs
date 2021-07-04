@@ -1,9 +1,9 @@
-using Micro.Auth.Api.GraphQL.Federation;
 using Micro.Auth.Storage;
+using Micro.GraphQL.Federation;
 
 namespace Micro.Auth.Api.GraphQL.Types
 {
-    public sealed class RefreshTokenType : FederatedObjectGraphType<RefreshToken>
+    public sealed class RefreshTokenType : ObjectGraphType<RefreshToken>
     {
         public RefreshTokenType()
         {
