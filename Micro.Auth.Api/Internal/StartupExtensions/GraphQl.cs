@@ -8,7 +8,6 @@ using GraphQL.Utilities.Federation;
 using Micro.Auth.Api.GraphQL;
 using Micro.Auth.Api.GraphQL.DataLoaders;
 using Micro.Auth.Api.GraphQL.Directives;
-using Micro.Auth.Api.GraphQL.Federation;
 using Micro.Auth.Api.GraphQL.Inputs;
 using Micro.Auth.Api.GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +27,7 @@ namespace Micro.Auth.Api.Internal.StartupExtensions
             services.AddTransient<UserType>();
             services.AddTransient<AvailabilityResultType>();
             services.AddTransient<ResultType>();
+            services.AddTransient<TokensType>();
             services.AddTransient<RegisterInputType>();
             services.AddTransient<RefreshTokenType>();
             services.AddTransient<ChangePasswordInput>();

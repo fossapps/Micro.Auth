@@ -1,18 +1,20 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Micro.Auth.Business.Internal.Extensions;
 using Micro.Auth.Business.Internal.Tokens;
+using Micro.Auth.Business.Sessions.Exceptions;
+using Micro.Auth.Business.Users;
 using Micro.Auth.Common;
 using Micro.Auth.Storage;
 using Microsoft.AspNetCore.Identity;
+using User = Micro.Auth.Storage.User;
 
 namespace Micro.Auth.Business.Sessions
 {
     public interface ISessionService
     {
         Task<string> Refresh(string token);
-        Task<(SignInResult, ServiceAccountLoginResponse)> Login(LoginRequest loginRequest);
+        Task<LoginSuccessResponse> Login(LoginRequest request);
     }
 
     public class SessionService : ISessionService
@@ -48,40 +50,52 @@ namespace Micro.Auth.Business.Sessions
             return _tokenFactory.GenerateJwtToken(principal);
         }
 
-        public async Task<(SignInResult, ServiceAccountLoginResponse)> Login(LoginRequest loginRequest)
+        public async Task<LoginSuccessResponse> Login(LoginRequest request)
         {
-            var user = await _userManager.GetUserByLogin(loginRequest.Login);
-            loginRequest.User = user;
-            return await AuthenticateUser(loginRequest);
-        }
-
-        private async Task<(SignInResult signInResult, ServiceAccountLoginResponse login)> AuthenticateUser(LoginRequest login)
-        {
-            if (login.User == null)
+            var user = await _userManager.GetUserByLogin(request.Login);
+            if (user == null)
             {
-                throw new ArgumentNullException(nameof(login), "not null expected");
+                throw new UserNotFoundException();
             }
-            var signInResult = await _signInManager.PasswordSignInAsync(login.User, login.Password, false, true);
+
+            var signInResult = await _signInManager.PasswordSignInAsync(user, request.Password, false, true);
             if (!signInResult.Succeeded)
             {
-                return (signInResult, null);
+                throw new InvalidCredentialsException(ProcessErrorResult(signInResult));
             }
-            var principal = await _signInManager.CreateUserPrincipalAsync(login.User);
+            var principal = await _signInManager.CreateUserPrincipalAsync(user);
             var jwt = _tokenFactory.GenerateJwtToken(principal);
-            if (!principal.IsServiceAccount())
+            if (principal.IsServiceAccount())
             {
-                var refreshToken = await _refreshTokenRepository.Create(login.ToRefreshToken(_uuidService.GenerateUuId("session")));
-                return (signInResult, new LoginSuccessResponse
+                return new LoginSuccessResponse
                 {
                     Jwt = jwt,
-                    RefreshToken = refreshToken.Value
-                });
+                };
             }
-            var res = new ServiceAccountLoginResponse
+            var refreshToken = await _refreshTokenRepository.Create(new RefreshToken
             {
-                Jwt = jwt
+                Location = request.Location,
+                User = user.Id,
+                Useragent = request.UserAgent,
+                IpAddress = request.IpAddress,
+                LastUsed = DateTime.Now,
+                Value = _uuidService.GenerateUuId("session"),
+            });
+            return new LoginSuccessResponse
+            {
+                Jwt = jwt,
+                RefreshToken = refreshToken.Value,
             };
-            return (signInResult, res);
+        }
+
+        private static string ProcessErrorResult(Microsoft.AspNetCore.Identity.SignInResult result)
+        {
+            if (result.IsLockedOut)
+            {
+                return "Account Locked Out";
+            }
+
+            return result.IsNotAllowed ? "Login not allowed" : "Wrong Credentials";
         }
     }
 }
