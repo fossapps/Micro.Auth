@@ -14,7 +14,7 @@
         <PackageReference Include="GraphQL.DataLoader" Version="4.5.0" />
         <PackageReference Include="GraphQL.Server.Ui.Playground" Version="5.0.2" />
         <PackageReference Include="Micro.GraphQL.Federation" Version="1.1.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.6" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.9" />
         <PackageReference Include="GraphQL" Version="4.5.0" />
         <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="5.0.2" />
         <PackageReference Include="GraphQL.Server.Transports.AspNetCore.SystemTextJson" Version="5.0.2" />
